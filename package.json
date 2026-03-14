@@ -4,10 +4,13 @@
   "description": "Portfolio with auto-syncing Medium + LinkedIn content, deployed to AWS S3 + CloudFront",
   "scripts": {
     "build": "node scripts/sync-content.js",
-    "dev":   "npm run build && npx serve dist -p 3000",
-    "sync":  "node scripts/sync-content.js"
+    "dev": "npm run build && npx serve dist -p 3000",
+    "sync": "node scripts/sync-content.js"
   },
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
   }
 }
