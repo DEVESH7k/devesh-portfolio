@@ -9,7 +9,7 @@
 <meta name="author" content="Devesh Khatik"/>
 <meta property="og:title" content="Devesh Khatik | DevSecOps & Cloud Engineer"/>
 <meta property="og:description" content="Building secure, scalable infrastructure. 156+ CI/CD pipelines. Mumbai, India."/>
-<meta name="theme-color" content="#04080f"/>
+<meta name="theme-color" content="#08050f"/>
 <!-- BUILD_TIME -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
@@ -17,22 +17,22 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 :root{
-  --bg:#04080f;--bg1:#080e18;--bg2:#0d1520;--bg3:#111d2a;
+  --bg:#08050f;--bg1:#0f0a1a;--bg2:#150f24;--bg3:#1c1430;
   --b0:rgba(255,255,255,0.04);--b1:rgba(255,255,255,0.08);--b2:rgba(255,255,255,0.14);
-  --cyan:#38bdf8;--cyan2:#0ea5e9;--cyanD:rgba(56,189,248,0.1);--cyanD2:rgba(56,189,248,0.06);
-  --green:#34d399;--greenD:rgba(52,211,153,0.1);
-  --text:#f0f6ff;--text2:#8899aa;--text3:#3d5066;
+  --cyan:#a78bfa;--cyan2:#7c3aed;--cyanD:rgba(167,139,250,0.1);--cyanD2:rgba(167,139,250,0.06);
+  --green:#e879f9;--greenD:rgba(232,121,249,0.1);
+  --text:#f5f0ff;--text2:#9488aa;--text3:#4a3d66;
   --ff:'Outfit',sans-serif;--mono:'IBM Plex Mono',monospace;
   --r:10px;--r2:6px;--ease:cubic-bezier(.4,0,.2,1)
 }
 body{background:var(--bg);color:var(--text);font-family:var(--ff);line-height:1.6;overflow-x:hidden}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--cyan2);border-radius:2px}
+::-webkit-scrollbar-thumb{background:#7c3aed;border-radius:2px}
 body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:9999}
 
 /* NAV */
-#nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;backdrop-filter:blur(24px) saturate(1.8);background:rgba(4,8,15,0.7);border-bottom:1px solid var(--b0);transition:border-color .3s}
+#nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;backdrop-filter:blur(24px) saturate(1.8);background:rgba(8,5,15,0.75);border-bottom:1px solid var(--b0);transition:border-color .3s}
 #nav.scrolled{border-color:var(--b1)}
 .nav-logo{font-family:var(--mono);font-size:14px;color:var(--cyan);display:flex;align-items:center;gap:10px;text-decoration:none}
 .nav-logo-ring{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--cyan)}
@@ -40,16 +40,16 @@ body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml
 .nl{padding:6px 12px;border-radius:20px;font-size:12px;color:var(--text2);text-decoration:none;transition:all .2s;letter-spacing:.02em}
 .nl:hover,.nl.active{color:var(--text);background:var(--b1)}
 .nav-r{display:flex;align-items:center;gap:10px}
-.nav-status{font-family:var(--mono);font-size:10px;color:var(--green);background:var(--greenD);border:1px solid rgba(52,211,153,.2);padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:6px}
+.nav-status{font-family:var(--mono);font-size:10px;color:var(--green);background:var(--greenD);border:1px solid rgba(232,121,249,.2);padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:6px}
 .nav-status::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
 .nav-hire{font-size:12px;font-weight:600;background:var(--cyan);color:#04080f;padding:7px 18px;border-radius:20px;text-decoration:none;transition:all .2s}
-.nav-hire:hover{background:#7dd3fc;transform:translateY(-1px)}
+.nav-hire:hover{background:#c4b5fd;transform:translateY(-1px)}
 
 /* HERO */
 #hero{min-height:100vh;display:flex;align-items:center;padding:80px 5vw 60px;position:relative;overflow:hidden}
-.hero-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(56,189,248,.12) 1px,transparent 1px);background-size:32px 32px;mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,black 20%,transparent 100%)}
-.g1{position:absolute;width:800px;height:800px;background:radial-gradient(circle,rgba(56,189,248,.06) 0%,transparent 60%);top:-200px;right:-200px;pointer-events:none}
-.g2{position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(52,211,153,.04) 0%,transparent 60%);bottom:-100px;left:50px;pointer-events:none}
+.hero-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(167,139,250,.12) 1px,transparent 1px);background-size:32px 32px;mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,black 20%,transparent 100%)}
+.g1{position:absolute;width:800px;height:800px;background:radial-gradient(circle,rgba(167,139,250,.07) 0%,transparent 60%);top:-200px;right:-200px;pointer-events:none}
+.g2{position:absolute;width:500px;height:500px;background:radial-gradient(circle,rgba(192,132,252,.05) 0%,transparent 60%);bottom:-100px;left:50px;pointer-events:none}
 .hero-wrap{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 400px;gap:64px;align-items:center}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--b2);padding:6px 14px;border-radius:20px;font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:.12em;text-transform:uppercase;margin-bottom:28px;opacity:0;animation:up .5s var(--ease) .1s forwards}
 .hero-h1{font-size:clamp(48px,7vw,88px);font-weight:800;line-height:.95;letter-spacing:-3px;margin-bottom:16px;opacity:0;animation:up .5s var(--ease) .2s forwards}
@@ -62,7 +62,7 @@ body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml
 .hero-btns{display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:up .5s var(--ease) .45s forwards}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:var(--r2);font-family:var(--ff);font-size:13px;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none}
 .btn-fill{background:var(--cyan);color:#04080f}
-.btn-fill:hover{background:#7dd3fc;transform:translateY(-2px);box-shadow:0 8px 24px rgba(56,189,248,.25)}
+.btn-fill:hover{background:#c4b5fd;transform:translateY(-2px);box-shadow:0 8px 24px rgba(167,139,250,.3)}
 .btn-ghost{background:transparent;border:1px solid var(--b2);color:var(--text)}
 .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
 .hero-stats{display:flex;gap:32px;padding-top:32px;margin-top:32px;border-top:1px solid var(--b1);opacity:0;animation:up .5s var(--ease) .5s forwards}
@@ -96,7 +96,7 @@ body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml
 .ticker::after{right:0;background:linear-gradient(-90deg,var(--bg1),transparent)}
 .ticker-track{display:flex;animation:tick 30s linear infinite;width:max-content}
 .ticker-item{display:flex;align-items:center;gap:10px;padding:0 32px;font-family:var(--mono);font-size:11px;color:var(--text2);white-space:nowrap}
-.ticker-dot{width:4px;height:4px;border-radius:50%;background:var(--cyan);opacity:.5}
+.ticker-dot{width:4px;height:4px;border-radius:50%;background:var(--cyan);opacity:.6}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* LAYOUT */
@@ -143,14 +143,14 @@ hr.div{border:none;border-top:1px solid var(--b1)}
 .bar-item{margin-bottom:16px}
 .bar-head{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px;font-family:var(--mono)}
 .bar-track{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
-.bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:2px;width:0;transition:width 1.3s var(--ease)}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan),#e879f9);border-radius:2px;width:0;transition:width 1.3s var(--ease)}
 .bar-fill.go{width:var(--w)}
 
 /* EXPERIENCE */
 .exp-tl{position:relative;padding-left:24px}
 .exp-tl::before{content:'';position:absolute;left:0;top:10px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--cyan),transparent)}
 .exp-item{position:relative;margin-bottom:48px}
-.exp-item::before{content:'';position:absolute;left:-28px;top:10px;width:8px;height:8px;border-radius:50%;background:var(--cyan);border:2px solid var(--bg);box-shadow:0 0 10px rgba(56,189,248,.5)}
+.exp-item::before{content:'';position:absolute;left:-28px;top:10px;width:8px;height:8px;border-radius:50%;background:var(--cyan);border:2px solid var(--bg);box-shadow:0 0 10px rgba(167,139,250,.5)}
 .exp-item.past::before{background:var(--text3);box-shadow:none}
 .exp-card{background:var(--bg1);border:1px solid var(--b1);border-radius:var(--r);padding:28px 32px;transition:all .25s}
 .exp-card:hover{border-color:var(--b2);transform:translateX(4px)}
@@ -159,7 +159,7 @@ hr.div{border:none;border-top:1px solid var(--b1)}
 .exp-role{font-size:12px;color:var(--cyan);margin-top:3px;font-family:var(--mono)}
 .exp-period{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
 .exp-badge{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:20px}
-.eb-now{background:var(--greenD);color:var(--green);border:1px solid rgba(52,211,153,.2)}
+.eb-now{background:var(--greenD);color:var(--green);border:1px solid rgba(232,121,249,.2)}
 .eb-prev{background:var(--bg3);color:var(--text3);border:1px solid var(--b1)}
 .exp-ul{list-style:none}
 .exp-ul li{font-size:13px;color:var(--text2);padding:7px 0 7px 18px;position:relative;border-bottom:1px solid var(--b0);line-height:1.7}
@@ -171,7 +171,7 @@ hr.div{border:none;border-top:1px solid var(--b1)}
 /* PROJECTS */
 .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .pc{background:var(--bg1);border:1px solid var(--b1);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;transition:all .25s;position:relative;overflow:hidden;text-decoration:none}
-.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--green));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),#e879f9);transform:scaleX(0);transform-origin:left;transition:transform .3s}
 .pc:hover::before{transform:scaleX(1)}
 .pc:hover{border-color:var(--b2);transform:translateY(-4px);box-shadow:0 20px 48px rgba(0,0,0,.4)}
 .pc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
@@ -196,7 +196,7 @@ hr.div{border:none;border-top:1px solid var(--b1)}
 
 /* CONTACT */
 .ct-box{background:linear-gradient(135deg,var(--bg1),var(--bg2));border:1px solid var(--b2);border-radius:var(--r);padding:60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;overflow:hidden}
-.ct-box::before{content:'';position:absolute;top:-150px;right:-150px;width:400px;height:400px;background:radial-gradient(circle,rgba(56,189,248,.06),transparent 70%);pointer-events:none}
+.ct-box::before{content:'';position:absolute;top:-150px;right:-150px;width:400px;height:400px;background:radial-gradient(circle,rgba(167,139,250,.07),transparent 70%);pointer-events:none}
 .ct-h{font-size:clamp(24px,3vw,38px);font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:14px}
 .ct-sub{font-size:13.5px;color:var(--text2);line-height:1.85;margin-bottom:28px}
 .ct-email{font-family:var(--mono);font-size:13px;color:var(--cyan);display:flex;align-items:center;gap:8px;margin-bottom:24px}
@@ -208,11 +208,48 @@ hr.div{border:none;border-top:1px solid var(--b1)}
 .cl-arr{font-size:12px;color:var(--text3)}
 .cl:hover .cl-arr{color:var(--cyan)}
 
-/* FOOTER */
-footer{border-top:1px solid var(--b1);padding:24px 5vw;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--text3)}
-.foot-r{display:flex;gap:20px}
-.foot-r a{color:var(--text3);text-decoration:none;transition:color .2s}
-.foot-r a:hover{color:var(--cyan)}
+/* END BAR */
+.endbar{border-top:1px solid var(--b1);padding:20px 5vw;display:flex;align-items:center;gap:16px;font-family:var(--mono);font-size:11px;color:var(--text3)}
+.endbar-logo{width:26px;height:26px;border-radius:50%;border:1px solid var(--text3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
+.endbar-text{flex:1}
+.endbar-links{display:flex;gap:16px}
+.endbar-links a{color:var(--text3);text-decoration:none;transition:color .2s}
+.endbar-links a:hover{color:var(--cyan)}
+
+/* DEVOPS SECTION */
+.dv-quote{display:flex;flex-direction:column;gap:12px;padding:32px;background:var(--bg1);border:1px solid var(--b1);border-radius:var(--r);margin-bottom:48px;position:relative}
+.dv-quote-bar{position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--cyan),#e879f9);border-radius:2px}
+.dv-quote-text{font-size:17px;font-weight:500;color:var(--text);line-height:1.7;letter-spacing:-.2px;padding-left:8px}
+.dv-quote-attr{font-family:var(--mono);font-size:11px;color:var(--text3);padding-left:8px}
+.dv-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px}
+.dv-pillar{background:var(--bg1);border:1px solid var(--b1);border-radius:var(--r);padding:28px;transition:all .25s;position:relative}
+.dv-pillar:hover{border-color:var(--b2);transform:translateY(-3px)}
+.dv-pillar-num{font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:12px}
+.dv-pillar-icon{font-size:28px;margin-bottom:10px}
+.dv-pillar-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:10px;letter-spacing:-.3px}
+.dv-pillar-desc{font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:14px}
+.dv-pillar-tags{display:flex;flex-wrap:wrap;gap:5px}
+.dpt{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;background:var(--cyanD2);color:var(--cyan);border:1px solid rgba(56,189,248,.12)}
+.dv-cycle{background:var(--bg1);border:1px solid var(--b1);border-radius:var(--r);padding:32px;margin-bottom:32px}
+.dv-cycle-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:24px;font-family:var(--mono)}
+.dv-cycle-steps{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.dv-step{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 14px;background:var(--bg2);border:1px solid var(--b1);border-radius:var(--r2);min-width:72px}
+.dv-step-hl{background:var(--cyanD2);border-color:rgba(56,189,248,.2)}
+.dv-step-icon{font-size:18px}
+.dv-step-label{font-family:var(--mono);font-size:10px;color:var(--text2);text-align:center}
+.dv-step-hl .dv-step-label{color:var(--cyan)}
+.dv-step-arrow{color:var(--text3);font-size:14px}
+.dv-cycle-note{font-family:var(--mono);font-size:11px;color:var(--text3)}
+.dv-tools{background:var(--bg1);border:1px solid var(--b1);border-radius:var(--r);padding:32px}
+.dv-tools-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:20px;font-family:var(--mono)}
+.dv-tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dv-tool{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--r2);padding:16px;display:flex;flex-direction:column;gap:4px;transition:all .2s}
+.dv-tool:hover{border-color:var(--b2);background:var(--bg3)}
+.dv-tool-icon{font-size:20px;margin-bottom:4px}
+.dv-tool-name{font-size:13px;font-weight:600;color:var(--text)}
+.dv-tool-use{font-family:var(--mono);font-size:10px;color:var(--text3)}
+@media(max-width:1024px){.dv-pillars{grid-template-columns:1fr}.dv-tools-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.dv-cycle-steps{gap:4px}.dv-step{min-width:56px;padding:8px}.dv-tools-grid{grid-template-columns:1fr}}
 
 /* RESPONSIVE */
 @media(max-width:1024px){.hero-wrap{grid-template-columns:1fr}.t-card{display:none}.about-grid{grid-template-columns:1fr}.sk-grid{grid-template-columns:repeat(2,1fr)}.proj-grid{grid-template-columns:1fr}.blog-grid{grid-template-columns:1fr}.wgrid{grid-template-columns:1fr}.ct-box{grid-template-columns:1fr;padding:36px}}
@@ -232,6 +269,8 @@ footer{border-top:1px solid var(--b1);padding:24px 5vw;display:flex;justify-cont
     <a class="nl" href="#experience">experience</a>
     <a class="nl" href="#projects">projects</a>
     <a class="nl" href="#blog">blog</a>
+    <a class="nl" href="#devops">devops</a>
+    <a class="nl" href="#devops">devops</a>
     <a class="nl" href="#contact">contact</a>
   </div>
   <div class="nav-r">
@@ -343,7 +382,6 @@ footer{border-top:1px solid var(--b1);padding:24px 5vw;display:flex;justify-cont
         <div class="ac"><div class="ac-icon">☁️</div><div class="ac-val">50+</div><div class="ac-lbl">Environments</div></div>
         <div class="ac"><div class="ac-icon">🔐</div><div class="ac-val">100%</div><div class="ac-lbl">Pipelines with SAST</div></div>
         <div class="ac"><div class="ac-icon">📝</div><div class="ac-val">3.3K</div><div class="ac-lbl">LinkedIn Followers</div></div>
-        <div class="ac"><div class="ac-icon">🎓</div><div class="ac-val">8.8</div><div class="ac-lbl">CGPA — Mumbai Univ.</div></div>
         <div class="ac"><div class="ac-icon">🏆</div><div class="ac-val">AZ-900</div><div class="ac-lbl">Azure Certified</div></div>
       </div>
     </div>
@@ -486,14 +524,82 @@ footer{border-top:1px solid var(--b1);padding:24px 5vw;display:flex;justify-cont
   </div>
 </section>
 
-<footer>
-  <span>© 2025 Devesh Khatik · DevSecOps Engineer · Mumbai</span>
-  <div class="foot-r">
+<!-- DEVOPS PHILOSOPHY SECTION -->
+<hr class="div">
+<section class="sec" id="devops">
+  <div class="s-inner">
+    <div class="s-label">My Approach</div>
+    <h2 class="s-title">DevOps <span>Philosophy</span></h2>
+    <div class="dv-quote rv">
+      <div class="dv-quote-bar"></div>
+      <p class="dv-quote-text">"DevOps is not a tool. It's not a team. It's a culture of shared responsibility — where developers own security, operations own quality, and everyone owns the pipeline."</p>
+      <span class="dv-quote-attr">— Devesh Khatik</span>
+    </div>
+    <div class="dv-pillars rv d1">
+      <div class="dv-pillar">
+        <div class="dv-pillar-num">01</div>
+        <div class="dv-pillar-icon">🔄</div>
+        <div class="dv-pillar-title">Automate Everything</div>
+        <p class="dv-pillar-desc">If you're doing it manually more than twice, automate it. From infrastructure provisioning with Terraform to container scanning with Trivy — every repetitive task is a pipeline opportunity.</p>
+        <div class="dv-pillar-tags"><span class="dpt">CI/CD</span><span class="dpt">IaC</span><span class="dpt">GitOps</span></div>
+      </div>
+      <div class="dv-pillar">
+        <div class="dv-pillar-num">02</div>
+        <div class="dv-pillar-icon">🔐</div>
+        <div class="dv-pillar-title">Shift Security Left</div>
+        <p class="dv-pillar-desc">Security isn't a final gate — it's baked into every commit. SAST with SonarQube, CVE scanning with Trivy, IAM least privilege, secret scanning — all integrated pre-production, not post-incident.</p>
+        <div class="dv-pillar-tags"><span class="dpt">SAST</span><span class="dpt">Trivy</span><span class="dpt">SonarQube</span></div>
+      </div>
+      <div class="dv-pillar">
+        <div class="dv-pillar-num">03</div>
+        <div class="dv-pillar-icon">📊</div>
+        <div class="dv-pillar-title">Observe Everything</div>
+        <p class="dv-pillar-desc">You can't fix what you can't see. Prometheus metrics, Grafana dashboards, structured logging, and on-call discipline mean we catch problems before customers do — every time.</p>
+        <div class="dv-pillar-tags"><span class="dpt">Prometheus</span><span class="dpt">Grafana</span><span class="dpt">On-call</span></div>
+      </div>
+    </div>
+    <div class="dv-cycle rv d2">
+      <div class="dv-cycle-title">The DevSecOps Lifecycle I live by</div>
+      <div class="dv-cycle-steps">
+        <div class="dv-step"><span class="dv-step-icon">📝</span><span class="dv-step-label">Plan</span></div>
+        <div class="dv-step-arrow">→</div>
+        <div class="dv-step"><span class="dv-step-icon">💻</span><span class="dv-step-label">Code</span></div>
+        <div class="dv-step-arrow">→</div>
+        <div class="dv-step dv-step-hl"><span class="dv-step-icon">🔍</span><span class="dv-step-label">SAST Scan</span></div>
+        <div class="dv-step-arrow">→</div>
+        <div class="dv-step"><span class="dv-step-icon">🏗️</span><span class="dv-step-label">Build</span></div>
+        <div class="dv-step-arrow">→</div>
+        <div class="dv-step dv-step-hl"><span class="dv-step-icon">🛡️</span><span class="dv-step-label">CVE Scan</span></div>
+        <div class="dv-step-arrow">→</div>
+        <div class="dv-step"><span class="dv-step-icon">🚀</span><span class="dv-step-label">Deploy</span></div>
+        <div class="dv-step-arrow">→</div>
+        <div class="dv-step"><span class="dv-step-icon">📊</span><span class="dv-step-label">Monitor</span></div>
+      </div>
+      <div class="dv-cycle-note">Security gates highlighted — no code ships without passing SAST + CVE checks</div>
+    </div>
+    <div class="dv-tools rv d2">
+      <div class="dv-tools-title">Tools I use every day at ProTechmanize</div>
+      <div class="dv-tools-grid">
+        <div class="dv-tool"><span class="dv-tool-icon">⚙️</span><span class="dv-tool-name">AWS CodePipeline</span><span class="dv-tool-use">156+ active pipelines</span></div>
+        <div class="dv-tool"><span class="dv-tool-icon">🔍</span><span class="dv-tool-name">SonarQube</span><span class="dv-tool-use">SAST on every commit</span></div>
+        <div class="dv-tool"><span class="dv-tool-icon">🛡️</span><span class="dv-tool-name">Trivy</span><span class="dv-tool-use">Container CVE scanning</span></div>
+        <div class="dv-tool"><span class="dv-tool-icon">🐳</span><span class="dv-tool-name">Docker + EKS</span><span class="dv-tool-use">Container orchestration</span></div>
+        <div class="dv-tool"><span class="dv-tool-icon">☁️</span><span class="dv-tool-name">Azure DevOps</span><span class="dv-tool-use">Mobile app pipelines</span></div>
+        <div class="dv-tool"><span class="dv-tool-icon">🏗️</span><span class="dv-tool-name">Jenkins</span><span class="dv-tool-use">In-house delivery</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="endbar">
+  <span class="endbar-logo">DK</span>
+  <span class="endbar-text">Devesh Khatik · DevSecOps Engineer · Mumbai</span>
+  <div class="endbar-links">
     <a href="https://github.com/DEVESH7k" target="_blank">GitHub</a>
     <a href="https://www.linkedin.com/in/deveshkhatik" target="_blank">LinkedIn</a>
     <a href="https://medium.com/@deveshkhatik007" target="_blank">Medium</a>
   </div>
-</footer>
+</div>
 
 <script>
 const nav=document.getElementById('nav');
