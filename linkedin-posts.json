@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Going from Data Specialist to DevSecOps — what nobody tells you",
+    "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
+    "pubDate": "14 Mar 2025",
+    "snippet": "Security thinking is a different mindset. You stop asking 'Does it work?' and start asking 'Is it safe?' Every docker run flag, every IAM role, every third-party image has a security implication.",
+    "tag": "Career"
+  },
+  {
+    "title": "Stop using Kubernetes when Docker Compose would do the job",
+    "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
+    "pubDate": "13 Mar 2025",
+    "snippet": "At my org I've seen engineers spin up full EKS clusters for apps serving 10 users a day. Here's a simple decision framework: use Compose for local dev + small apps, K8s only when you truly need auto-scaling and HA.",
+    "tag": "DevOps"
+  }
+]
