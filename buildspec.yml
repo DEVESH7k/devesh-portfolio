@@ -7,7 +7,7 @@ env:
     MEDIUM_USERNAME: "deveshkhatik007"
   # These come from CodePipeline environment / SSM (set during pipeline setup)
   parameter-store:
-    CLOUDFRONT_DISTRIBUTION_ID: "portfolio-cloudfront-id"
+    CLOUDFRONT_DISTRIBUTION_ID: "/portfolio/cloudfront_distribution_id"
 phases:
   install:
     runtime-versions:
@@ -25,7 +25,11 @@ phases:
       - ls -lh dist/
   post_build:
     commands:
-      - echo "=== Build done — waiting for manual approval before deploy ==="
+      - echo "=== Syncing to S3 ==="
+      - aws s3 sync dist/ s3://$S3_BUCKET_NAME/ --delete --cache-control "public, max-age=300"
+      - echo "=== Invalidating CloudFront cache ==="
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+      - echo "=== Deploy complete! ==="
 artifacts:
   files:
     - dist/**/*
@@ -33,3 +37,12 @@ artifacts:
 cache:
   paths:
     - node_modules/**/*
+```
+
+**Two things changed:**
+1. `post_build` — restored `aws s3 sync` and CloudFront invalidation
+2. SSM key fixed from `"portfolio-cloudfront-id"` → `"/portfolio/cloudfront_distribution_id"`
+
+Commit with:
+```
+fix: restore S3 deploy + fix SSM key for CloudFront invalidation
