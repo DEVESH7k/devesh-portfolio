@@ -1,32 +1,28 @@
 version: 0.2
-
 # AWS CodeBuild build spec
 # Runs during the Build stage of CodePipeline
 # Fetches Medium RSS + injects LinkedIn posts → outputs dist/index.html
-
 env:
   variables:
     MEDIUM_USERNAME: "deveshkhatik007"
   # These come from CodePipeline environment / SSM (set during pipeline setup)
   parameter-store:
     CLOUDFRONT_DISTRIBUTION_ID: "portfolio-cloudfront-id"
-
 phases:
-
   install:
     runtime-versions:
       nodejs: 20
     commands:
       - echo "=== Installing dependencies ==="
       - npm ci
-
   build:
     commands:
       - echo "=== Syncing Medium RSS + building ==="
       - node scripts/sync-content.js
+      - echo "=== Copying resume to dist ==="
+      - cp resume.pdf dist/resume.pdf
       - echo "=== Build complete ==="
       - ls -lh dist/
-
   post_build:
     commands:
       - echo "=== Syncing to S3 ==="
@@ -34,12 +30,10 @@ phases:
       - echo "=== Invalidating CloudFront cache ==="
       - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
       - echo "=== Deploy complete! ==="
-
 artifacts:
   files:
     - dist/**/*
   discard-paths: no
-
 cache:
   paths:
     - node_modules/**/*
