@@ -25,11 +25,7 @@ phases:
       - ls -lh dist/
   post_build:
     commands:
-      - echo "=== Syncing to S3 ==="
-      - aws s3 sync dist/ s3://$S3_BUCKET_NAME/ --delete --cache-control "public, max-age=300"
-      - echo "=== Invalidating CloudFront cache ==="
-      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
-      - echo "=== Deploy complete! ==="
+      - echo "=== Build done — waiting for manual approval before deploy ==="
 artifacts:
   files:
     - dist/**/*
