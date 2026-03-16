@@ -3,7 +3,7 @@ env:
   variables:
     MEDIUM_USERNAME: "deveshkhatik007"
   parameter-store:
-  CLOUDFRONT_DISTRIBUTION_ID: "portfolio-cloudfront-id"
+    CLOUDFRONT_DISTRIBUTION_ID: "portfolio-cloudfront-id"
 phases:
   install:
     runtime-versions:
