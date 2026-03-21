@@ -192,15 +192,46 @@ hr.div{border:none;border-top:1px solid var(--b1)}
 .pt{font-family:var(--mono);font-size:10px;padding:3px 7px;border-radius:4px;background:var(--bg3);border:1px solid var(--b1);color:var(--text3)}
 
 /* BLOG */
-.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.blog-card{background:var(--bg1);border:1px solid var(--b1);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:9px;transition:all .25s;text-decoration:none}
-.blog-card:hover{border-color:var(--b2);transform:translateY(-4px);background:var(--bg2)}
-.blog-platform{font-family:var(--mono);font-size:10px;color:var(--cyan);text-transform:uppercase;letter-spacing:.1em}
-.blog-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.45}
-.blog-snippet{font-size:12px;color:var(--text2);line-height:1.7;flex:1}
-.blog-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
-.blog-tag{font-family:var(--mono);font-size:10px;padding:3px 8px;background:var(--bg3);border:1px solid var(--b1);border-radius:4px;color:var(--text3)}
-.blog-arrow{font-size:14px;color:var(--cyan)}
+.<!-- BLOG_START -->
+<div class="blog-grid">
+  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
+    <div class="blog-platform">💼&nbsp;LinkedIn · Day 26</div>
+    <div class="blog-title">Your Kubernetes cluster is running — but is it healthy?</div>
+    <div class="blog-snippet">Many teams only discover problems when users start complaining. Prometheus + Grafana + AlertManager gives full visibility into cluster health before issues reach production.</div>
+    <div class="blog-footer"><span class="blog-tag">Kubernetes</span><span class="blog-arrow">↗</span></div>
+  </a>
+  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
+    <div class="blog-platform">💼&nbsp;LinkedIn · Day 25</div>
+    <div class="blog-title">A bad Dockerfile can create security risks and very large container images</div>
+    <div class="blog-snippet">My 8-point Dockerfile checklist — from pinning base image versions and multi-stage builds to never running containers as root and always scanning for vulnerabilities.</div>
+    <div class="blog-footer"><span class="blog-tag">Docker</span><span class="blog-arrow">↗</span></div>
+  </a>
+  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
+    <div class="blog-platform">💼&nbsp;LinkedIn · Day 24</div>
+    <div class="blog-title">How to prepare for a DevOps interview in 30 days</div>
+    <div class="blog-snippet">No expensive courses. No unnecessary theory. Week by week plan covering Linux, Docker, Kubernetes, CI/CD, and cloud architecture — plus 2026 trends like Platform Engineering and FinOps.</div>
+    <div class="blog-footer"><span class="blog-tag">Career</span><span class="blog-arrow">↗</span></div>
+  </a>
+  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
+    <div class="blog-platform">💼&nbsp;LinkedIn · Day 23</div>
+    <div class="blog-title">Ansible vs Terraform — they are not competitors, they work best together</div>
+    <div class="blog-snippet">Terraform builds the house. Ansible furnishes it. In real production environments: Terraform creates the infrastructure, Ansible configures the servers, applications deploy on top.</div>
+    <div class="blog-footer"><span class="blog-tag">IaC</span><span class="blog-arrow">↗</span></div>
+  </a>
+  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
+    <div class="blog-platform">💼&nbsp;LinkedIn · Day 22</div>
+    <div class="blog-title">I built a Netflix Clone DevSecOps pipeline on AWS — not a tutorial demo</div>
+    <div class="blog-snippet">A real project with real problems: Jenkins, Docker, EKS, ArgoCD, Prometheus, Grafana, SonarQube and Trivy. The problems I faced and the lessons learned building production-style pipelines.</div>
+    <div class="blog-footer"><span class="blog-tag">DevSecOps</span><span class="blog-arrow">↗</span></div>
+  </a>
+  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
+    <div class="blog-platform">💼&nbsp;LinkedIn · Day 21</div>
+    <div class="blog-title">Your CI/CD pipeline may have a hidden security problem</div>
+    <div class="blog-snippet">Many engineers only discover it after credentials get leaked. Cloud credentials stored directly inside configuration files is one of the most dangerous mistakes in DevSecOps.</div>
+    <div class="blog-footer"><span class="blog-tag">Security</span><span class="blog-arrow">↗</span></div>
+  </a>
+</div>
+<!-- BLOG_END -->
 
 /* CONTACT */
 .ct-box{background:linear-gradient(135deg,var(--bg1),var(--bg2));border:1px solid var(--b2);border-radius:var(--r);padding:60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;overflow:hidden}
@@ -512,7 +543,7 @@ body.light .g2{background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transp
         <div class="wgrid">
           <a href="https://medium.com/@deveshkhatik007" target="_blank" class="wc"><div class="wc-src">✍️ Medium</div><div class="wc-title">Cloud project walkthroughs &amp; DevOps tutorials</div><div class="wc-meta">EKS · Terraform · CI/CD</div><div class="wc-link">Read →</div></a>
           <a href="https://hashnode.com/@DeveshKhatik" target="_blank" class="wc"><div class="wc-src">💻 Hashnode</div><div class="wc-title">DevSecOps deep-dives &amp; tool comparisons</div><div class="wc-meta">SonarQube · Trivy · AppSec</div><div class="wc-link">Read →</div></a>
-          <a href="https://www.linkedin.com/in/deveshkhatik" target="_blank" class="wc"><div class="wc-src">💼 LinkedIn</div><div class="wc-title">30-day DevSecOps challenge — daily posts with code</div><div class="wc-meta">3,409 followers · Day 21+</div><div class="wc-link">Follow →</div></a>
+          <a href="https://www.linkedin.com/in/deveshkhatik" target="_blank" class="wc"><div class="wc-src">💼 LinkedIn</div><div class="wc-title">30-day DevSecOps challenge — daily posts with code</div><div class="wc-meta">3,441 followers · Day 26+</div><div class="wc-link">Follow →</div></a>
         </div>
       </div>
       <div class="about-cards">
