@@ -1,16 +1,49 @@
 [
   {
-    "title": "Going from Data Specialist to DevSecOps — what nobody tells you",
+    "title": "Your Kubernetes cluster is running — but is it healthy?",
     "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
-    "pubDate": "14 Mar 2025",
-    "snippet": "Security thinking is a different mindset. You stop asking 'Does it work?' and start asking 'Is it safe?' Every docker run flag, every IAM role, every third-party image has a security implication.",
+    "pubDate": "Day 26",
+    "snippet": "Many teams only discover problems when users start complaining. Prometheus + Grafana + AlertManager gives full visibility into cluster health before issues reach production.",
+    "tag": "Kubernetes"
+  },
+  {
+    "title": "A bad Dockerfile can create security risks and very large container images",
+    "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
+    "pubDate": "Day 25",
+    "snippet": "My 8-point Dockerfile checklist — from pinning base image versions and multi-stage builds to never running containers as root and always scanning for vulnerabilities.",
+    "tag": "Docker"
+  },
+  {
+    "title": "How to prepare for a DevOps interview in 30 days",
+    "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
+    "pubDate": "Day 24",
+    "snippet": "No expensive courses. No unnecessary theory. Week by week plan covering Linux, Docker, Kubernetes, CI/CD, and cloud architecture — plus 2026 trends like Platform Engineering and FinOps.",
     "tag": "Career"
   },
   {
-    "title": "Stop using Kubernetes when Docker Compose would do the job",
+    "title": "Ansible vs Terraform — they are not competitors, they work best together",
     "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
-    "pubDate": "13 Mar 2025",
-    "snippet": "At my org I've seen engineers spin up full EKS clusters for apps serving 10 users a day. Here's a simple decision framework: use Compose for local dev + small apps, K8s only when you truly need auto-scaling and HA.",
-    "tag": "DevOps"
+    "pubDate": "Day 23",
+    "snippet": "Terraform builds the house. Ansible furnishes it. In real production: Terraform creates the infrastructure, Ansible configures the servers, applications deploy on top.",
+    "tag": "IaC"
+  },
+  {
+    "title": "I built a Netflix Clone DevSecOps pipeline on AWS — not a tutorial demo",
+    "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
+    "pubDate": "Day 22",
+    "snippet": "A real project with real problems: Jenkins, Docker, EKS, ArgoCD, Prometheus, Grafana, SonarQube and Trivy. The lessons learned building production-style pipelines.",
+    "tag": "DevSecOps"
+  },
+  {
+    "title": "Your CI/CD pipeline may have a hidden security problem",
+    "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
+    "pubDate": "Day 21",
+    "snippet": "Many engineers only discover it after credentials get leaked. Cloud credentials stored directly inside configuration files is one of the most dangerous mistakes in DevSecOps.",
+    "tag": "Security"
   }
 ]
+```
+
+Commit with:
+```
+content: update linkedin posts to day 26
