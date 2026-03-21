@@ -4,11 +4,11 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Devesh Khatik | DevSecOps & Cloud Engineer</title>
-<meta name="description" content="Devesh Khatik — DevSecOps Engineer at ProTechmanize. CI/CD, Kubernetes, AWS, Azure, SonarQube, Trivy. Mumbai, India."/>
+<meta name="description" content="Devesh Khatik — DevSecOps Engineer at ProTechmanize, Mumbai. Building secure cloud-native pipelines across AWS and Azure. Managing 156+ CI/CD pipelines with SonarQube SAST and Trivy CVE scanning across 50+ customer environments."/>
 <meta name="keywords" content="DevSecOps, DevOps, Cloud Engineer, Kubernetes, Terraform, AWS, Azure, CI/CD, Docker, SonarQube, Trivy, Jenkins, Mumbai"/>
 <meta name="author" content="Devesh Khatik"/>
 <meta property="og:title" content="Devesh Khatik | DevSecOps & Cloud Engineer"/>
-<meta property="og:description" content="Building secure, scalable infrastructure. 156+ CI/CD pipelines. Mumbai, India."/>
+<meta property="og:description" content="Devesh Khatik — DevSecOps Engineer at ProTechmanize, Mumbai. Building secure cloud-native pipelines across AWS and Azure. Managing 156+ CI/CD pipelines with SonarQube SAST and Trivy CVE scanning across 50+ customer environments."/>
 <meta property="og:image" content="https://d35cca44okwtnr.cloudfront.net/og-image.svg"/>
 <meta property="og:url" content="https://d35cca44okwtnr.cloudfront.net"/>
 <meta property="og:type" content="website"/>
@@ -17,7 +17,6 @@
 <meta name="theme-color" content="#08050f"/>
 <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 <link rel="alternate icon" href="favicon.svg"/>
-<meta name="theme-color" content="#08050f"/>
 <!-- BUILD_TIME -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
@@ -192,46 +191,15 @@ hr.div{border:none;border-top:1px solid var(--b1)}
 .pt{font-family:var(--mono);font-size:10px;padding:3px 7px;border-radius:4px;background:var(--bg3);border:1px solid var(--b1);color:var(--text3)}
 
 /* BLOG */
-.<!-- BLOG_START -->
-<div class="blog-grid">
-  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
-    <div class="blog-platform">💼&nbsp;LinkedIn · Day 26</div>
-    <div class="blog-title">Your Kubernetes cluster is running — but is it healthy?</div>
-    <div class="blog-snippet">Many teams only discover problems when users start complaining. Prometheus + Grafana + AlertManager gives full visibility into cluster health before issues reach production.</div>
-    <div class="blog-footer"><span class="blog-tag">Kubernetes</span><span class="blog-arrow">↗</span></div>
-  </a>
-  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
-    <div class="blog-platform">💼&nbsp;LinkedIn · Day 25</div>
-    <div class="blog-title">A bad Dockerfile can create security risks and very large container images</div>
-    <div class="blog-snippet">My 8-point Dockerfile checklist — from pinning base image versions and multi-stage builds to never running containers as root and always scanning for vulnerabilities.</div>
-    <div class="blog-footer"><span class="blog-tag">Docker</span><span class="blog-arrow">↗</span></div>
-  </a>
-  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
-    <div class="blog-platform">💼&nbsp;LinkedIn · Day 24</div>
-    <div class="blog-title">How to prepare for a DevOps interview in 30 days</div>
-    <div class="blog-snippet">No expensive courses. No unnecessary theory. Week by week plan covering Linux, Docker, Kubernetes, CI/CD, and cloud architecture — plus 2026 trends like Platform Engineering and FinOps.</div>
-    <div class="blog-footer"><span class="blog-tag">Career</span><span class="blog-arrow">↗</span></div>
-  </a>
-  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
-    <div class="blog-platform">💼&nbsp;LinkedIn · Day 23</div>
-    <div class="blog-title">Ansible vs Terraform — they are not competitors, they work best together</div>
-    <div class="blog-snippet">Terraform builds the house. Ansible furnishes it. In real production environments: Terraform creates the infrastructure, Ansible configures the servers, applications deploy on top.</div>
-    <div class="blog-footer"><span class="blog-tag">IaC</span><span class="blog-arrow">↗</span></div>
-  </a>
-  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
-    <div class="blog-platform">💼&nbsp;LinkedIn · Day 22</div>
-    <div class="blog-title">I built a Netflix Clone DevSecOps pipeline on AWS — not a tutorial demo</div>
-    <div class="blog-snippet">A real project with real problems: Jenkins, Docker, EKS, ArgoCD, Prometheus, Grafana, SonarQube and Trivy. The problems I faced and the lessons learned building production-style pipelines.</div>
-    <div class="blog-footer"><span class="blog-tag">DevSecOps</span><span class="blog-arrow">↗</span></div>
-  </a>
-  <a href="https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/" target="_blank" rel="noopener noreferrer" class="blog-card">
-    <div class="blog-platform">💼&nbsp;LinkedIn · Day 21</div>
-    <div class="blog-title">Your CI/CD pipeline may have a hidden security problem</div>
-    <div class="blog-snippet">Many engineers only discover it after credentials get leaked. Cloud credentials stored directly inside configuration files is one of the most dangerous mistakes in DevSecOps.</div>
-    <div class="blog-footer"><span class="blog-tag">Security</span><span class="blog-arrow">↗</span></div>
-  </a>
-</div>
-<!-- BLOG_END -->
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.blog-card{background:var(--bg1);border:1px solid var(--b1);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:9px;transition:all .25s;text-decoration:none}
+.blog-card:hover{border-color:var(--b2);transform:translateY(-4px);background:var(--bg2)}
+.blog-platform{font-family:var(--mono);font-size:10px;color:var(--cyan);text-transform:uppercase;letter-spacing:.1em}
+.blog-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.45}
+.blog-snippet{font-size:12px;color:var(--text2);line-height:1.7;flex:1}
+.blog-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.blog-tag{font-family:var(--mono);font-size:10px;padding:3px 8px;background:var(--bg3);border:1px solid var(--b1);border-radius:4px;color:var(--text3)}
+.blog-arrow{font-size:14px;color:var(--cyan)}
 
 /* CONTACT */
 .ct-box{background:linear-gradient(135deg,var(--bg1),var(--bg2));border:1px solid var(--b2);border-radius:var(--r);padding:60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;overflow:hidden}
@@ -290,7 +258,6 @@ hr.div{border:none;border-top:1px solid var(--b1)}
 @media(max-width:1024px){.dv-pillars{grid-template-columns:1fr}.dv-tools-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.dv-cycle-steps{gap:4px}.dv-step{min-width:56px;padding:8px}.dv-tools-grid{grid-template-columns:1fr}}
 
-/* RESPONSIVE */
 /* PROGRESS BAR */
 #progress-bar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--cyan),#e879f9);z-index:9999;width:0%;transition:width .1s;box-shadow:0 0 8px rgba(167,139,250,.6)}
 
@@ -450,7 +417,7 @@ body.light .g2{background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transp
     <div>
       <div class="live-badges">
         <span class="live-badge"><span class="lb-dot green"></span>Open to Work</span>
-        <span class="live-badge" id="li-badge"><span class="lb-dot purple"></span>LinkedIn: <span id="li-day" style="color:var(--cyan);margin-left:2px">Day 21</span> of 30</span>
+        <span class="live-badge" id="li-badge"><span class="lb-dot purple"></span>LinkedIn: <span id="li-day" style="color:var(--cyan);margin-left:2px">Day 26</span> of 30</span>
       </div>
       <div class="hero-eyebrow">⚡ DevSecOps Engineer · Mumbai, India</div>
       <h1 class="hero-h1">Devesh<br><em>Khatik</em></h1>
@@ -646,26 +613,6 @@ body.light .g2{background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transp
     <div class="s-label">Writing</div>
     <h2 class="s-title">Latest <span>Posts</span></h2>
     <!-- BLOG_START -->
-    <div class="blog-grid">
-      <a href="https://www.linkedin.com/in/deveshkhatik" target="_blank" class="blog-card">
-        <div class="blog-platform">💼 LinkedIn · Day 19</div>
-        <div class="blog-title">Going from Data Specialist to DevSecOps — what nobody tells you</div>
-        <div class="blog-snippet">Security thinking is a mindset shift. You stop asking "Does it work?" and start asking "Is it safe?" Every docker run flag has a security implication.</div>
-        <div class="blog-footer"><span class="blog-tag">Career</span><span class="blog-arrow">↗</span></div>
-      </a>
-      <a href="https://www.linkedin.com/in/deveshkhatik" target="_blank" class="blog-card">
-        <div class="blog-platform">💼 LinkedIn · Day 18</div>
-        <div class="blog-title">Stop using Kubernetes when Docker Compose would do the job</div>
-        <div class="blog-snippet">A simple framework for choosing the right container tool in 2026 — and why over-engineering costs more than money.</div>
-        <div class="blog-footer"><span class="blog-tag">DevOps</span><span class="blog-arrow">↗</span></div>
-      </a>
-      <a href="https://medium.com/@deveshkhatik007" target="_blank" class="blog-card">
-        <div class="blog-platform">✍️ Medium</div>
-        <div class="blog-title">EKS + Terraform setup for real-time applications</div>
-        <div class="blog-snippet">Step-by-step guide to provisioning a production-grade EKS cluster with Terraform including VPC, node groups, IAM roles, and add-ons.</div>
-        <div class="blog-footer"><span class="blog-tag">Terraform</span><span class="blog-arrow">↗</span></div>
-      </a>
-    </div>
     <!-- BLOG_END -->
   </div>
 </section>
@@ -693,7 +640,6 @@ body.light .g2{background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transp
   </div>
 </section>
 
-<!-- DEVOPS PHILOSOPHY SECTION -->
 <hr class="div">
 <section class="sec" id="devops">
   <div class="s-inner">
@@ -773,30 +719,23 @@ body.light .g2{background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transp
 <a href="#hero" id="btt" title="Back to top">↑</a>
 
 <script>
-// ── NAV SCROLL ──
 const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>{
   nav.classList.toggle('scrolled',scrollY>20);
-  // progress bar
   const h=document.documentElement;
   const pct=(scrollY/(h.scrollHeight-h.clientHeight))*100;
   document.getElementById('progress-bar').style.width=pct+'%';
-  // back to top
   document.getElementById('btt').classList.toggle('show',scrollY>400);
 },{passive:true});
 
-// ── ACTIVE NAV ──
 const secs=document.querySelectorAll('section[id]');
 const nls=document.querySelectorAll('.nl');
 secs.forEach(s=>new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){nls.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.nl[href="#${e.target.id}"]`);if(a)a.classList.add('active')}})},{threshold:.4}).observe(s));
 
-// ── SCROLL REVEAL ──
 document.querySelectorAll('.rv').forEach(el=>new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.08}).observe(el));
 
-// ── SKILL BARS ──
 document.querySelectorAll('.bars').forEach(el=>new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('.bar-fill').forEach(b=>b.classList.add('go'))})},{threshold:.3}).observe(el));
 
-// ── TYPING EFFECT ──
 const phrases=['DevSecOps Engineer','Cloud Infrastructure Specialist','Pipeline Automation Expert','Shift-Left Security Advocate','SRE & DevOps Engineer'];
 let pi=0,ci=0,deleting=false;
 const el=document.getElementById('typed-text');
@@ -814,7 +753,6 @@ function type(){
 }
 type();
 
-// ── DARK/LIGHT TOGGLE ──
 function toggleTheme(){
   const light=document.body.classList.toggle('light');
   document.getElementById('theme-toggle').textContent=light?'🌙':'☀️';
@@ -822,26 +760,20 @@ function toggleTheme(){
 }
 if(localStorage.getItem('theme')==='light'){document.body.classList.add('light');document.getElementById('theme-toggle').textContent='🌙';}
 
-// ── LINKEDIN DAY COUNTER ──
 const startDate=new Date('2026-02-24');
 const dayNum=Math.min(30,Math.max(1,Math.round((new Date()-startDate)/(1000*60*60*24))));
 const liDay=document.getElementById('li-day');
 if(liDay)liDay.textContent='Day '+dayNum;
 
-// ── GITHUB ACTIVITY GRAPH ──
 async function loadGithub(){
   const grid=document.getElementById('gh-grid');
   const totalEl=document.getElementById('gh-total');
   if(!grid)return;
-  // Generate realistic-looking contribution data (365 cells)
-  // In production this would call GitHub API — showing simulated data
   const cells=364;
   let total=0;
-  const weights=[0,0,0,0,1,1,2,3]; // mostly empty, some activity
   for(let i=0;i<cells;i++){
     const div=document.createElement('div');
     div.className='gh-cell';
-    // More activity in recent months
     const recency=i/cells;
     const rand=Math.random();
     let level=0;
@@ -857,9 +789,6 @@ async function loadGithub(){
 }
 loadGithub();
 
-// ── PIPELINE STATUS ──
-// In production: call AWS CodePipeline API via a Lambda endpoint
-// Showing static "passing" for now
 const pipeBadge=document.getElementById('pipeline-badge');
 if(pipeBadge)pipeBadge.title='Last deployed: '+new Date().toLocaleDateString('en-IN');
 </script>
