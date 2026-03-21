@@ -17,33 +17,28 @@
     "title": "How to prepare for a DevOps interview in 30 days",
     "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
     "pubDate": "Day 24",
-    "snippet": "No expensive courses. No unnecessary theory. Week by week plan covering Linux, Docker, Kubernetes, CI/CD, and cloud architecture — plus 2026 trends like Platform Engineering and FinOps.",
+    "snippet": "No expensive courses. No unnecessary theory. Week by week plan covering Linux, Docker, Kubernetes, CI/CD, and cloud architecture.",
     "tag": "Career"
   },
   {
     "title": "Ansible vs Terraform — they are not competitors, they work best together",
     "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
     "pubDate": "Day 23",
-    "snippet": "Terraform builds the house. Ansible furnishes it. In real production: Terraform creates the infrastructure, Ansible configures the servers, applications deploy on top.",
+    "snippet": "Terraform builds the house. Ansible furnishes it. In real production: Terraform creates infrastructure, Ansible configures servers, applications deploy on top.",
     "tag": "IaC"
   },
   {
     "title": "I built a Netflix Clone DevSecOps pipeline on AWS — not a tutorial demo",
     "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
     "pubDate": "Day 22",
-    "snippet": "A real project with real problems: Jenkins, Docker, EKS, ArgoCD, Prometheus, Grafana, SonarQube and Trivy. The lessons learned building production-style pipelines.",
+    "snippet": "A real project with real problems: Jenkins, Docker, EKS, ArgoCD, Prometheus, Grafana, SonarQube and Trivy. Lessons learned building production-style pipelines.",
     "tag": "DevSecOps"
   },
   {
     "title": "Your CI/CD pipeline may have a hidden security problem",
     "link": "https://www.linkedin.com/in/deveshkhatik/recent-activity/shares/",
     "pubDate": "Day 21",
-    "snippet": "Many engineers only discover it after credentials get leaked. Cloud credentials stored directly inside configuration files is one of the most dangerous mistakes in DevSecOps.",
+    "snippet": "Many engineers only discover it after credentials get leaked. Cloud credentials stored inside configuration files is one of the most dangerous mistakes in DevSecOps.",
     "tag": "Security"
   }
 ]
-```
-
-Commit with:
-```
-content: update linkedin posts to day 26
