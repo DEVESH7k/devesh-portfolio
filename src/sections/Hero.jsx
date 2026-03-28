@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import StarsCanvas from "../components/StarsCanvas";
 import { socialLinks } from "../constants";
 
 const titles = [
@@ -41,7 +40,7 @@ function Hero() {
 
   return (
     <section ref={sectionRef} className="relative w-full h-screen flex items-center overflow-hidden">
-      <StarsCanvas />
+    
 
       {/* Cursor glow */}
       <div className="cursor-glow hidden md:block" style={{ left: mousePos.x, top: mousePos.y }} />

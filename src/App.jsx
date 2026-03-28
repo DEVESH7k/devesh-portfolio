@@ -1,10 +1,10 @@
 import { useState, lazy, Suspense } from "react";
 import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
+import StarsCanvas from "./components/StarsCanvas";
 import Hero from "./sections/Hero";
 import Footer from "./components/Footer";
 
-// Lazy load heavier sections for performance
 const About = lazy(() => import("./sections/About"));
 const Skills = lazy(() => import("./sections/Skills"));
 const Experience = lazy(() => import("./sections/Experience"));
@@ -29,19 +29,24 @@ function App() {
     <>
       {loading && <Loader onComplete={() => setLoading(false)} />}
       <div className={`relative bg-[#050816] ${loading ? "overflow-hidden h-screen" : ""}`}>
-        <Navbar />
-        <Hero />
-        <Suspense fallback={<SectionFallback />}>
-          <About />
-          <Skills />
-          <Experience />
-          <Projects />
-          <Certifications />
-          <Challenge />
-          <Blog />
-          <Contact />
-        </Suspense>
-        <Footer />
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <StarsCanvas />
+        </div>
+        <div className="relative z-10">
+          <Navbar />
+          <Hero />
+          <Suspense fallback={<SectionFallback />}>
+            <About />
+            <Skills />
+            <Experience />
+            <Projects />
+            <Certifications />
+            <Challenge />
+            <Blog />
+            <Contact />
+          </Suspense>
+          <Footer />
+        </div>
       </div>
     </>
   );
