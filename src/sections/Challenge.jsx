@@ -9,59 +9,116 @@ const phases = [
   { name: "2026 Trends", days: "22–30", color: "#f0abfc", desc: "Karpenter, OTel, LLMOps, Sigstore" },
 ];
 
-function ChallengeStatCard({ value, label }) {
+const statItems = [
+  { value: "30", label: "Posts Published", icon: "✍️" },
+  { value: "3541", label: "Followers Reached", icon: "👥" },
+  { value: "598", label: "Top Post Impressions", icon: "📈" },
+  { value: "0", label: "Days Missed", icon: "🔥" },
+];
+
+function ChallengeStatCard({ value, label, icon }) {
   const { ref, displayValue } = useCountUp(value, 1800, true);
   return (
-    <div ref={ref} className="rounded-2xl bg-bg1 border border-white/[0.06] p-6 text-center">
-      <p className="text-[36px] font-bold font-outfit text-white leading-none">{displayValue}</p>
-      <p className="text-[11px] font-mono text-[#9488aa] uppercase tracking-wider mt-2">{label}</p>
-    </div>
+    <motion.div
+      variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
+      className="group rounded-2xl bg-bg1 border border-white/[0.06] p-6 hover:border-accent/20 transition-colors duration-300 text-center"
+    >
+      <div ref={ref}>
+        <span className="text-[26px] block mb-3">{icon}</span>
+        <p className="text-[34px] font-bold font-outfit text-white leading-none">{displayValue}</p>
+        <p className="text-[11px] font-mono text-[#9488aa] uppercase tracking-wider mt-2">{label}</p>
+      </div>
+    </motion.div>
   );
 }
 
 function Challenge() {
   return (
     <section id="challenge" className="section-padding relative overflow-hidden">
-      <div className="pointer-events-none absolute bottom-0 left-[10%] w-[600px] h-[600px] rounded-full opacity-[0.03]" style={{ background: "radial-gradient(circle, #e879f9 0%, transparent 70%)" }} />
+      <div
+        className="pointer-events-none absolute bottom-0 left-[10%] w-[600px] h-[600px] rounded-full opacity-[0.03]"
+        style={{ background: "radial-gradient(circle, #e879f9 0%, transparent 70%)" }}
+      />
 
-      <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.6 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.6 }}
+      >
         <p className="section-label">Content creation</p>
         <h2 className="text-[38px] sm:text-[48px] font-bold font-outfit leading-tight">
           30 Days of <span className="orange-text-gradient">DevSecOps</span>
         </h2>
         <p className="mt-4 text-[#9488aa] text-[16px] font-outfit font-light max-w-2xl leading-relaxed">
-          30 consecutive days of LinkedIn posts — real projects, production blockers, tool deep-dives, and 2026 industry trends. Zero days missed.
+          30 consecutive days of LinkedIn posts — real projects, production blockers, tool deep-dives, and
+          2026 industry trends. Zero days missed.
         </p>
       </motion.div>
 
       {/* Stats */}
-      <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-5">
-        <ChallengeStatCard value="30" label="Posts Published" />
-        <ChallengeStatCard value="3541" label="Followers Reached" />
-        <ChallengeStatCard value="598" label="Top Impressions" />
-        <div className="rounded-2xl bg-bg1 border border-white/[0.06] p-6 text-center">
-          <p className="text-[36px] font-bold font-outfit text-white leading-none">0</p>
-          <p className="text-[11px] font-mono text-[#9488aa] uppercase tracking-wider mt-2">Days Missed</p>
-        </div>
-      </div>
-
-      {/* Phases */}
-      <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {phases.map((phase) => (
-          <div key={phase.name} className="rounded-xl bg-bg1 border border-white/[0.06] p-5 group hover:border-accent/20 transition-colors duration-300">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: phase.color }} />
-              <span className="text-[11px] font-mono text-[#9488aa] uppercase tracking-wider">Days {phase.days}</span>
-            </div>
-            <p className="text-[16px] font-outfit font-semibold text-white">{phase.name}</p>
-            <p className="text-[12px] font-outfit font-light text-muted mt-1">{phase.desc}</p>
-          </div>
+      <motion.div
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.1 }}
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
+        className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-5"
+      >
+        {statItems.map((s) => (
+          <ChallengeStatCard key={s.label} {...s} />
         ))}
+      </motion.div>
+
+      {/* Phases — connected timeline */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="mt-14"
+      >
+        <p className="text-[11px] font-mono text-[#9488aa] uppercase tracking-[0.18em] mb-6">Challenge Phases</p>
+
+        {/* Progress bar */}
+        <div className="relative h-[3px] bg-white/[0.05] rounded-full mb-8 overflow-hidden">
+          <motion.div
+            className="absolute inset-y-0 left-0 rounded-full"
+            style={{ background: "linear-gradient(90deg, #a78bfa, #e879f9)" }}
+            initial={{ width: "0%" }}
+            whileInView={{ width: "100%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.4, delay: 0.3, ease: "easeOut" }}
+          />
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {phases.map((phase, i) => (
+            <motion.div
+              key={phase.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.1 + i * 0.1 }}
+              className="rounded-xl bg-bg1 border border-white/[0.06] p-5 group hover:border-accent/20 transition-colors duration-300"
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: phase.color }} />
+                <span className="text-[10px] font-mono text-[#9488aa] uppercase tracking-wider">
+                  Days {phase.days}
+                </span>
+              </div>
+              <p className="text-[15px] font-outfit font-semibold text-white">{phase.name}</p>
+              <p className="text-[12px] font-outfit font-light text-muted mt-1 leading-relaxed">{phase.desc}</p>
+            </motion.div>
+          ))}
+        </div>
       </motion.div>
 
       {/* Top posts */}
       <motion.div
-        initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.1 }}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.05 }}
         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
         className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
       >
@@ -71,28 +128,50 @@ function Challenge() {
             href={socialLinks.linkedinActivity}
             target="_blank"
             rel="noopener noreferrer"
-            variants={{
-              hidden: { opacity: 0, y: 30 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-            }}
-            className="group rounded-2xl bg-bg1 border border-white/[0.06] p-6 hover:border-accent/30 transition-all duration-300 card-hover block"
+            variants={{ hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}
+            className="group rounded-2xl bg-bg1 border border-white/[0.06] p-6 hover:border-accent/25 transition-all duration-300 card-hover block"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-accent/10 text-accent border border-accent/15">Day {post.day}</span>
-              <span className="px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-accentPink/10 text-accentPink border border-accentPink/15">{post.tag}</span>
+              <span className="px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-accent/10 text-accent border border-accent/15">
+                Day {post.day}
+              </span>
+              <span className="px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-accentPink/10 text-accentPink border border-accentPink/15">
+                {post.tag}
+              </span>
             </div>
-            <h4 className="text-[16px] font-outfit font-semibold text-white leading-snug group-hover:text-accent transition-colors duration-300">{post.title}</h4>
+            <h4 className="text-[15px] font-outfit font-semibold text-white leading-snug group-hover:text-accent transition-colors duration-300 mt-1">
+              {post.title}
+            </h4>
             {post.impressions !== "—" && (
-              <p className="mt-3 text-[12px] font-mono text-[#9488aa]">{post.impressions} impressions</p>
+              <div className="flex items-center gap-1.5 mt-4">
+                <svg className="w-3.5 h-3.5 text-[#9488aa]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <p className="text-[12px] font-mono text-[#9488aa]">{post.impressions} impressions</p>
+              </div>
             )}
           </motion.a>
         ))}
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }} className="mt-10 text-center">
-        <a href={socialLinks.linkedinActivity} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-7 py-3 rounded-full border border-white/[0.12] text-[#9488aa] font-outfit font-semibold text-[14px] hover:border-accent hover:text-accent transition-all duration-300">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="mt-10 text-center"
+      >
+        <a
+          href={socialLinks.linkedinActivity}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-7 py-3 rounded-full border border-white/[0.12] text-[#9488aa] font-outfit font-semibold text-[14px] hover:border-accent hover:text-accent transition-all duration-300"
+        >
           View all 30 posts on LinkedIn
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
         </a>
       </motion.div>
     </section>

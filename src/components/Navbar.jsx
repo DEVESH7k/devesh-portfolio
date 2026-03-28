@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { navLinks, socialLinks } from "../constants";
 
 function Navbar() {
@@ -7,16 +7,31 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 60);
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
-      setScrollProgress(progress);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  const handleScroll = useCallback(() => {
+    const y = window.scrollY;
+    setScrolled(y > 60);
+    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+    setScrollProgress(totalHeight > 0 ? (y / totalHeight) * 100 : 0);
+
+    // Scroll-spy: find the section currently in view
+    const sectionEls = navLinks
+      .map((l) => ({ id: l.id, title: l.title, el: document.getElementById(l.id) }))
+      .filter((s) => s.el);
+
+    for (let i = sectionEls.length - 1; i >= 0; i--) {
+      const { el, title } = sectionEls[i];
+      if (el.getBoundingClientRect().top <= 120) {
+        setActive(title);
+        return;
+      }
+    }
+    setActive("");
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   return (
     <>
@@ -25,9 +40,7 @@ function Navbar() {
 
       <nav
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-[#050816]/90 backdrop-blur-lg border-b border-white/[0.06]"
-            : "bg-transparent"
+          scrolled ? "bg-[#050816]/90 backdrop-blur-lg border-b border-white/[0.06]" : "bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-10 flex items-center justify-between h-[72px]">
@@ -49,7 +62,7 @@ function Navbar() {
           <div className="hidden md:flex items-center gap-8">
             <ul className="flex items-center gap-7">
               {navLinks.map((link) => (
-                <li key={link.id}>
+                <li key={link.id} className="relative">
                   <a
                     href={`#${link.id}`}
                     onClick={() => setActive(link.title)}
@@ -59,10 +72,12 @@ function Navbar() {
                   >
                     {link.title}
                   </a>
+                  {active === link.title && (
+                    <span className="absolute -bottom-[18px] left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent" />
+                  )}
                 </li>
               ))}
             </ul>
-            {/* Resume button */}
             <a
               href={socialLinks.resume}
               target="_blank"
@@ -75,7 +90,7 @@ function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden flex flex-col gap-[5px]"
+            className="md:hidden flex flex-col gap-[5px] p-1"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
@@ -86,7 +101,11 @@ function Navbar() {
         </div>
 
         {/* Mobile menu */}
-        <div className={`md:hidden absolute top-[72px] left-0 w-full bg-[#0a0618]/95 backdrop-blur-xl border-b border-white/[0.06] transition-all duration-300 overflow-hidden ${menuOpen ? "max-h-[500px] py-6" : "max-h-0 py-0"}`}>
+        <div
+          className={`md:hidden absolute top-[72px] left-0 w-full bg-[#0a0618]/97 backdrop-blur-xl border-b border-white/[0.06] transition-all duration-300 overflow-hidden ${
+            menuOpen ? "max-h-[500px] py-6" : "max-h-0 py-0"
+          }`}
+        >
           <ul className="flex flex-col items-center gap-5">
             {navLinks.map((link) => (
               <li key={link.id}>

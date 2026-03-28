@@ -14,6 +14,7 @@ export const experiences = [
     company: "ProTechmanize",
     date: "Dec 2025 — Present",
     location: "Mumbai · On-site",
+    highlights: ["156+ Pipelines", "SonarQube SAST", "Trivy CVE Scan", "50+ EC2 Hosts", "24/7 On-Call"],
     points: [
       "Managing 156+ CI/CD pipelines — AWS CodePipeline for web apps, Azure DevOps for Android/iOS, Jenkins for in-house delivery.",
       "Integrated SonarQube SAST across all pipelines to enforce code quality and detect vulnerabilities pre-production.",
@@ -28,6 +29,7 @@ export const experiences = [
     company: "HERE Technologies",
     date: "May 2024 — Sep 2025",
     location: "Navi Mumbai · 1 yr 5 mos",
+    highlights: ["AWS Infrastructure", "Data Pipelines", "Global Scale", "1yr 5mo"],
     points: [
       "Analyzed complex datasets to derive actionable insights for location-based solutions in HERE WeGo.",
       "Optimized data pipelines with cross-functional teams to ensure accuracy and high availability.",
@@ -40,52 +42,56 @@ export const experiences = [
 
 export const projects = [
   {
+    name: "Netflix Clone — Full DevSecOps",
+    description:
+      "Production-grade Netflix clone on Kubernetes with a complete shift-left security pipeline — SonarQube SAST quality gates, Trivy CVE scanning before every deployment, Jenkins CI/CD with rolling updates and auto-scaling on EKS.",
+    highlights: ["SonarQube SAST", "Trivy CVE Scan", "EKS Auto-Scale", "Rolling Deploy"],
+    tags: ["Kubernetes", "SonarQube", "Trivy", "Jenkins", "EKS"],
+    icon: "🎬",
+    source_code_link: "https://github.com/DEVESH7k",
+  },
+  {
     name: "Super Mario on AWS EKS",
     description:
-      "Deployed Super Mario on Amazon EKS using Terraform IaC. End-to-end Docker containerization, Kubernetes services, and cloud provisioning on AWS.",
+      "Provisioned a production EKS cluster with Terraform IaC — VPC, subnets, node groups, IAM roles. Containerized the app with Docker and exposed it via Kubernetes LoadBalancer with least-privilege access policies.",
+    highlights: ["Terraform IaC", "EKS Cluster", "IAM Least-Privilege", "K8s RBAC"],
     tags: ["Terraform", "EKS", "Docker", "Kubernetes", "AWS"],
     icon: "🎮",
     source_code_link: "https://github.com/DEVESH7k",
   },
   {
-    name: "Django Notes App CI/CD",
+    name: "Swiggy CI/CD on AWS CodePipeline",
     description:
-      "React + Django notes app containerized with Docker, deployed on AWS with Nginx reverse proxy and a complete CI/CD pipeline.",
-    tags: ["Django", "Docker", "AWS", "Nginx", "CI/CD"],
-    icon: "📝",
-    source_code_link: "https://github.com/DEVESH7k",
-  },
-  {
-    name: "Netflix Clone DevSecOps",
-    description:
-      "Production-grade Netflix clone on Kubernetes with full DevSecOps pipeline — SonarQube SAST, Trivy CVE scanning, auto-scaling, and rolling deployments.",
-    tags: ["Kubernetes", "SonarQube", "Trivy", "Docker"],
-    icon: "🎬",
-    source_code_link: "https://github.com/DEVESH7k",
-  },
-  {
-    name: "Swiggy CI/CD Pipeline on AWS",
-    description:
-      "End-to-end AWS CI/CD for a food-delivery app using CodePipeline + Jenkins with automated security gates and multi-environment deployment approvals.",
+      "End-to-end AWS CI/CD for a food-delivery app — CodePipeline triggers on every push, Jenkins runs security gates (SAST + container scan), and multi-environment approvals enforce controlled rollouts.",
+    highlights: ["CodePipeline", "Security Gates", "Multi-Env Approval", "Jenkins"],
     tags: ["AWS CodePipeline", "Jenkins", "DevSecOps", "IaC"],
     icon: "🍔",
+    source_code_link: "https://github.com/DEVESH7k",
+  },
+  {
+    name: "Django Notes App CI/CD",
+    description:
+      "React + Django notes app containerized with Docker and deployed on AWS behind Nginx reverse proxy. Full CI/CD pipeline with automated Docker image builds, container scanning, and zero-downtime deployments.",
+    highlights: ["Docker Compose", "Nginx Proxy", "CI/CD Pipeline", "Zero-Downtime"],
+    tags: ["Django", "Docker", "AWS", "Nginx", "CI/CD"],
+    icon: "📝",
     source_code_link: "https://github.com/DEVESH7k",
   },
 ];
 
 export const skills = [
-  { name: "AWS", color: "#FF9900", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" },
-  { name: "Kubernetes", color: "#326CE5", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" },
-  { name: "Docker", color: "#2496ED", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
-  { name: "Terraform", color: "#7B42BC", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg" },
-  { name: "Jenkins", color: "#D33833", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jenkins/jenkins-original.svg" },
-  { name: "SonarQube", color: "#4E9BCD", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sonarqube/sonarqube-original.svg" },
-  { name: "Trivy", color: "#1904DA", logo: "https://cdn.simpleicons.org/trivy/1904DA" },
-  { name: "Azure", color: "#0078D4", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" },
-  { name: "Linux", color: "#FCC624", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" },
-  { name: "Git", color: "#F05032", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-  { name: "Prometheus", color: "#E6522C", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg" },
-  { name: "Grafana", color: "#F46800", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg" },
+  { name: "AWS", category: "Cloud", color: "#FF9900", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" },
+  { name: "Azure", category: "Cloud", color: "#0078D4", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" },
+  { name: "SonarQube", category: "Security", color: "#4E9BCD", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sonarqube/sonarqube-original.svg" },
+  { name: "Trivy", category: "Security", color: "#1904DA", logo: "https://cdn.simpleicons.org/trivy/1904DA" },
+  { name: "Jenkins", category: "CI/CD", color: "#D33833", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jenkins/jenkins-original.svg" },
+  { name: "Terraform", category: "CI/CD", color: "#7B42BC", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg" },
+  { name: "Kubernetes", category: "Containers", color: "#326CE5", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" },
+  { name: "Docker", category: "Containers", color: "#2496ED", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
+  { name: "Prometheus", category: "Monitoring", color: "#E6522C", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg" },
+  { name: "Grafana", category: "Monitoring", color: "#F46800", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg" },
+  { name: "Linux", category: "Foundation", color: "#FCC624", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" },
+  { name: "Git", category: "Foundation", color: "#F05032", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
 ];
 
 export const certifications = [
