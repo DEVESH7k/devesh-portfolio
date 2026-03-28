@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+body {
+  background-color: #050816;
+  color: #f5f0ff;
+  font-family: 'Outfit', sans-serif;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #050816; }
+::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 2px; }
+
+.hash-span { margin-top: -100px; padding-bottom: 100px; display: block; }
+
+/* ── Gradients ── */
+.orange-text-gradient {
+  background: linear-gradient(90deg, #a78bfa, #e879f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.green-pink-gradient { background: linear-gradient(90deg, #a78bfa 0%, #e879f9 100%); }
+
+.shimmer-border {
+  background: linear-gradient(90deg, transparent, rgba(167,139,250,0.3), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* ── Cards ── */
+.card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(167,139,250,0.2); }
+
+/* ── Sections ── */
+.section-padding { padding: 96px 5vw; }
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: #a78bfa;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.section-label::before { content: ''; width: 20px; height: 1px; background: #a78bfa; }
+
+/* ── Timeline ── */
+.timeline-line {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #a78bfa 0%, #e879f9 50%, transparent 100%);
+}
+@media (min-width: 768px) {
+  .timeline-line { left: 50%; transform: translateX(-1px); }
+}
+
+/* ── Form inputs ── */
+.form-input {
+  background: #0f0a1a;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 14px 18px;
+  color: #f5f0ff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  width: 100%;
+}
+.form-input:focus {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167,139,250,0.15);
+}
+.form-input::placeholder { color: #4a3d66; }
+
+/* ── Scroll progress bar ── */
+.scroll-progress {
+  position: fixed;
+  top: 72px;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #a78bfa, #e879f9);
+  z-index: 100;
+  transition: width 0.1s linear;
+}
+
+/* ── Loading screen ── */
+.loader-container {
+  position: fixed;
+  inset: 0;
+  background: #050816;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.loader-container.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+.loader-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #a78bfa, #e879f9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  color: white;
+  animation: loaderPulse 1.5s ease-in-out infinite;
+}
+@keyframes loaderPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(167,139,250,0.4); }
+  50% { transform: scale(1.08); box-shadow: 0 0 40px 10px rgba(167,139,250,0.2); }
+}
+
+/* ── Cursor glow (hero only) ── */
+.cursor-glow {
+  pointer-events: none;
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  transition: opacity 0.3s;
+}
+
+/* ── Certification badge ── */
+.cert-badge {
+  position: relative;
+  overflow: hidden;
+}
+.cert-badge::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(167,139,250,0.1), transparent 30%);
+  animation: spin 8s linear infinite;
+}
+
+/* ── Blog card image shimmer ── */
+.blog-shimmer {
+  background: linear-gradient(90deg, #0f0a1a 25%, #1c1430 50%, #0f0a1a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}

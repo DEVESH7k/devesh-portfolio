@@ -1,0 +1,43 @@
+version: 0.2
+
+env:
+  parameter-store:
+    CLOUDFRONT_DISTRIBUTION_ID: "portfolio-cloudfront-id"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo "=== Installing dependencies ==="
+      - npm ci
+
+  build:
+    commands:
+      - echo "=== Building Vite React app ==="
+      - npm run build
+      - echo "=== Copying resume to dist ==="
+      - cp resume.pdf dist/resume.pdf 2>/dev/null || echo "No resume.pdf found, skipping"
+      - echo "=== Build complete ==="
+      - ls -lh dist/
+
+  post_build:
+    commands:
+      - echo "=== Syncing to S3 ==="
+      - aws s3 sync dist/ s3://$S3_BUCKET_NAME/ --delete --cache-control "public, max-age=31536000, immutable" --exclude "index.html" --exclude "*.xml" --exclude "*.txt" --exclude "*.pdf"
+      - aws s3 cp dist/index.html s3://$S3_BUCKET_NAME/index.html --cache-control "no-cache, no-store, must-revalidate"
+      - aws s3 cp dist/sitemap.xml s3://$S3_BUCKET_NAME/sitemap.xml --cache-control "no-cache" --content-type "application/xml" 2>/dev/null || true
+      - aws s3 cp dist/robots.txt s3://$S3_BUCKET_NAME/robots.txt --cache-control "no-cache" --content-type "text/plain" 2>/dev/null || true
+      - aws s3 cp dist/resume.pdf s3://$S3_BUCKET_NAME/resume.pdf --cache-control "no-cache" 2>/dev/null || true
+      - echo "=== Invalidating CloudFront cache ==="
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+      - echo "=== Deploy complete! ==="
+
+artifacts:
+  files:
+    - dist/**/*
+  discard-paths: no
+
+cache:
+  paths:
+    - node_modules/**/*
