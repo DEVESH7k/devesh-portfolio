@@ -11,14 +11,13 @@ const Experience = lazy(() => import("./sections/Experience"));
 const Projects = lazy(() => import("./sections/Projects"));
 const Architecture = lazy(() => import("./sections/Architecture"));
 const Certifications = lazy(() => import("./sections/Certifications"));
-const Challenge = lazy(() => import("./sections/Challenge"));
-const Blog = lazy(() => import("./sections/Blog"));
+const Writing = lazy(() => import("./sections/Challenge"));
 const Contact = lazy(() => import("./sections/Contact"));
 
 function SectionFallback() {
   return (
     <div className="section-padding flex items-center justify-center min-h-[200px]">
-      <div className="w-6 h-6 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+      <div className="w-6 h-6 border-2 border-accent/30 border-t-accent rounded-full animate-spin" aria-label="Loading section" />
     </div>
   );
 }
@@ -30,23 +29,24 @@ function App() {
     <>
       {loading && <Loader onComplete={() => setLoading(false)} />}
       <div className={`relative bg-[#050816] ${loading ? "overflow-hidden h-screen" : ""}`}>
-        <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
           <StarsCanvas />
         </div>
         <div className="relative z-10">
           <Navbar />
-          <Hero />
-          <Suspense fallback={<SectionFallback />}>
-            <About />
-            <Skills />
-            <Experience />
-            <Projects />
-            <Architecture />
-            <Certifications />
-            <Challenge />
-            <Blog />
-            <Contact />
-          </Suspense>
+          <main>
+            <Hero />
+            <Suspense fallback={<SectionFallback />}>
+              <About />
+              <Skills />
+              <Experience />
+              <Projects />
+              <Architecture />
+              <Certifications />
+              <Writing />
+              <Contact />
+            </Suspense>
+          </main>
           <Footer />
         </div>
       </div>

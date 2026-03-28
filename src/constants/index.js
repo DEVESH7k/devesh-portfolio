@@ -3,9 +3,9 @@ export const navLinks = [
   { id: "skills", title: "Skills" },
   { id: "experience", title: "Experience" },
   { id: "projects", title: "Projects" },
-  { id: "architecture", title: "Architecture" },
+  { id: "architecture", title: "Design" },
   { id: "certifications", title: "Certs" },
-  { id: "challenge", title: "30 Days" },
+  { id: "writing", title: "Writing" },
   { id: "contact", title: "Contact" },
 ];
 
@@ -17,11 +17,11 @@ export const experiences = [
     location: "Mumbai · On-site",
     highlights: ["156+ Pipelines", "SonarQube SAST", "Trivy CVE Scan", "50+ EC2 Hosts", "24/7 On-Call"],
     points: [
-      "Managing 156+ CI/CD pipelines — AWS CodePipeline for web apps, Azure DevOps for Android/iOS, Jenkins for in-house delivery.",
-      "Integrated SonarQube SAST across all pipelines to enforce code quality and detect vulnerabilities pre-production.",
-      "Implemented Trivy for container image CVE scanning across Docker and EKS environments before every deployment.",
-      "Managing Ubuntu Linux and Windows EC2 hosts across 50+ customer environments.",
-      "24/7 on-call rotation — triaging and resolving production incidents to minimize downtime.",
+      "Managing 156+ CI/CD pipelines — AWS CodePipeline for web apps, Azure DevOps for Android/iOS, and Jenkins for in-house delivery — with zero CRITICAL CVEs reaching production since SAST integration.",
+      "Integrated SonarQube SAST across all pipelines, enforcing quality gates that block deployments on any critical vulnerability before a container image is ever built.",
+      "Implemented Trivy container image CVE scanning as a mandatory pipeline gate across Docker and EKS environments, preventing vulnerable images from reaching any environment.",
+      "Managing Ubuntu Linux and Windows EC2 hosts across 50+ customer environments — including OS patching, security hardening, and capacity management.",
+      "24/7 on-call rotation — triaging and resolving production incidents, writing post-mortems, and eliminating recurring failure modes to reduce MTTR.",
     ],
     current: true,
   },
@@ -30,68 +30,79 @@ export const experiences = [
     company: "HERE Technologies",
     date: "May 2024 — Sep 2025",
     location: "Navi Mumbai · 1 yr 5 mos",
-    highlights: ["AWS Infrastructure", "Data Pipelines", "Global Scale", "1yr 5mo"],
+    highlights: ["AWS Infrastructure", "Python Automation", "Data Pipelines", "Global Scale"],
     points: [
-      "Analyzed complex datasets to derive actionable insights for location-based solutions in HERE WeGo.",
-      "Optimized data pipelines with cross-functional teams to ensure accuracy and high availability.",
-      "Managed place data lifecycle — creation, modification, deletion — across global mapping records.",
-      "Collaborated with cloud infrastructure teams to store and secure large datasets on AWS.",
+      "Built data quality automation scripts in Python, replacing hours of manual validation with reliable, repeatable pipelines — establishing the scripting-first discipline that now drives my DevSecOps automation work.",
+      "Collaborated with AWS infrastructure teams to store and secure large-scale geospatial datasets — gaining hands-on exposure to S3 data governance, IAM access control, and EC2 operations at global scale.",
+      "Managed the full place-data lifecycle across HERE WeGo's global mapping records, developing rigorous standards for data integrity and audit trails that directly inform CI/CD quality gate design.",
+      "Operated in a high-availability, globally distributed team — building incident-awareness, structured escalation habits, and cross-functional communication skills that carry directly into 24/7 on-call operations.",
     ],
     current: false,
   },
 ];
 
+export const education = {
+  degree: "Bachelor of Computer Science (B.Sc. CS)",
+  institution: "University of Mumbai",
+  period: "2021 – 2024",
+  highlights: ["Cloud Computing", "Network Security", "Linux Administration", "Database Management"],
+};
+
 export const projects = [
   {
     name: "Netflix Clone — Full DevSecOps",
     description:
-      "Production-grade Netflix clone on Kubernetes with a complete shift-left security pipeline — SonarQube SAST quality gates, Trivy CVE scanning before every deployment, Jenkins CI/CD with rolling updates and auto-scaling on EKS.",
+      "Production-grade Netflix clone on Kubernetes with a complete shift-left security pipeline — SonarQube SAST quality gates block on any critical vulnerability, Trivy CVE scanning before every deployment, Jenkins CI/CD with rolling updates and auto-scaling on EKS.",
     architecture:
-      "Code push triggers Jenkins pipeline → SonarQube SAST quality gate → Docker multi-stage build → Trivy CVE scan → ECR push → kubectl rolling update on EKS → Prometheus health check.",
+      "Code push triggers Jenkins pipeline → SonarQube SAST quality gate (0 bugs · 0 vulns) → Docker multi-stage build → Trivy CVE scan (CRITICAL: 0) → ECR push → kubectl rolling update on EKS → Prometheus health check.",
     highlights: ["SonarQube SAST", "Trivy CVE Scan", "EKS Auto-Scale", "Rolling Deploy"],
+    metrics: ["Build: ~4 min", "CRITICAL CVEs: 0", "SAST Findings: 0", "Pods: 3/3 healthy"],
     pipeline: ["Git", "Jenkins", "SonarQube", "Docker", "Trivy", "ECR", "EKS"],
     tags: ["Kubernetes", "SonarQube", "Trivy", "Jenkins", "EKS"],
     icon: "🎬",
-    source_code_link: "https://github.com/DEVESH7k",
+    source_code_link: "https://github.com/DEVESH7k/netflix-devsecops-pipeline",
     live_demo: null,
   },
   {
     name: "Super Mario on AWS EKS",
     description:
-      "Provisioned a production EKS cluster with Terraform IaC — VPC, subnets, node groups, IAM roles. Containerized the app with Docker and exposed it via Kubernetes LoadBalancer with least-privilege access policies.",
+      "Provisioned a production EKS cluster with Terraform IaC — VPC, subnets, node groups, and IAM roles with least-privilege. Containerized the app with Docker, exposed via Kubernetes LoadBalancer, with auto-scaling node groups handling demand spikes.",
     architecture:
-      "Terraform provisions VPC + EKS cluster → IAM roles with least-privilege → Docker image built and pushed to ECR → Kubernetes Deployment + LoadBalancer Service → Auto-scaling node groups.",
+      "Terraform provisions VPC + EKS cluster → IAM roles with least-privilege → Docker image built and pushed to ECR → Kubernetes Deployment + LoadBalancer Service → Auto-scaling node groups (1–5 nodes).",
     highlights: ["Terraform IaC", "EKS Cluster", "IAM Least-Privilege", "K8s RBAC"],
+    metrics: ["IaC: 100% Terraform", "IAM: Least-privilege", "Auto-scale: 1–5 nodes", "Cluster: EKS managed"],
     pipeline: ["Terraform", "AWS VPC", "EKS", "Docker", "ECR", "K8s"],
     tags: ["Terraform", "EKS", "Docker", "Kubernetes", "AWS"],
     icon: "🎮",
-    source_code_link: "https://github.com/DEVESH7k",
+    source_code_link: "https://github.com/DEVESH7k/mario-eks-terraform",
     live_demo: null,
   },
   {
     name: "Swiggy CI/CD on AWS CodePipeline",
     description:
-      "End-to-end AWS CI/CD for a food-delivery app — CodePipeline triggers on every push, Jenkins runs security gates (SAST + container scan), and multi-environment approvals enforce controlled rollouts.",
+      "End-to-end AWS CI/CD for a food-delivery clone — CodePipeline triggers on every push, Jenkins runs SAST and container scan security gates, and manual approval gates enforce controlled rollouts through staging to production.",
     architecture:
       "GitHub push → CodePipeline webhook → CodeBuild compile → Jenkins security stage (SonarQube + Trivy) → Manual approval gate → CodeDeploy to staging → Auto-promote to production on green.",
     highlights: ["CodePipeline", "Security Gates", "Multi-Env Approval", "Jenkins"],
+    metrics: ["Envs: Staging + Prod", "Gates: 2 approval stages", "SAST: SonarQube", "CVE scan: Trivy"],
     pipeline: ["CodePipeline", "CodeBuild", "Jenkins", "SonarQube", "Trivy", "CodeDeploy"],
     tags: ["AWS CodePipeline", "Jenkins", "DevSecOps", "IaC"],
     icon: "🍔",
-    source_code_link: "https://github.com/DEVESH7k",
+    source_code_link: "https://github.com/DEVESH7k/swiggy-aws-codepipeline",
     live_demo: null,
   },
   {
     name: "Django Notes App CI/CD",
     description:
-      "React + Django notes app containerized with Docker and deployed on AWS behind Nginx reverse proxy. Full CI/CD pipeline with automated Docker image builds, container scanning, and zero-downtime deployments.",
+      "React + Django notes app containerized with Docker and deployed on AWS behind Nginx reverse proxy. Full CI/CD with GitHub Actions — automated builds, Trivy container scanning, ECR push, and zero-downtime rolling restarts on EC2.",
     architecture:
-      "Docker Compose build → Container image scan → Push to ECR → EC2 pull + docker-compose up → Nginx reverse proxy → Health check endpoint → Zero-downtime rolling restart.",
-    highlights: ["Docker Compose", "Nginx Proxy", "CI/CD Pipeline", "Zero-Downtime"],
+      "GitHub Actions workflow → Docker Compose build → Trivy container scan → Push to ECR → EC2 pull + docker-compose up → Nginx reverse proxy → Health check endpoint → Zero-downtime rolling restart.",
+    highlights: ["GitHub Actions", "Docker Compose", "Nginx Proxy", "Zero-Downtime"],
+    metrics: ["Zero-downtime: ✓", "Image scan: Clean", "Stack: Docker + Nginx", "Deploy target: EC2"],
     pipeline: ["GitHub Actions", "Docker", "Trivy", "ECR", "EC2", "Nginx"],
-    tags: ["Django", "Docker", "AWS", "Nginx", "CI/CD"],
+    tags: ["Django", "Docker", "AWS", "Nginx", "GitHub Actions"],
     icon: "📝",
-    source_code_link: "https://github.com/DEVESH7k",
+    source_code_link: "https://github.com/DEVESH7k/django-notes-app",
     live_demo: null,
   },
 ];
@@ -99,7 +110,7 @@ export const projects = [
 export const skills = [
   {
     name: "AWS", category: "Cloud", color: "#FF9900", level: 85, levelLabel: "Advanced",
-    context: "EKS, EC2, CodePipeline, IAM, S3, CloudWatch",
+    context: "EKS, EC2, CodePipeline, IAM, S3, CloudWatch, ECR",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
   },
   {
@@ -109,17 +120,17 @@ export const skills = [
   },
   {
     name: "SonarQube", category: "Security", color: "#4E9BCD", level: 82, levelLabel: "Advanced",
-    context: "SAST across 156+ pipelines, quality gates, issue triage",
+    context: "SAST across 156+ pipelines, quality gates, vulnerability triage",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sonarqube/sonarqube-original.svg",
   },
   {
     name: "Trivy", category: "Security", color: "#1904DA", level: 85, levelLabel: "Advanced",
-    context: "Container CVE scanning, IaC misconfig, CI/CD gates",
+    context: "Container CVE scanning, IaC misconfig detection, CI/CD pipeline gates",
     logo: "https://cdn.simpleicons.org/trivy/1904DA",
   },
   {
     name: "Jenkins", category: "CI/CD", color: "#D33833", level: 88, levelLabel: "Advanced",
-    context: "Declarative pipelines, shared libraries, RBAC, webhooks",
+    context: "Declarative pipelines, shared libraries, RBAC, webhook triggers",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jenkins/jenkins-original.svg",
   },
   {
@@ -128,13 +139,18 @@ export const skills = [
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg",
   },
   {
+    name: "GitHub Actions", category: "CI/CD", color: "#2088FF", level: 72, levelLabel: "Proficient",
+    context: "Container build & scan workflows, ECR push, security gate checks, PR automation",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+  },
+  {
     name: "Kubernetes", category: "Containers", color: "#326CE5", level: 80, levelLabel: "Advanced",
     context: "EKS deployments, RBAC, HPA, rolling updates, namespaces",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg",
   },
   {
     name: "Docker", category: "Containers", color: "#2496ED", level: 92, levelLabel: "Expert",
-    context: "Multi-stage builds, ECR, Compose, image optimisation",
+    context: "Multi-stage builds, ECR, Compose, image optimisation, security hardening",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
   },
   {
@@ -144,17 +160,27 @@ export const skills = [
   },
   {
     name: "Grafana", category: "Monitoring", color: "#F46800", level: 75, levelLabel: "Proficient",
-    context: "EKS dashboards, alert channels, CloudWatch integration",
+    context: "EKS dashboards, alert channels, CloudWatch data source integration",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/grafana/grafana-original.svg",
   },
   {
+    name: "Python", category: "Scripting", color: "#3776AB", level: 72, levelLabel: "Proficient",
+    context: "Automation scripts, AWS boto3 integrations, data pipeline tooling, CI/CD utilities",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+  },
+  {
+    name: "Bash", category: "Scripting", color: "#4EAA25", level: 82, levelLabel: "Advanced",
+    context: "Deployment scripts, shell automation, cron jobs, log parsing, system administration",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg",
+  },
+  {
     name: "Linux", category: "Foundation", color: "#FCC624", level: 87, levelLabel: "Advanced",
-    context: "Ubuntu/RHEL EC2 admin, bash scripting, cron, systemd",
+    context: "Ubuntu/RHEL EC2 admin, systemd, hardening, performance tuning",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg",
   },
   {
     name: "Git", category: "Foundation", color: "#F05032", level: 90, levelLabel: "Expert",
-    context: "GitOps workflows, branching strategy, hooks, monorepos",
+    context: "GitOps workflows, branching strategy, hooks, monorepos, PR review workflows",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
   },
 ];
@@ -163,38 +189,42 @@ export const certifications = [
   {
     name: "AWS Solutions Architect Associate",
     issuer: "Amazon Web Services",
-    date: "2025",
+    date: "Target: 2025",
     icon: "☁️",
     color: "#FF9900",
     credentialUrl: "https://aws.amazon.com/certification/",
-    status: "planned",
+    status: "in-progress",
+    progress: 35,
   },
   {
     name: "Certified Kubernetes Administrator",
     issuer: "CNCF",
-    date: "2026",
+    date: "Target: Q2 2026",
     icon: "⎈",
     color: "#326CE5",
     credentialUrl: "https://www.cncf.io/training/certification/cka/",
     status: "planned",
+    progress: 20,
   },
   {
     name: "HashiCorp Terraform Associate",
     issuer: "HashiCorp",
-    date: "2026",
+    date: "Target: Q3 2026",
     icon: "🏗️",
     color: "#7B42BC",
     credentialUrl: "https://www.hashicorp.com/en/certification/terraform-associate",
     status: "planned",
+    progress: 15,
   },
   {
     name: "Certified DevSecOps Professional",
     issuer: "Practical DevSecOps",
-    date: "2026",
+    date: "Target: Q4 2026",
     icon: "🛡️",
     color: "#a78bfa",
     credentialUrl: "https://www.practical-devsecops.com/",
     status: "planned",
+    progress: 10,
   },
 ];
 
@@ -258,7 +288,7 @@ export const architectureDiagrams = [
       { icon: "📦", name: "Package", tool: "Docker", color: "#2496ED", detail: "Multi-stage Dockerfile builds a minimal production image, pushed to ECR" },
       { icon: "🛡️", name: "CVE Scan", tool: "Trivy", color: "#1904DA", detail: "Container image scanned for CVEs — CRITICAL findings fail the pipeline" },
       { icon: "🚀", name: "Deploy", tool: "Kubernetes", color: "#326CE5", detail: "kubectl rolling update to EKS — zero-downtime, 3/3 pods healthy" },
-      { icon: "📊", name: "Monitor", tool: "Prometheus", color: "#E6522C", detail: "Prometheus scrapes metrics, Grafana dashboards, PagerDuty alerts on anomaly" },
+      { icon: "📊", name: "Monitor", tool: "Prometheus", color: "#E6522C", detail: "Prometheus scrapes metrics, Grafana dashboards, alerts on anomaly" },
     ],
   },
   {

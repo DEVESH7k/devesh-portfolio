@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { socialLinks } from "../constants";
+import useCountUp from "../hooks/useCountUp";
 
 const titles = [
   "DevSecOps Engineer",
@@ -9,7 +10,6 @@ const titles = [
   "Shift-Left Advocate",
 ];
 
-// Realistic CI/CD log lines
 const LOG_LINES = [
   { ts: "08:42:01", text: "Incoming webhook — main branch push detected", type: "info" },
   { ts: "08:42:02", text: "Starting pipeline: netflix-clone-devsecops #47", type: "info" },
@@ -30,61 +30,54 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
 };
 
-function useCountUp(target, inView, duration = 1400) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    let frame = 0;
-    const total = Math.round((duration / 1000) * 60);
-    const timer = setInterval(() => {
-      frame++;
-      const eased = 1 - Math.pow(1 - frame / total, 3);
-      setCount(Math.min(Math.floor(eased * target), target));
-      if (frame >= total) clearInterval(timer);
-    }, 1000 / 60);
-    return () => clearInterval(timer);
-  }, [inView, target, duration]);
-  return count;
-}
-
-function StatItem({ numVal, suffix, label, inView }) {
-  const count = useCountUp(numVal, inView);
+function StatItem({ value, label }) {
+  const { ref, displayValue } = useCountUp(value, 1400, true);
   return (
-    <div>
+    <div ref={ref}>
       <p className="text-[30px] sm:text-[34px] font-bold font-outfit text-white leading-none tabular-nums">
-        {count}{suffix}
+        {displayValue}
       </p>
-      <p className="text-[11px] font-mono text-[#9488aa] uppercase tracking-[0.15em] mt-1">{label}</p>
+      <p className="text-[11px] font-mono text-[#b4aec8] uppercase tracking-[0.15em] mt-1">{label}</p>
     </div>
   );
 }
 
 function CicdTerminal() {
   const [visibleCount, setVisibleCount] = useState(0);
-  const [running, setRunning] = useState(true);
+  const [isRunning, setIsRunning] = useState(true);
+  // cycle counter is the real driver — incrementing it restarts the animation
+  const [cycle, setCycle] = useState(0);
+
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setVisibleCount(LOG_LINES.length);
+      setIsRunning(false);
+      return;
+    }
+
+    setVisibleCount(0);
+    setIsRunning(true);
     let i = 0;
     const interval = setInterval(() => {
       i += 1;
       setVisibleCount(i);
       if (i >= LOG_LINES.length) {
         clearInterval(interval);
-        setRunning(false);
-        // restart after pause
-        setTimeout(() => {
-          setVisibleCount(0);
-          setRunning(true);
-        }, 4000);
+        setIsRunning(false);
+        setTimeout(() => setCycle((c) => c + 1), 4000);
       }
     }, 520);
     return () => clearInterval(interval);
-  }, [running]);
+  }, [cycle]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const lineColor = (type) => {
     if (type === "success") return "#34d399";
     if (type === "done") return "#a78bfa";
-    return "#9488aa";
+    return "#b4aec8";
   };
 
   return (
@@ -94,32 +87,31 @@ function CicdTerminal() {
       transition={{ delay: 0.5, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       className="animate-float relative w-full max-w-[480px]"
     >
-      {/* Card glow */}
-      <div className="absolute inset-0 rounded-2xl blur-2xl bg-gradient-to-br from-accent/20 to-accentPink/10 scale-110 pointer-events-none" />
+      <div className="absolute inset-0 rounded-2xl blur-2xl bg-gradient-to-br from-accent/20 to-accentPink/10 scale-110 pointer-events-none" aria-hidden="true" />
 
       <div className="relative rounded-2xl border border-white/[0.08] bg-[#07040f]/95 backdrop-blur-sm overflow-hidden shadow-card">
         {/* Title bar */}
         <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
-          <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-          <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
-          <div className="w-3 h-3 rounded-full bg-[#28c840]" />
-          <span className="ml-3 text-[11px] font-mono text-[#9488aa]">jenkins — pipeline console</span>
-          {running && visibleCount > 0 && visibleCount < LOG_LINES.length && (
+          <div className="w-3 h-3 rounded-full bg-[#ff5f57]" aria-hidden="true" />
+          <div className="w-3 h-3 rounded-full bg-[#febc2e]" aria-hidden="true" />
+          <div className="w-3 h-3 rounded-full bg-[#28c840]" aria-hidden="true" />
+          <span className="ml-3 text-[11px] font-mono text-[#b4aec8]">jenkins — pipeline console</span>
+          {isRunning && visibleCount > 0 && visibleCount < LOG_LINES.length && (
             <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-[#febc2e]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#febc2e] animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#febc2e] animate-pulse" aria-hidden="true" />
               RUNNING
             </span>
           )}
-          {!running && (
+          {!isRunning && (
             <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-[#34d399]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]" aria-hidden="true" />
               SUCCESS
             </span>
           )}
         </div>
 
         {/* Log body */}
-        <div className="p-4 font-mono text-[11.5px] leading-[1.85] min-h-[224px] overflow-hidden">
+        <div className="p-4 font-mono text-[11.5px] leading-[1.85] min-h-[224px] overflow-hidden" aria-label="CI/CD pipeline log output">
           {LOG_LINES.slice(0, visibleCount).map((line, i) => (
             <motion.div
               key={i}
@@ -132,8 +124,8 @@ function CicdTerminal() {
               <span style={{ color: lineColor(line.type) }}>{line.text}</span>
             </motion.div>
           ))}
-          {running && visibleCount < LOG_LINES.length && (
-            <span className="inline-block w-[2px] h-[13px] bg-accent animate-pulse ml-1" />
+          {isRunning && visibleCount < LOG_LINES.length && (
+            <span className="inline-block w-[2px] h-[13px] bg-accent animate-pulse ml-1" aria-hidden="true" />
           )}
         </div>
       </div>
@@ -145,7 +137,7 @@ function CicdTerminal() {
         transition={{ delay: 1.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="absolute -top-4 -right-3 px-3 py-1.5 rounded-full bg-[#07040f] border border-accent/30 text-[10.5px] font-mono text-accent flex items-center gap-1.5 shadow-glow"
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+        <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true" />
         156+ Pipelines
       </motion.div>
 
@@ -155,7 +147,7 @@ function CicdTerminal() {
         transition={{ delay: 1.5, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="absolute -bottom-4 -left-3 px-3 py-1.5 rounded-full bg-[#07040f] border border-[#34d399]/30 text-[10.5px] font-mono text-[#34d399] flex items-center gap-1.5"
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" aria-hidden="true" />
         All gates passed
       </motion.div>
     </motion.div>
@@ -167,8 +159,6 @@ function Hero() {
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [mousePos, setMousePos] = useState({ x: -500, y: -500 });
-  const statsRef = useRef(null);
-  const statsInView = useInView(statsRef, { once: true, margin: "-80px" });
 
   useEffect(() => {
     const current = titles[titleIndex];
@@ -195,7 +185,11 @@ function Hero() {
   return (
     <section className="relative w-full min-h-screen flex items-center overflow-hidden">
       {/* Cursor glow */}
-      <div className="cursor-glow hidden md:block" style={{ left: mousePos.x, top: mousePos.y }} />
+      <div
+        className="cursor-glow hidden md:block"
+        style={{ left: mousePos.x, top: mousePos.y }}
+        aria-hidden="true"
+      />
 
       {/* Grid overlay */}
       <div
@@ -205,29 +199,28 @@ function Hero() {
             "linear-gradient(#a78bfa 1px, transparent 1px), linear-gradient(90deg, #a78bfa 1px, transparent 1px)",
           backgroundSize: "56px 56px",
         }}
+        aria-hidden="true"
       />
 
       {/* Ambient blobs */}
-      <div className="pointer-events-none absolute top-[-5%] left-[-8%] w-[580px] h-[580px] rounded-full opacity-[0.07] blur-[110px] bg-accent" />
-      <div className="pointer-events-none absolute bottom-[5%] right-[-8%] w-[500px] h-[500px] rounded-full opacity-[0.06] blur-[100px] bg-accentPink" />
-      <div className="pointer-events-none absolute top-[55%] left-[38%] w-[320px] h-[320px] rounded-full opacity-[0.04] blur-[80px] bg-accentPink" />
+      <div className="pointer-events-none absolute top-[-5%] left-[-8%] w-[580px] h-[580px] rounded-full opacity-[0.07] blur-[110px] bg-accent" aria-hidden="true" />
+      <div className="pointer-events-none absolute bottom-[5%] right-[-8%] w-[500px] h-[500px] rounded-full opacity-[0.06] blur-[100px] bg-accentPink" aria-hidden="true" />
+      <div className="pointer-events-none absolute top-[55%] left-[38%] w-[320px] h-[320px] rounded-full opacity-[0.04] blur-[80px] bg-accentPink" aria-hidden="true" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 w-full py-24 md:py-0">
         <div className="grid md:grid-cols-2 gap-14 md:gap-8 items-center">
 
-          {/* ── LEFT ── */}
+          {/* LEFT */}
           <motion.div variants={containerVariants} initial="hidden" animate="visible">
 
-            {/* Status + availability badge row */}
+            {/* Status badges */}
             <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-3 mb-7">
-              {/* Currently employed */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#07040f] border border-white/[0.08] text-[11px] font-mono text-[#9488aa]">
-                <span className="text-[#34d399]">●</span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#07040f] border border-white/[0.08] text-[11px] font-mono text-[#b4aec8]">
+                <span className="text-[#34d399]" aria-hidden="true">●</span>
                 ProTechmanize · DevSecOps Engineer
               </div>
-              {/* Open to work */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-accent/20 bg-accent/[0.06] text-[11px] font-mono text-accent">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true" />
                 Open to opportunities
               </div>
             </motion.div>
@@ -237,12 +230,12 @@ function Hero() {
               Hello, I'm Devesh
             </motion.p>
 
-            {/* Gradient headline */}
+            {/* Headline */}
             <motion.h1
               variants={itemVariants}
               className="text-[40px] sm:text-[52px] md:text-[58px] lg:text-[64px] font-bold font-outfit leading-[1.06] mt-2"
             >
-              Building
+              Engineering
               <br />
               <span className="hero-gradient-text">Secure&nbsp;</span>
               <span className="hero-gradient-text-alt">Cloud&#8209;Native</span>
@@ -252,19 +245,23 @@ function Hero() {
 
             {/* Typewriter */}
             <motion.div variants={itemVariants} className="mt-5 h-[30px] flex items-center">
-              <span className="text-[16px] sm:text-[19px] font-mono text-accent">
+              <span
+                aria-live="polite"
+                aria-atomic="true"
+                className="text-[16px] sm:text-[19px] font-mono text-accent"
+              >
                 &gt;&nbsp;{titles[titleIndex].slice(0, charIndex)}
               </span>
-              <span className="inline-block w-[2px] h-[17px] bg-accent ml-0.5 animate-pulse" />
+              <span className="inline-block w-[2px] h-[17px] bg-accent ml-0.5 animate-pulse" aria-hidden="true" />
             </motion.div>
 
             {/* Stats */}
-            <motion.div ref={statsRef} variants={itemVariants} className="mt-10 flex flex-wrap gap-8 sm:gap-12">
-              <StatItem numVal={156} suffix="+" label="CI/CD Pipelines" inView={statsInView} />
-              <StatItem numVal={50} suffix="+" label="Cloud Environments" inView={statsInView} />
+            <motion.div variants={itemVariants} className="mt-10 flex flex-wrap gap-8 sm:gap-12">
+              <StatItem value="156+" label="CI/CD Pipelines" />
+              <StatItem value="50+" label="Cloud Environments" />
               <div>
-                <p className="text-[30px] sm:text-[34px] font-bold font-outfit text-white leading-none">3.5K+</p>
-                <p className="text-[11px] font-mono text-[#9488aa] uppercase tracking-[0.15em] mt-1">LinkedIn Followers</p>
+                <p className="text-[30px] sm:text-[34px] font-bold font-outfit text-white leading-none">24/7</p>
+                <p className="text-[11px] font-mono text-[#b4aec8] uppercase tracking-[0.15em] mt-1">On-Call Coverage</p>
               </div>
             </motion.div>
 
@@ -282,14 +279,14 @@ function Hero() {
                 rel="noopener noreferrer"
                 className="px-7 py-3 rounded-full border border-accent/40 text-accent font-outfit font-semibold text-[14px] hover:bg-accent/10 transition-all duration-300 flex items-center gap-2"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 Resume
               </a>
               <a
                 href="#contact"
-                className="px-7 py-3 rounded-full border border-white/[0.12] text-[#9488aa] font-outfit font-semibold text-[14px] hover:border-accent hover:text-accent transition-all duration-300"
+                className="px-7 py-3 rounded-full border border-white/[0.12] text-[#b4aec8] font-outfit font-semibold text-[14px] hover:border-accent hover:text-accent transition-all duration-300"
               >
                 Contact
               </a>
@@ -317,17 +314,17 @@ function Hero() {
                   target={label !== "Email" ? "_blank" : undefined}
                   rel={label !== "Email" ? "noopener noreferrer" : undefined}
                   aria-label={label}
-                  className="w-9 h-9 rounded-lg border border-white/[0.08] flex items-center justify-center text-[#9488aa] hover:border-accent/50 hover:text-accent hover:bg-accent/5 transition-all duration-300"
+                  className="w-9 h-9 rounded-lg border border-white/[0.08] flex items-center justify-center text-[#b4aec8] hover:border-accent/50 hover:text-accent hover:bg-accent/5 transition-all duration-300"
                 >
                   {icon}
                 </a>
               ))}
-              <div className="h-px flex-1 max-w-[80px] bg-white/[0.06]" />
+              <div className="h-px flex-1 max-w-[80px] bg-white/[0.06]" aria-hidden="true" />
             </motion.div>
           </motion.div>
 
-          {/* ── RIGHT: CI/CD terminal ── */}
-          <div className="hidden md:flex justify-center md:justify-end pr-2">
+          {/* RIGHT: CI/CD terminal — shown on md+ and on mobile below the fold */}
+          <div className="flex justify-center md:justify-end md:pr-2">
             <CicdTerminal />
           </div>
         </div>
@@ -341,14 +338,15 @@ function Hero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <a href="#about" className="flex flex-col items-center gap-2">
-          <div className="w-[26px] h-[44px] rounded-full border-2 border-[#9488aa]/30 flex justify-center pt-2">
+          <div className="w-[26px] h-[44px] rounded-full border-2 border-[#b4aec8]/30 flex justify-center pt-2">
             <motion.div
               animate={{ y: [0, 14, 0] }}
               transition={{ duration: 1.8, repeat: Infinity, repeatType: "loop" }}
               className="w-[5px] h-[5px] rounded-full bg-accent"
+              aria-hidden="true"
             />
           </div>
-          <span className="text-[10px] font-mono text-[#9488aa]/50 uppercase tracking-widest">Scroll</span>
+          <span className="text-[10px] font-mono text-[#b4aec8]/50 uppercase tracking-widest">Scroll</span>
         </a>
       </motion.div>
     </section>

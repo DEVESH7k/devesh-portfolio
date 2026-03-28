@@ -1,13 +1,15 @@
 import { motion } from "framer-motion";
-import { challengePosts, socialLinks } from "../constants";
+import { blogPosts, socialLinks } from "../constants";
 import useCountUp from "../hooks/useCountUp";
 
-const phases = [
-  { name: "Foundations", days: "1–7", color: "#a78bfa", desc: "Core concepts, first pipelines" },
-  { name: "Going Deeper", days: "8–14", color: "#c084fc", desc: "Code snippets, real blockers" },
-  { name: "Production Reality", days: "15–21", color: "#e879f9", desc: "War stories, incident debugging" },
-  { name: "2026 Trends", days: "22–30", color: "#f0abfc", desc: "Karpenter, OTel, LLMOps, Sigstore" },
-];
+const tagColors = {
+  "CI/CD":      "#a78bfa",
+  Kubernetes:   "#326CE5",
+  Career:       "#e879f9",
+  Monitoring:   "#E6522C",
+  Docker:       "#2496ED",
+  Growth:       "#10b981",
+};
 
 const statItems = [
   { value: "30", label: "Posts Published", icon: "✍️" },
@@ -16,7 +18,7 @@ const statItems = [
   { value: "0", label: "Days Missed", icon: "🔥" },
 ];
 
-function ChallengeStatCard({ value, label, icon }) {
+function WritingStatCard({ value, label, icon }) {
   const { ref, displayValue } = useCountUp(value, 1800, true);
   return (
     <motion.div
@@ -24,20 +26,21 @@ function ChallengeStatCard({ value, label, icon }) {
       className="group rounded-2xl bg-bg1 border border-white/[0.06] p-6 hover:border-accent/20 transition-colors duration-300 text-center"
     >
       <div ref={ref}>
-        <span className="text-[26px] block mb-3">{icon}</span>
+        <span className="text-[26px] block mb-3" aria-hidden="true">{icon}</span>
         <p className="text-[34px] font-bold font-outfit text-white leading-none">{displayValue}</p>
-        <p className="text-[11px] font-mono text-[#9488aa] uppercase tracking-wider mt-2">{label}</p>
+        <p className="text-[11px] font-mono text-[#b4aec8] uppercase tracking-wider mt-2">{label}</p>
       </div>
     </motion.div>
   );
 }
 
-function Challenge() {
+function Writing() {
   return (
-    <section id="challenge" className="section-padding relative overflow-hidden">
+    <section id="writing" className="section-padding relative overflow-hidden">
       <div
         className="pointer-events-none absolute bottom-0 left-[10%] w-[600px] h-[600px] rounded-full opacity-[0.03]"
         style={{ background: "radial-gradient(circle, #e879f9 0%, transparent 70%)" }}
+        aria-hidden="true"
       />
 
       <motion.div
@@ -46,11 +49,11 @@ function Challenge() {
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6 }}
       >
-        <p className="section-label">Content creation</p>
+        <p className="section-label">Writing &amp; Community</p>
         <h2 className="text-[38px] sm:text-[48px] font-bold font-outfit leading-tight">
           30 Days of <span className="orange-text-gradient">DevSecOps</span>
         </h2>
-        <p className="mt-4 text-[#9488aa] text-[16px] font-outfit font-light max-w-2xl leading-relaxed">
+        <p className="mt-4 text-[#b4aec8] text-[16px] font-outfit font-light max-w-2xl leading-relaxed">
           30 consecutive days of LinkedIn posts — real projects, production blockers, tool deep-dives, and
           2026 industry trends. Zero days missed.
         </p>
@@ -65,117 +68,103 @@ function Challenge() {
         className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-5"
       >
         {statItems.map((s) => (
-          <ChallengeStatCard key={s.label} {...s} />
+          <WritingStatCard key={s.label} {...s} />
         ))}
       </motion.div>
 
-      {/* Phases — connected timeline */}
+      {/* Featured posts */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="mt-14"
+        className="mt-16"
       >
-        <p className="text-[11px] font-mono text-[#9488aa] uppercase tracking-[0.18em] mb-6">Challenge Phases</p>
+        <p className="text-[11px] font-mono text-[#b4aec8] uppercase tracking-[0.18em] mb-8">Featured Posts</p>
 
-        {/* Progress bar */}
-        <div className="relative h-[3px] bg-white/[0.05] rounded-full mb-8 overflow-hidden">
-          <motion.div
-            className="absolute inset-y-0 left-0 rounded-full"
-            style={{ background: "linear-gradient(90deg, #a78bfa, #e879f9)" }}
-            initial={{ width: "0%" }}
-            whileInView={{ width: "100%" }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.4, delay: 0.3, ease: "easeOut" }}
-          />
-        </div>
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.05 }}
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"
+        >
+          {blogPosts.map((post) => {
+            const color = tagColors[post.tag] || "#a78bfa";
+            return (
+              <motion.a
+                key={post.day}
+                href={socialLinks.linkedinActivity}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Read: ${post.title}`}
+                variants={{
+                  hidden: { opacity: 0, y: 40 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+                }}
+                className="group relative rounded-2xl overflow-hidden card-hover block"
+              >
+                {/* Top accent bar */}
+                <div className="h-[3px] w-full" style={{ background: `linear-gradient(90deg, ${color}, ${color}60)` }} aria-hidden="true" />
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {phases.map((phase, i) => (
-            <motion.div
-              key={phase.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.1 + i * 0.1 }}
-              className="rounded-xl bg-bg1 border border-white/[0.06] p-5 group hover:border-accent/20 transition-colors duration-300"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: phase.color }} />
-                <span className="text-[10px] font-mono text-[#9488aa] uppercase tracking-wider">
-                  Days {phase.days}
-                </span>
-              </div>
-              <p className="text-[15px] font-outfit font-semibold text-white">{phase.name}</p>
-              <p className="text-[12px] font-outfit font-light text-muted mt-1 leading-relaxed">{phase.desc}</p>
-            </motion.div>
-          ))}
-        </div>
+                <div className="bg-bg1 border border-white/[0.06] border-t-0 rounded-b-2xl p-7 h-full flex flex-col">
+                  {/* Meta row */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-[11px] font-mono text-muted uppercase tracking-wider">Day {post.day}</span>
+                    <span
+                      className="px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider"
+                      style={{ backgroundColor: `${color}15`, color, border: `1px solid ${color}25` }}
+                    >
+                      {post.tag}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-[17px] font-outfit font-semibold text-white leading-snug group-hover:text-accent transition-colors duration-300">
+                    {post.title}
+                  </h3>
+
+                  {/* Excerpt */}
+                  <p className="text-[13px] font-outfit font-light text-[#b4aec8] leading-[1.7] mt-3 flex-1">
+                    {post.excerpt}
+                  </p>
+
+                  {/* Read more */}
+                  <div className="mt-5 flex items-center gap-2 text-[12px] font-mono text-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true">
+                    Read on LinkedIn
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+              </motion.a>
+            );
+          })}
+        </motion.div>
       </motion.div>
 
-      {/* Top posts */}
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.05 }}
-        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
-        className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-      >
-        {challengePosts.map((post) => (
-          <motion.a
-            key={post.day}
-            href={socialLinks.linkedinActivity}
-            target="_blank"
-            rel="noopener noreferrer"
-            variants={{ hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}
-            className="group rounded-2xl bg-bg1 border border-white/[0.06] p-6 hover:border-accent/25 transition-all duration-300 card-hover block"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <span className="px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-accent/10 text-accent border border-accent/15">
-                Day {post.day}
-              </span>
-              <span className="px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-accentPink/10 text-accentPink border border-accentPink/15">
-                {post.tag}
-              </span>
-            </div>
-            <h4 className="text-[15px] font-outfit font-semibold text-white leading-snug group-hover:text-accent transition-colors duration-300 mt-1">
-              {post.title}
-            </h4>
-            {post.impressions !== "—" && (
-              <div className="flex items-center gap-1.5 mt-4">
-                <svg className="w-3.5 h-3.5 text-[#9488aa]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-                <p className="text-[12px] font-mono text-[#9488aa]">{post.impressions} impressions</p>
-              </div>
-            )}
-          </motion.a>
-        ))}
-      </motion.div>
-
+      {/* CTA */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="mt-10 text-center"
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className="mt-12 text-center"
       >
         <a
           href={socialLinks.linkedinActivity}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-7 py-3 rounded-full border border-white/[0.12] text-[#9488aa] font-outfit font-semibold text-[14px] hover:border-accent hover:text-accent transition-all duration-300"
+          className="inline-flex items-center gap-2 px-7 py-3 rounded-full green-pink-gradient text-white font-outfit font-semibold text-[14px] hover:opacity-90 transition-opacity"
         >
-          View all 30 posts on LinkedIn
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          <svg className="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
           </svg>
+          View all 30 posts on LinkedIn
         </a>
       </motion.div>
     </section>
   );
 }
 
-export default Challenge;
+export default Writing;

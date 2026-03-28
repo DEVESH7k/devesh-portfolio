@@ -2,8 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { socialLinks } from "../constants";
 
-// Free email service — sign up at web3forms.com, add your access key below
-const WEB3FORMS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY;
 
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -47,6 +46,7 @@ function Contact() {
       <div
         className="pointer-events-none absolute top-1/2 left-[5%] -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-[0.04]"
         style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 70%)" }}
+        aria-hidden="true"
       />
 
       <motion.div
@@ -59,7 +59,7 @@ function Contact() {
         <h2 className="text-[38px] sm:text-[48px] font-bold font-outfit leading-tight">
           Let's <span className="orange-text-gradient">Connect</span>
         </h2>
-        <p className="mt-4 text-[#9488aa] text-[16px] font-outfit font-light max-w-2xl leading-relaxed">
+        <p className="mt-4 text-[#b4aec8] text-[16px] font-outfit font-light max-w-2xl leading-relaxed">
           Open to DevSecOps roles, cloud security consulting, and technical collaborations. Drop a message or
           reach out directly — I reply within 24 hours.
         </p>
@@ -74,13 +74,14 @@ function Contact() {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="flex-1"
         >
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
             <div className="grid sm:grid-cols-2 gap-5">
               <div>
-                <label className="text-[11px] font-mono text-[#9488aa] uppercase tracking-wider block mb-2">
+                <label htmlFor="contact-name" className="text-[11px] font-mono text-[#b4aec8] uppercase tracking-wider block mb-2">
                   Your Name
                 </label>
                 <input
+                  id="contact-name"
                   type="text"
                   name="name"
                   value={form.name}
@@ -88,13 +89,15 @@ function Contact() {
                   placeholder="John Smith"
                   className="form-input"
                   required
+                  autoComplete="name"
                 />
               </div>
               <div>
-                <label className="text-[11px] font-mono text-[#9488aa] uppercase tracking-wider block mb-2">
+                <label htmlFor="contact-email" className="text-[11px] font-mono text-[#b4aec8] uppercase tracking-wider block mb-2">
                   Email
                 </label>
                 <input
+                  id="contact-email"
                   type="email"
                   name="email"
                   value={form.email}
@@ -102,14 +105,16 @@ function Contact() {
                   placeholder="hello@company.com"
                   className="form-input"
                   required
+                  autoComplete="email"
                 />
               </div>
             </div>
             <div>
-              <label className="text-[11px] font-mono text-[#9488aa] uppercase tracking-wider block mb-2">
+              <label htmlFor="contact-message" className="text-[11px] font-mono text-[#b4aec8] uppercase tracking-wider block mb-2">
                 Message
               </label>
               <textarea
+                id="contact-message"
                 name="message"
                 value={form.message}
                 onChange={handleChange}
@@ -128,7 +133,7 @@ function Contact() {
               >
                 {sending ? (
                   <>
-                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
@@ -142,23 +147,25 @@ function Contact() {
               <AnimatePresence>
                 {status === "success" && (
                   <motion.span
+                    role="status"
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0 }}
                     className="text-[13px] font-mono text-green-400 flex items-center gap-2"
                   >
-                    <span className="w-2 h-2 rounded-full bg-green-400" />
+                    <span className="w-2 h-2 rounded-full bg-green-400" aria-hidden="true" />
                     Message sent! I'll reply soon.
                   </motion.span>
                 )}
                 {status === "error" && (
                   <motion.span
+                    role="alert"
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0 }}
                     className="text-[13px] font-mono text-red-400 flex items-center gap-2"
                   >
-                    <span className="w-2 h-2 rounded-full bg-red-400" />
+                    <span className="w-2 h-2 rounded-full bg-red-400" aria-hidden="true" />
                     Failed — email me directly at{" "}
                     <a href={`mailto:${socialLinks.email}`} className="underline">
                       {socialLinks.email}
@@ -188,7 +195,7 @@ function Contact() {
                   label: "Email",
                   value: socialLinks.email,
                   icon: (
-                    <svg className="w-[17px] h-[17px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg className="w-[17px] h-[17px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   ),
@@ -196,10 +203,10 @@ function Contact() {
                 {
                   href: socialLinks.linkedin,
                   label: "LinkedIn",
-                  value: "3,541 followers",
+                  value: "linkedin.com/in/deveshkhatik",
                   target: "_blank",
                   icon: (
-                    <svg className="w-[17px] h-[17px]" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-[17px] h-[17px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z" />
                     </svg>
                   ),
@@ -207,10 +214,10 @@ function Contact() {
                 {
                   href: socialLinks.github,
                   label: "GitHub",
-                  value: "DEVESH7k",
+                  value: "github.com/DEVESH7k",
                   target: "_blank",
                   icon: (
-                    <svg className="w-[17px] h-[17px]" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-[17px] h-[17px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                       <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
                     </svg>
                   ),
@@ -227,7 +234,7 @@ function Contact() {
                     {icon}
                   </div>
                   <div>
-                    <p className="text-[10px] font-mono text-[#9488aa] uppercase tracking-wider">{label}</p>
+                    <p className="text-[10px] font-mono text-[#b4aec8] uppercase tracking-wider">{label}</p>
                     <p className="text-[13px] font-outfit text-white group-hover:text-accent transition-colors duration-300 mt-0.5">
                       {value}
                     </p>
@@ -240,13 +247,13 @@ function Contact() {
           {/* Availability card */}
           <div className="rounded-2xl bg-bg1 border border-white/[0.06] p-6">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
+              <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" aria-hidden="true" />
               <span className="text-[12px] font-mono text-green-400 uppercase tracking-wider">
                 Available for opportunities
               </span>
             </div>
-            <p className="text-[#9488aa] text-[14px] font-outfit font-light leading-relaxed">
-              Open to DevSecOps roles, cloud security consulting, and technical collaborations.
+            <p className="text-[#b4aec8] text-[14px] font-outfit font-light leading-relaxed">
+              Open to full-time DevSecOps roles, cloud security consulting, and technical collaborations.
             </p>
           </div>
 
@@ -257,7 +264,7 @@ function Contact() {
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-3 w-full py-4 rounded-2xl bg-bg1 border border-accent/20 hover:border-accent/50 hover:bg-accent/5 transition-all duration-300 group"
           >
-            <svg className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <span className="text-[14px] font-outfit font-semibold text-accent">Download Resume (PDF)</span>

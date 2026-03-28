@@ -125,6 +125,23 @@ function ProjectCard({ project, index }) {
           </div>
         )}
 
+        {/* Impact metrics */}
+        {project.metrics && (
+          <div className="mt-5 pt-4 border-t border-white/[0.05]">
+            <p className="text-[9px] font-mono text-[#4a3d66] uppercase tracking-[0.15em] mb-3">Impact Metrics</p>
+            <div className="flex flex-wrap gap-2">
+              {project.metrics.map((m) => (
+                <span
+                  key={m}
+                  className="px-2.5 py-1 rounded-lg text-[10px] font-mono text-[#34d399] border border-[#34d399]/20 bg-[#34d399]/5"
+                >
+                  {m}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* DevSecOps highlights */}
         {project.highlights && (
           <div className="mt-4 flex flex-wrap gap-2">

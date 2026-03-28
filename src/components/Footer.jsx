@@ -79,9 +79,6 @@ function Footer() {
 
         {/* Bottom line */}
         <div className="mt-8 pt-8 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[12px] font-mono text-muted">
-            Built with React, Framer Motion &amp; Tailwind CSS
-          </p>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             <span className="text-[12px] font-mono text-green-400">Open to opportunities</span>

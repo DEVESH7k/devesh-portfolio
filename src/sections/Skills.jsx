@@ -2,16 +2,17 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { skills } from "../constants";
 
-const categories = ["All", "Cloud", "Security", "CI/CD", "Containers", "Monitoring", "Foundation"];
+const categories = ["All", "Cloud", "Security", "CI/CD", "Containers", "Monitoring", "Scripting", "Foundation"];
 
 const categoryMeta = {
   All:        { color: "#a78bfa", desc: "The full toolkit I use daily across cloud, security, automation, and observability." },
   Cloud:      { color: "#FF9900", desc: "Multi-cloud platforms — provisioning, managing, and securing workloads at scale." },
   Security:   { color: "#4E9BCD", desc: "Shift-left tools — SAST and CVE scanning baked into every pipeline." },
-  "CI/CD":    { color: "#7B42BC", desc: "Automation engines — Terraform for IaC, Jenkins for delivery pipelines." },
+  "CI/CD":    { color: "#7B42BC", desc: "Automation engines — Terraform for IaC, Jenkins and GitHub Actions for delivery pipelines." },
   Containers: { color: "#326CE5", desc: "Container orchestration — from image builds to production cluster management." },
   Monitoring: { color: "#F46800", desc: "Observability stack — metrics, alerting, and production health dashboards." },
-  Foundation: { color: "#F05032", desc: "The bedrock — Linux system administration and version-controlled workflows." },
+  Scripting:  { color: "#3776AB", desc: "Automation languages — Python and Bash for infrastructure tooling, scripts, and CI/CD utilities." },
+  Foundation: { color: "#F05032", desc: "The bedrock — Linux system administration and version-controlled GitOps workflows." },
 };
 
 const levelColors = {

@@ -138,16 +138,16 @@ function About() {
             <StatCard key={s.label} {...s} />
           ))}
 
-          {/* Currently building strip */}
+          {/* Currently studying strip */}
           <motion.div
             variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
             className="col-span-2 rounded-2xl bg-bg1 border border-white/[0.06] p-5 flex items-center gap-4"
           >
-            <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
+            <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse flex-shrink-0" aria-hidden="true" />
             <div>
-              <p className="text-[11px] font-mono text-[#9488aa] uppercase tracking-wider">Currently building</p>
+              <p className="text-[11px] font-mono text-[#9488aa] uppercase tracking-wider">Currently studying</p>
               <p className="text-[14px] font-outfit font-medium text-white mt-0.5">
-                30 Days of DevSecOps challenge — public on LinkedIn
+                AWS Solutions Architect Associate — active exam prep
               </p>
             </div>
           </motion.div>
