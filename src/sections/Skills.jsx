@@ -4,51 +4,87 @@ import { skills } from "../constants";
 
 const categories = ["All", "Cloud", "Security", "CI/CD", "Containers", "Monitoring", "Foundation"];
 
-const categoryColors = {
-  Cloud: "#FF9900",
-  Security: "#4E9BCD",
-  "CI/CD": "#7B42BC",
-  Containers: "#326CE5",
-  Monitoring: "#F46800",
-  Foundation: "#FCC624",
+const categoryMeta = {
+  All:        { color: "#a78bfa", desc: "The full toolkit I use daily across cloud, security, automation, and observability." },
+  Cloud:      { color: "#FF9900", desc: "Multi-cloud platforms — provisioning, managing, and securing workloads at scale." },
+  Security:   { color: "#4E9BCD", desc: "Shift-left tools — SAST and CVE scanning baked into every pipeline." },
+  "CI/CD":    { color: "#7B42BC", desc: "Automation engines — Terraform for IaC, Jenkins for delivery pipelines." },
+  Containers: { color: "#326CE5", desc: "Container orchestration — from image builds to production cluster management." },
+  Monitoring: { color: "#F46800", desc: "Observability stack — metrics, alerting, and production health dashboards." },
+  Foundation: { color: "#F05032", desc: "The bedrock — Linux system administration and version-controlled workflows." },
 };
 
-const categoryDescriptions = {
-  All: "The full toolkit I use daily across cloud, security, automation, and observability.",
-  Cloud: "Multi-cloud platforms — provisioning, managing, and securing workloads at scale.",
-  Security: "Shift-left tools — SAST and CVE scanning baked into every pipeline.",
-  "CI/CD": "Automation engines — Terraform for IaC, Jenkins for delivery pipelines.",
-  Containers: "Container orchestration — from image builds to production cluster management.",
-  Monitoring: "Observability stack — metrics, alerting, and production health dashboards.",
-  Foundation: "The bedrock — Linux system administration and version-controlled workflows.",
+const levelColors = {
+  Expert:     "#34d399",
+  Advanced:   "#a78bfa",
+  Proficient: "#60a5fa",
 };
 
 function SkillCard({ skill }) {
+  const lc = levelColors[skill.levelLabel] || "#9488aa";
+
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.88 }}
+      initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.88 }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
       className="group relative rounded-2xl p-[1px] overflow-hidden"
     >
+      {/* Gradient border on hover */}
       <div
         className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{ background: `linear-gradient(135deg, ${skill.color}40, transparent 60%, ${skill.color}20)` }}
+        style={{ background: `linear-gradient(135deg, ${skill.color}40, transparent 55%, ${skill.color}20)` }}
       />
-      <div className="relative rounded-2xl bg-bg1 border border-white/[0.06] group-hover:border-transparent p-5 flex flex-col items-center gap-3 transition-all duration-300 group-hover:bg-bg2 h-full">
-        <div
-          className="w-14 h-14 rounded-xl flex items-center justify-center p-3 transition-transform duration-300 group-hover:scale-110"
-          style={{ backgroundColor: `${skill.color}12`, border: `1px solid ${skill.color}20` }}
-        >
-          <img src={skill.logo} alt={`${skill.name} logo`} className="w-full h-full object-contain" loading="lazy" />
+
+      <div className="relative rounded-2xl bg-bg1 border border-white/[0.06] group-hover:border-transparent p-5 flex flex-col gap-4 h-full transition-all duration-300 group-hover:bg-bg2">
+
+        {/* Header: logo + name + level badge */}
+        <div className="flex items-center gap-3">
+          <div
+            className="w-11 h-11 rounded-xl flex items-center justify-center p-2.5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
+            style={{ backgroundColor: `${skill.color}12`, border: `1px solid ${skill.color}20` }}
+          >
+            <img src={skill.logo} alt={`${skill.name}`} className="w-full h-full object-contain" loading="lazy" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[14px] font-outfit font-semibold text-white truncate">{skill.name}</p>
+            <span
+              className="text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded mt-0.5 inline-block"
+              style={{ background: `${lc}15`, color: lc, border: `1px solid ${lc}25` }}
+            >
+              {skill.levelLabel}
+            </span>
+          </div>
         </div>
-        <span className="text-[13px] font-outfit font-semibold transition-colors duration-300" style={{ color: skill.color }}>
-          {skill.name}
-        </span>
+
+        {/* Context description */}
+        <p className="text-[11.5px] font-outfit font-light text-[#9488aa] leading-[1.6] flex-1">
+          {skill.context}
+        </p>
+
+        {/* Proficiency bar */}
+        <div>
+          <div className="flex justify-between items-center mb-1.5">
+            <span className="text-[9px] font-mono text-[#4a3d66] uppercase tracking-wider">Proficiency</span>
+            <span className="text-[10px] font-mono" style={{ color: lc }}>{skill.level}%</span>
+          </div>
+          <div className="h-[3px] w-full rounded-full bg-white/[0.06] overflow-hidden">
+            <motion.div
+              className="h-full rounded-full"
+              style={{ background: `linear-gradient(90deg, ${skill.color}, ${skill.color}90)` }}
+              initial={{ width: "0%" }}
+              whileInView={{ width: `${skill.level}%` }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.1, delay: 0.1, ease: "easeOut" }}
+            />
+          </div>
+        </div>
+
+        {/* Bottom glow */}
         <div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[55%] h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60%] h-[2px] opacity-0 group-hover:opacity-60 transition-opacity duration-500 rounded-full"
           style={{ background: `linear-gradient(90deg, transparent, ${skill.color}, transparent)` }}
         />
       </div>
@@ -59,6 +95,7 @@ function SkillCard({ skill }) {
 function Skills() {
   const [active, setActive] = useState("All");
   const filtered = active === "All" ? skills : skills.filter((s) => s.category === active);
+  const meta = categoryMeta[active];
 
   return (
     <section id="skills" className="section-padding relative overflow-hidden">
@@ -81,23 +118,23 @@ function Skills() {
 
       {/* Category tabs */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.5, delay: 0.15 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.12 }}
         className="mt-10 flex flex-wrap gap-2"
       >
         {categories.map((cat) => {
           const isActive = active === cat;
-          const color = cat === "All" ? "#a78bfa" : categoryColors[cat];
+          const color = categoryMeta[cat].color;
           return (
             <button
               key={cat}
               onClick={() => setActive(cat)}
-              className="px-4 py-2 rounded-full text-[12px] font-mono uppercase tracking-wider transition-all duration-300"
+              className="px-4 py-2 rounded-full text-[11.5px] font-mono uppercase tracking-wider transition-all duration-300"
               style={{
-                background: isActive ? `${color}20` : "transparent",
-                border: `1px solid ${isActive ? color : "rgba(255,255,255,0.08)"}`,
+                background: isActive ? `${color}18` : "transparent",
+                border: `1px solid ${isActive ? color : "rgba(255,255,255,0.07)"}`,
                 color: isActive ? color : "#9488aa",
               }}
             >
@@ -107,25 +144,38 @@ function Skills() {
         })}
       </motion.div>
 
-      {/* Category description */}
+      {/* Dynamic description */}
       <AnimatePresence mode="wait">
         <motion.p
           key={active}
-          initial={{ opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.3 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.25 }}
           className="mt-5 text-[#9488aa] text-[15px] font-outfit font-light max-w-2xl leading-relaxed"
         >
-          {categoryDescriptions[active]}
+          {meta.desc}
         </motion.p>
       </AnimatePresence>
 
-      {/* Skills grid */}
+      {/* Legend */}
       <motion.div
-        layout
-        className="mt-10 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="mt-4 flex flex-wrap gap-x-6 gap-y-2"
       >
+        {Object.entries(levelColors).map(([label, color]) => (
+          <div key={label} className="flex items-center gap-2 text-[11px] font-mono text-[#9488aa]">
+            <span className="w-2 h-2 rounded-full inline-block" style={{ background: color }} />
+            {label}
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Skills grid */}
+      <motion.div layout className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <AnimatePresence>
           {filtered.map((skill) => (
             <SkillCard key={skill.name} skill={skill} />
