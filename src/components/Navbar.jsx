@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { navLinks, socialLinks } from "../constants";
 
-function Navbar() {
+function Navbar({ onOpenPalette }) {
   const [active, setActive] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -78,14 +78,31 @@ function Navbar() {
                 </li>
               ))}
             </ul>
-            <a
-              href={socialLinks.resume}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-[7px] rounded-full text-[11px] font-mono uppercase tracking-wider border border-accent/40 text-accent hover:bg-accent/10 transition-all duration-300"
-            >
-              Resume
-            </a>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-400/10 border border-green-400/25">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0" aria-hidden="true" />
+                <span className="text-[10px] font-mono text-green-400 uppercase tracking-wider hidden lg:block">Open to work</span>
+              </div>
+              {/* ⌘K palette trigger */}
+              <button
+                onClick={onOpenPalette}
+                className="hidden lg:flex items-center gap-2 px-3 py-[7px] rounded-full border border-white/[0.08] text-[#4a3d66] hover:border-accent/30 hover:text-[#9488aa] transition-all duration-300"
+                aria-label="Open command palette"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+                </svg>
+                <span className="text-[10px] font-mono">⌘K</span>
+              </button>
+              <a
+                href={socialLinks.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-[7px] rounded-full text-[11px] font-mono uppercase tracking-wider border border-accent/40 text-accent hover:bg-accent/10 transition-all duration-300"
+              >
+                Resume
+              </a>
+            </div>
           </div>
 
           {/* Mobile hamburger */}

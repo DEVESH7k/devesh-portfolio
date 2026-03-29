@@ -223,3 +223,60 @@ section { scroll-margin-top: 80px; }
 .flow-line-animate {
   animation: flowPulse 2s ease-in-out infinite;
 }
+
+/* ── Tool marquee strip ── */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 30s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Aurora background ── */
+.aurora-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+@keyframes aurora-appear {
+  to { opacity: 1; }
+}
+@keyframes aurora1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  30%       { transform: translate(80px, -60px) scale(1.08); }
+  60%       { transform: translate(-50px, 40px) scale(0.96); }
+}
+@keyframes aurora2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  35%       { transform: translate(-90px, 70px) scale(1.06); }
+  65%       { transform: translate(60px, -50px) scale(1.1); }
+}
+@keyframes aurora3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%       { transform: translate(50px, 60px) scale(1.07); }
+}
+
+/* ── ReactFlow dark theme overrides ── */
+.react-flow__background { background: transparent !important; }
+.react-flow__controls button {
+  background: rgba(10,6,24,0.8) !important;
+  border-color: rgba(255,255,255,0.06) !important;
+  color: #9488aa !important;
+  fill: #9488aa !important;
+}
+.react-flow__controls button:hover {
+  background: rgba(167,139,250,0.15) !important;
+  color: #a78bfa !important;
+  fill: #a78bfa !important;
+}
+.react-flow__edge-path { stroke-opacity: 0.7; }
+
+/* ── Command palette scrollbar ── */
+.cmd-scroll::-webkit-scrollbar { width: 0; }
+

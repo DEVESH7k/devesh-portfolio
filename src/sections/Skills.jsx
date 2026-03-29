@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { skills } from "../constants";
 
@@ -23,14 +23,24 @@ const levelColors = {
 
 function SkillCard({ skill }) {
   const lc = levelColors[skill.levelLabel] || "#9488aa";
+  const [spotlight, setSpotlight] = useState({ x: 0, y: 0 });
+  const cardRef = useRef(null);
+
+  const handleMouseMove = useCallback((e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setSpotlight({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  }, []);
 
   return (
     <motion.div
+      ref={cardRef}
       layout
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+      onMouseMove={handleMouseMove}
       className="group relative rounded-2xl p-[1px] overflow-hidden"
     >
       {/* Gradient border on hover */}
@@ -39,7 +49,14 @@ function SkillCard({ skill }) {
         style={{ background: `linear-gradient(135deg, ${skill.color}40, transparent 55%, ${skill.color}20)` }}
       />
 
-      <div className="relative rounded-2xl bg-bg1 border border-white/[0.06] group-hover:border-transparent p-5 flex flex-col gap-4 h-full transition-all duration-300 group-hover:bg-bg2">
+      <div className="relative rounded-2xl bg-bg1 border border-white/[0.06] group-hover:border-transparent p-5 flex flex-col gap-4 h-full transition-all duration-300 group-hover:bg-bg2 overflow-hidden">
+        {/* Spotlight overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(200px circle at ${spotlight.x}px ${spotlight.y}px, ${skill.color}14, transparent 80%)`,
+          }}
+        />
 
         {/* Header: logo + name + level badge */}
         <div className="flex items-center gap-3">
@@ -116,6 +133,23 @@ function Skills() {
           Tech <span className="orange-text-gradient">Stack</span>
         </h2>
       </motion.div>
+
+      {/* Marquee tool strip */}
+      <div className="mt-12 relative overflow-hidden">
+        <div className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: "linear-gradient(90deg, #050816 0%, transparent 100%)" }} />
+        <div className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: "linear-gradient(270deg, #050816 0%, transparent 100%)" }} />
+        <div className="flex gap-5 marquee-track" style={{ width: "max-content" }}>
+          {[...skills, ...skills].map((skill, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-white/[0.06] bg-bg1 flex-shrink-0"
+            >
+              <img src={skill.logo} alt={skill.name} className="w-5 h-5 object-contain" loading="lazy" />
+              <span className="text-[12px] font-mono text-[#9488aa] whitespace-nowrap">{skill.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Category tabs */}
       <motion.div

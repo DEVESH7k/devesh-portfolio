@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function ProjectCard({ project, index }) {
   const [tab, setTab] = useState("overview");
+  const [spotlight, setSpotlight] = useState({ x: 0, y: 0 });
+  const cardRef = useRef(null);
+
+  const handleMouseMove = useCallback((e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setSpotlight({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  }, []);
 
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 48 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      onMouseMove={handleMouseMove}
       className="group relative rounded-2xl p-[1px] overflow-hidden card-hover"
     >
       {/* Gradient border */}
@@ -17,7 +27,14 @@ function ProjectCard({ project, index }) {
       {/* Top accent bar */}
       <div className="absolute top-0 left-0 right-0 h-[2px] green-pink-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-      <div className="relative rounded-2xl bg-bg1 p-6 h-full flex flex-col">
+      <div className="relative rounded-2xl bg-bg1 p-6 h-full flex flex-col overflow-hidden">
+        {/* Spotlight overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(240px circle at ${spotlight.x}px ${spotlight.y}px, rgba(167,139,250,0.1), transparent 80%)`,
+          }}
+        />
 
         {/* Header row */}
         <div className="flex items-start justify-between gap-4 mb-4">

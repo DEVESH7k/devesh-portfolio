@@ -1,81 +1,53 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactFlow, {
+  Background,
+  Controls,
+  Handle,
+  Position,
+  MarkerType,
+  useNodesState,
+  useEdgesState,
+} from "reactflow";
+import "reactflow/dist/style.css";
 import { architectureDiagrams } from "../constants";
 
-function FlowArrow({ delay }) {
-  return (
-    <div className="hidden sm:flex flex-col items-center justify-center flex-shrink-0 w-10 gap-1">
-      <motion.div
-        initial={{ scaleX: 0, opacity: 0 }}
-        whileInView={{ scaleX: 1, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.4, delay }}
-        className="w-full h-[1px] bg-gradient-to-r from-white/10 via-accent/40 to-white/10 origin-left"
-      />
-      <motion.svg
-        initial={{ opacity: 0, x: -4 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, delay: delay + 0.15 }}
-        className="w-3 h-3 text-accent flex-shrink-0"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-      </motion.svg>
-    </div>
-  );
-}
-
-function StageNode({ stage, index, total }) {
+// ── Custom pipeline node ──────────────────────────────────────────────────
+function PipelineNode({ data }) {
   const [hovered, setHovered] = useState(false);
-  const delay = index * 0.12;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-      className="relative flex flex-col"
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="relative flex flex-col items-center text-center cursor-default select-none"
+      style={{ width: 100 }}
     >
-      {/* Mobile arrow (below each except last) */}
-      {index < total - 1 && (
-        <div className="sm:hidden flex justify-center my-2">
-          <svg className="w-4 h-4 text-accent/40" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-      )}
+      <Handle type="target" position={Position.Left} style={{ background: `${data.color}60`, border: "none", width: 8, height: 8 }} />
 
       <div
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        className="group relative rounded-xl border border-white/[0.08] bg-[#0a0618] p-4 flex flex-col items-center text-center gap-2.5 cursor-default transition-all duration-300 hover:border-opacity-60 w-[110px] sm:w-[120px]"
-        style={{ borderColor: hovered ? `${stage.color}50` : undefined, boxShadow: hovered ? `0 0 20px ${stage.color}15` : undefined }}
+        className="w-full rounded-xl border p-3 flex flex-col items-center gap-2 transition-all duration-300"
+        style={{
+          background: hovered ? `${data.color}14` : "#0a0618",
+          borderColor: hovered ? `${data.color}70` : "rgba(255,255,255,0.08)",
+          boxShadow: hovered ? `0 0 24px ${data.color}20` : "none",
+        }}
       >
-        {/* Number badge */}
+        {/* Index badge */}
         <div
-          className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full text-[10px] font-mono font-bold flex items-center justify-center border"
-          style={{ background: `${stage.color}20`, borderColor: `${stage.color}40`, color: stage.color }}
+          className="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full text-[9px] font-mono font-bold flex items-center justify-center border"
+          style={{ background: `${data.color}20`, borderColor: `${data.color}40`, color: data.color }}
         >
-          {index + 1}
+          {data.index + 1}
         </div>
 
-        {/* Icon */}
-        <span className="text-[26px] mt-1">{stage.icon}</span>
-
-        {/* Stage name */}
-        <p className="text-[12px] font-outfit font-semibold text-white leading-tight">{stage.name}</p>
-
-        {/* Tool name */}
+        <span className="text-[22px] mt-1">{data.icon}</span>
+        <p className="text-[11px] font-outfit font-semibold text-white leading-tight">{data.label}</p>
         <span
-          className="px-2 py-0.5 rounded text-[9px] font-mono uppercase tracking-wider"
-          style={{ background: `${stage.color}15`, color: stage.color, border: `1px solid ${stage.color}25` }}
+          className="px-1.5 py-0.5 rounded text-[8px] font-mono uppercase tracking-wider"
+          style={{ background: `${data.color}15`, color: data.color, border: `1px solid ${data.color}25` }}
         >
-          {stage.tool}
+          {data.tool}
         </span>
       </div>
 
@@ -83,31 +55,118 @@ function StageNode({ stage, index, total }) {
       <AnimatePresence>
         {hovered && (
           <motion.div
-            initial={{ opacity: 0, y: 6, scale: 0.96 }}
+            initial={{ opacity: 0, y: 8, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.96 }}
-            transition={{ duration: 0.2 }}
-            className="absolute top-full left-1/2 -translate-x-1/2 mt-3 z-20 w-[200px] rounded-xl border border-white/[0.08] bg-[#0f0a1e]/95 backdrop-blur-sm p-4 shadow-xl pointer-events-none"
+            exit={{ opacity: 0, y: 8, scale: 0.95 }}
+            transition={{ duration: 0.18 }}
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-3 z-50 w-[190px] rounded-xl border border-white/[0.08] bg-[#0f0a1e]/95 backdrop-blur-sm p-3.5 shadow-xl pointer-events-none"
           >
-            <p className="text-[12px] font-outfit text-white leading-relaxed">{stage.detail}</p>
-            <div
-              className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rotate-45 border-l border-t border-white/[0.08] rounded-sm"
-              style={{ background: "#0f0a1e" }}
-            />
+            <p className="text-[11px] font-outfit text-white leading-relaxed">{data.detail}</p>
+            <div className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rotate-45 border-l border-t border-white/[0.08] rounded-sm bg-[#0f0a1e]" />
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+
+      <Handle type="source" position={Position.Right} style={{ background: `${data.color}60`, border: "none", width: 8, height: 8 }} />
+    </div>
   );
 }
 
+const nodeTypes = { pipeline: PipelineNode };
+
+// ── Build nodes + edges from a diagram config ─────────────────────────────
+function buildGraph(diagram) {
+  const SPACING_X = 180;
+  const SPACING_Y = 120;
+  const cols = Math.min(diagram.stages.length, 4);
+
+  const nodes = diagram.stages.map((stage, i) => ({
+    id: `${diagram.id}-${i}`,
+    type: "pipeline",
+    position: {
+      x: (i % cols) * SPACING_X,
+      y: Math.floor(i / cols) * SPACING_Y,
+    },
+    data: {
+      ...stage,
+      label: stage.name,
+      index: i,
+    },
+  }));
+
+  const edges = diagram.stages.slice(0, -1).map((stage, i) => ({
+    id: `e-${diagram.id}-${i}`,
+    source: `${diagram.id}-${i}`,
+    target: `${diagram.id}-${i + 1}`,
+    type: "smoothstep",
+    animated: true,
+    style: { stroke: `${stage.color}50`, strokeWidth: 2 },
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      color: `${stage.color}80`,
+      width: 16,
+      height: 16,
+    },
+  }));
+
+  return { nodes, edges };
+}
+
+// ── Flow diagram view ─────────────────────────────────────────────────────
+function FlowDiagram({ diagram }) {
+  const { nodes: initialNodes, edges: initialEdges } = useMemo(
+    () => buildGraph(diagram),
+    [diagram]
+  );
+
+  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [edges, , onEdgesChange] = useEdgesState(initialEdges);
+
+  return (
+    <div
+      className="rounded-2xl border border-white/[0.07] bg-[#07040f]/60 overflow-hidden"
+      style={{ height: diagram.stages.length > 4 ? 340 : 220 }}
+    >
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
+        fitView
+        fitViewOptions={{ padding: 0.35 }}
+        minZoom={0.5}
+        maxZoom={2}
+        attributionPosition="bottom-right"
+        proOptions={{ hideAttribution: true }}
+        style={{ background: "transparent" }}
+      >
+        <Background
+          color="rgba(167,139,250,0.06)"
+          gap={20}
+          size={1}
+          variant="dots"
+        />
+        <Controls
+          showInteractive={false}
+          style={{
+            background: "rgba(10,6,24,0.8)",
+            border: "1px solid rgba(255,255,255,0.07)",
+            borderRadius: "10px",
+          }}
+        />
+      </ReactFlow>
+    </div>
+  );
+}
+
+// ── Main section ─────────────────────────────────────────────────────────
 function Architecture() {
   const [activeId, setActiveId] = useState("cicd");
   const active = architectureDiagrams.find((d) => d.id === activeId);
 
   return (
     <section id="architecture" className="section-padding relative overflow-hidden">
-      {/* Ambient blob */}
       <div
         className="pointer-events-none absolute top-1/2 right-0 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-[0.03]"
         style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 70%)" }}
@@ -124,8 +183,8 @@ function Architecture() {
           Architecture <span className="orange-text-gradient">Diagrams</span>
         </h2>
         <p className="mt-4 text-[#9488aa] text-[16px] font-outfit font-light max-w-2xl leading-relaxed">
-          Visual breakdowns of the systems I design and operate daily — from pipeline orchestration to cloud
-          infrastructure and shift-left security. Hover each stage for detail.
+          Interactive pipeline diagrams — drag, zoom, and explore the systems I design.
+          Hover each node for detail.
         </p>
       </motion.div>
 
@@ -143,7 +202,9 @@ function Architecture() {
             onClick={() => setActiveId(d.id)}
             className="px-5 py-2.5 rounded-xl text-[13px] font-outfit font-medium transition-all duration-300"
             style={{
-              background: activeId === d.id ? "linear-gradient(135deg, rgba(167,139,250,0.15), rgba(232,121,249,0.08))" : "transparent",
+              background: activeId === d.id
+                ? "linear-gradient(135deg, rgba(167,139,250,0.15), rgba(232,121,249,0.08))"
+                : "transparent",
               border: `1px solid ${activeId === d.id ? "rgba(167,139,250,0.4)" : "rgba(255,255,255,0.08)"}`,
               color: activeId === d.id ? "#f5f0ff" : "#9488aa",
             }}
@@ -153,7 +214,15 @@ function Architecture() {
         ))}
       </motion.div>
 
-      {/* Diagram card */}
+      {/* Hint */}
+      <p className="mt-3 text-[11px] font-mono text-[#4a3d66] flex items-center gap-2">
+        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5" />
+        </svg>
+        Drag to pan · scroll to zoom · hover nodes for details
+      </p>
+
+      {/* Flow diagram */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeId}
@@ -161,41 +230,26 @@ function Architecture() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -12 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-8 relative rounded-2xl border border-white/[0.07] bg-[#07040f]/60 backdrop-blur-sm p-8 overflow-hidden"
+          className="mt-4"
         >
-          {/* Subtle corner accent */}
-          <div className="absolute top-0 left-0 w-[200px] h-[200px] rounded-full opacity-[0.04] blur-3xl bg-accent pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-[200px] h-[200px] rounded-full opacity-[0.04] blur-3xl bg-accentPink pointer-events-none" />
-
-          {/* Diagram title */}
-          <div className="mb-8">
-            <h3 className="text-[20px] font-outfit font-bold text-white">{active.title}</h3>
-            <p className="text-[14px] font-outfit font-light text-[#9488aa] mt-1">{active.subtitle}</p>
+          <div className="mb-4">
+            <h3 className="text-[18px] font-outfit font-bold text-white">{active.title}</h3>
+            <p className="text-[13px] font-outfit font-light text-[#9488aa] mt-0.5">{active.subtitle}</p>
           </div>
 
-          {/* Flow diagram — horizontal scrollable */}
-          <div className="overflow-x-auto pb-4">
-            <div className="flex items-start gap-0 min-w-max sm:min-w-0 sm:flex-wrap sm:justify-center">
-              {active.stages.map((stage, i) => (
-                <div key={stage.name} className="flex items-center">
-                  <StageNode stage={stage} index={i} total={active.stages.length} />
-                  {i < active.stages.length - 1 && <FlowArrow delay={i * 0.12 + 0.3} />}
-                </div>
-              ))}
-            </div>
-          </div>
+          <FlowDiagram diagram={active} />
 
           {/* Legend */}
-          <div className="mt-8 pt-6 border-t border-white/[0.05] flex flex-wrap gap-x-8 gap-y-3">
-            <div className="flex items-center gap-2 text-[12px] font-mono text-[#9488aa]">
-              <span className="w-3 h-[1px] bg-accent/40 inline-block" />
+          <div className="mt-5 flex flex-wrap gap-x-8 gap-y-2.5">
+            <div className="flex items-center gap-2 text-[11px] font-mono text-[#9488aa]">
+              <span className="w-6 h-[2px] bg-accent/40 inline-block" />
               Automated handoff
             </div>
-            <div className="flex items-center gap-2 text-[12px] font-mono text-[#9488aa]">
+            <div className="flex items-center gap-2 text-[11px] font-mono text-[#9488aa]">
               <span className="w-4 h-4 rounded border border-accent/30 bg-accent/10 inline-block" />
               Stage node (hover for detail)
             </div>
-            <div className="flex items-center gap-2 text-[12px] font-mono text-[#9488aa]">
+            <div className="flex items-center gap-2 text-[11px] font-mono text-[#9488aa]">
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse inline-block" />
               Active in production
             </div>

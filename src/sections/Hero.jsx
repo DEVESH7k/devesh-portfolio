@@ -10,15 +10,52 @@ const titles = [
   "Shift-Left Advocate",
 ];
 
-const LOG_LINES = [
-  { ts: "08:42:01", text: "Incoming webhook — main branch push detected", type: "info" },
-  { ts: "08:42:02", text: "Starting pipeline: netflix-clone-devsecops #47", type: "info" },
-  { ts: "08:42:03", text: "Stage 1/5 · Source Checkout ................. ✓", type: "success" },
-  { ts: "08:42:08", text: "Stage 2/5 · SonarQube SAST .................. ✓  (0 bugs · 0 vulns)", type: "success" },
-  { ts: "08:42:19", text: "Stage 3/5 · Docker Build ..................... ✓  devesh/netflix:2.4.1", type: "success" },
-  { ts: "08:42:26", text: "Stage 4/5 · Trivy CVE Scan .................. ✓  CRITICAL: 0 · HIGH: 0", type: "success" },
-  { ts: "08:42:33", text: "Stage 5/5 · EKS Rolling Deploy .............. ✓  3/3 pods healthy", type: "success" },
-  { ts: "08:42:34", text: "✅  Pipeline SUCCESS — 33s — all security gates passed", type: "done" },
+const TERMINAL_CYCLES = [
+  {
+    run: "#47",
+    branch: "main",
+    status: "SUCCESS",
+    lines: [
+      { ts: "08:42:01", text: "Incoming webhook — main branch push detected", type: "info" },
+      { ts: "08:42:02", text: "Starting pipeline: netflix-clone-devsecops #47", type: "info" },
+      { ts: "08:42:03", text: "Stage 1/5 · Source Checkout ................. ✓", type: "success" },
+      { ts: "08:42:08", text: "Stage 2/5 · SonarQube SAST .................. ✓  (0 bugs · 0 vulns)", type: "success" },
+      { ts: "08:42:19", text: "Stage 3/5 · Docker Build ..................... ✓  devesh/netflix:2.4.1", type: "success" },
+      { ts: "08:42:26", text: "Stage 4/5 · Trivy CVE Scan .................. ✓  CRITICAL: 0 · HIGH: 0", type: "success" },
+      { ts: "08:42:33", text: "Stage 5/5 · EKS Rolling Deploy .............. ✓  3/3 pods healthy", type: "success" },
+      { ts: "08:42:34", text: "✅  Pipeline SUCCESS — 33s — all security gates passed", type: "done" },
+    ],
+  },
+  {
+    run: "#48",
+    branch: "feature/update-deps",
+    status: "BLOCKED",
+    lines: [
+      { ts: "14:17:01", text: "Incoming webhook — feature/update-deps push", type: "info" },
+      { ts: "14:17:02", text: "Starting pipeline: netflix-clone-devsecops #48", type: "info" },
+      { ts: "14:17:03", text: "Stage 1/5 · Source Checkout ................. ✓", type: "success" },
+      { ts: "14:17:08", text: "Stage 2/5 · SonarQube SAST .................. ✓  (0 bugs · 0 vulns)", type: "success" },
+      { ts: "14:17:19", text: "Stage 3/5 · Docker Build ..................... ✓  devesh/netflix:2.4.2", type: "success" },
+      { ts: "14:17:26", text: "Stage 4/5 · Trivy CVE Scan .................. ✗  CRITICAL: 2 found", type: "fail" },
+      { ts: "14:17:26", text: "  ↳ CVE-2024-4577 [CRITICAL] php:8.2 — RCE via arg injection", type: "fail" },
+      { ts: "14:17:26", text: "  ↳ CVE-2024-39689 [CRITICAL] certifi:2023.11 — CA bundle", type: "fail" },
+      { ts: "14:17:27", text: "⛔  Pipeline BLOCKED — 2 CRITICAL CVEs, deploy prevented", type: "blocked" },
+    ],
+  },
+  {
+    run: "#49",
+    branch: "fix/cve-remediation",
+    status: "SUCCESS",
+    lines: [
+      { ts: "14:31:05", text: "Hotfix: python:3.12-alpine base + certifi≥2024.2", type: "info" },
+      { ts: "14:31:06", text: "Starting pipeline: netflix-clone-devsecops #49", type: "info" },
+      { ts: "14:31:14", text: "Stage 2/5 · SonarQube SAST .................. ✓  (0 bugs · 0 vulns)", type: "success" },
+      { ts: "14:31:21", text: "Stage 3/5 · Docker Build ..................... ✓  devesh/netflix:2.4.3", type: "success" },
+      { ts: "14:31:28", text: "Stage 4/5 · Trivy CVE Scan .................. ✓  CRITICAL: 0 · HIGH: 0", type: "success" },
+      { ts: "14:31:35", text: "Stage 5/5 · EKS Rolling Deploy .............. ✓  3/3 pods healthy", type: "success" },
+      { ts: "14:31:36", text: "✅  CVEs remediated & deployed — 14 min MTTR", type: "done" },
+    ],
+  },
 ];
 
 const containerVariants = {
@@ -43,18 +80,20 @@ function StatItem({ value, label }) {
 }
 
 function CicdTerminal() {
+  const [cycleIndex, setCycleIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(0);
   const [isRunning, setIsRunning] = useState(true);
-  // cycle counter is the real driver — incrementing it restarts the animation
-  const [cycle, setCycle] = useState(0);
+  const [tick, setTick] = useState(0);
 
   const prefersReducedMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  const cycle = TERMINAL_CYCLES[cycleIndex];
+
   useEffect(() => {
     if (prefersReducedMotion) {
-      setVisibleCount(LOG_LINES.length);
+      setVisibleCount(cycle.lines.length);
       setIsRunning(false);
       return;
     }
@@ -65,19 +104,52 @@ function CicdTerminal() {
     const interval = setInterval(() => {
       i += 1;
       setVisibleCount(i);
-      if (i >= LOG_LINES.length) {
+      if (i >= cycle.lines.length) {
         clearInterval(interval);
         setIsRunning(false);
-        setTimeout(() => setCycle((c) => c + 1), 4000);
+        setTimeout(() => {
+          setCycleIndex((c) => (c + 1) % TERMINAL_CYCLES.length);
+          setTick((t) => t + 1);
+        }, cycleIndex === 1 ? 3000 : 4000);
       }
-    }, 520);
+    }, 460);
     return () => clearInterval(interval);
-  }, [cycle]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [tick]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const lineColor = (type) => {
     if (type === "success") return "#34d399";
     if (type === "done") return "#a78bfa";
+    if (type === "fail") return "#f87171";
+    if (type === "blocked") return "#fb923c";
     return "#b4aec8";
+  };
+
+  const statusBadge = () => {
+    if (isRunning && visibleCount > 0 && visibleCount < cycle.lines.length) {
+      return (
+        <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-[#febc2e]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#febc2e] animate-pulse" aria-hidden="true" />
+          RUNNING
+        </span>
+      );
+    }
+    if (!isRunning && cycle.status === "BLOCKED") {
+      return (
+        <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-[#fb923c]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#fb923c]" aria-hidden="true" />
+          BLOCKED
+        </span>
+      );
+    }
+    if (!isRunning && cycle.status === "SUCCESS") {
+      return (
+        <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-[#34d399]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]" aria-hidden="true" />
+          SUCCESS
+        </span>
+      );
+    }
+    return null;
   };
 
   return (
@@ -96,37 +168,49 @@ function CicdTerminal() {
           <div className="w-3 h-3 rounded-full bg-[#febc2e]" aria-hidden="true" />
           <div className="w-3 h-3 rounded-full bg-[#28c840]" aria-hidden="true" />
           <span className="ml-3 text-[11px] font-mono text-[#b4aec8]">jenkins — pipeline console</span>
-          {isRunning && visibleCount > 0 && visibleCount < LOG_LINES.length && (
-            <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-[#febc2e]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#febc2e] animate-pulse" aria-hidden="true" />
-              RUNNING
-            </span>
-          )}
-          {!isRunning && (
-            <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-[#34d399]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]" aria-hidden="true" />
-              SUCCESS
-            </span>
-          )}
+          {statusBadge()}
+        </div>
+
+        {/* Branch + run indicator */}
+        <div className="flex items-center gap-3 px-4 py-2 border-b border-white/[0.04] bg-white/[0.01]">
+          <span className="text-[9px] font-mono text-[#4a3d66] uppercase tracking-wider">branch</span>
+          <span className="text-[10px] font-mono text-accent">{cycle.branch}</span>
+          <span className="text-[9px] font-mono text-[#4a3d66] ml-auto">run {cycle.run}</span>
         </div>
 
         {/* Log body */}
-        <div className="p-4 font-mono text-[11.5px] leading-[1.85] min-h-[224px] overflow-hidden" aria-label="CI/CD pipeline log output">
-          {LOG_LINES.slice(0, visibleCount).map((line, i) => (
+        <div className="p-4 font-mono text-[11px] leading-[1.85] min-h-[220px] overflow-hidden" aria-label="CI/CD pipeline log output">
+          {cycle.lines.slice(0, visibleCount).map((line, i) => (
             <motion.div
-              key={i}
+              key={`${cycleIndex}-${i}`}
               initial={{ opacity: 0, x: -6 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.25 }}
+              transition={{ duration: 0.22 }}
               className="flex gap-2 items-baseline"
             >
-              <span className="text-[#4a3d66] flex-shrink-0 text-[10px]">[{line.ts}]</span>
+              <span className="text-[#4a3d66] flex-shrink-0 text-[9.5px]">[{line.ts}]</span>
               <span style={{ color: lineColor(line.type) }}>{line.text}</span>
             </motion.div>
           ))}
-          {isRunning && visibleCount < LOG_LINES.length && (
+          {isRunning && visibleCount < cycle.lines.length && (
             <span className="inline-block w-[2px] h-[13px] bg-accent animate-pulse ml-1" aria-hidden="true" />
           )}
+        </div>
+
+        {/* Cycle indicator dots */}
+        <div className="flex items-center justify-center gap-2 pb-3 pt-1">
+          {TERMINAL_CYCLES.map((c, i) => (
+            <div
+              key={i}
+              className="w-1.5 h-1.5 rounded-full transition-all duration-300"
+              style={{
+                background: i === cycleIndex
+                  ? (c.status === "BLOCKED" ? "#fb923c" : "#34d399")
+                  : "rgba(255,255,255,0.12)",
+                transform: i === cycleIndex ? "scale(1.3)" : "scale(1)",
+              }}
+            />
+          ))}
         </div>
       </div>
 
@@ -148,7 +232,7 @@ function CicdTerminal() {
         className="absolute -bottom-4 -left-3 px-3 py-1.5 rounded-full bg-[#07040f] border border-[#34d399]/30 text-[10.5px] font-mono text-[#34d399] flex items-center gap-1.5"
       >
         <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" aria-hidden="true" />
-        All gates passed
+        Zero CVEs in prod
       </motion.div>
     </motion.div>
   );

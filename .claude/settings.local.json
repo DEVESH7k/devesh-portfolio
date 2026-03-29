@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npx --yes acorn --ecma2022 --module src/App.jsx)",
+      "Bash(git add:*)",
+      "Bash(git update-index:*)",
+      "Bash(git rm:*)",
+      "Bash(git --version)",
+      "Bash(git hash-object:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(git push:*)",
+      "Bash(node:*)",
+      "Bash(nvm --version)",
+      "Bash(nvm use:*)",
+      "Bash(npm install:*)",
+      "Read(//home/hydra/.nvm/versions/**)",
+      "Read(//usr/local/lib/node_modules/**)",
+      "Bash(source ~/.bashrc)",
+      "Bash(source ~/.zshrc)",
+      "Bash(fnm use:*)",
+      "Bash(npx --yes eslint src/sections/SecurityDashboard.jsx src/sections/CodeSnippets.jsx src/components/AuroraBackground.jsx src/components/CommandPalette.jsx src/sections/About.jsx src/sections/Architecture.jsx --no-eslintrc --rule '{\"\"\"\"no-undef\"\"\"\": \"\"\"\"off\"\"\"\"}')",
+      "Bash(npx eslint:*)",
+      "Bash(echo \"EXIT:$?\")"
+    ]
+  }
+}
