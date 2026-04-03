@@ -11,9 +11,6 @@ const Skills         = lazy(() => import("./sections/Skills"));
 const Experience     = lazy(() => import("./sections/Experience"));
 const Projects       = lazy(() => import("./sections/Projects"));
 const Architecture   = lazy(() => import("./sections/Architecture"));
-const SecurityDashboard = lazy(() => import("./sections/SecurityDashboard"));
-const CodeSnippets   = lazy(() => import("./sections/CodeSnippets"));
-const Certifications = lazy(() => import("./sections/Certifications"));
 const Writing        = lazy(() => import("./sections/Challenge"));
 const Testimonials   = lazy(() => import("./sections/Testimonials"));
 const Contact        = lazy(() => import("./sections/Contact"));
@@ -112,9 +109,6 @@ function App() {
               <Experience />
               <Projects />
               <Architecture />
-              <SecurityDashboard />
-              <CodeSnippets />
-              <Certifications />
               <Writing />
               <Testimonials />
               <Contact />
