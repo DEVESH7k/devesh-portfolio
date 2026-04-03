@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { skills } from "../constants";
+import useCountUp from "../hooks/useCountUp";
 
 const categories = ["All", "Cloud", "Security", "CI/CD", "Containers", "Monitoring", "Scripting", "Foundation"];
 
@@ -25,6 +26,7 @@ function SkillCard({ skill }) {
   const lc = levelColors[skill.levelLabel] || "#9488aa";
   const [spotlight, setSpotlight] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
+  const { ref: countRef, displayValue: pctDisplay } = useCountUp(skill.level, 1100, true);
 
   const handleMouseMove = useCallback((e) => {
     if (!cardRef.current) return;
@@ -84,9 +86,9 @@ function SkillCard({ skill }) {
 
         {/* Proficiency bar */}
         <div>
-          <div className="flex justify-between items-center mb-1.5">
+          <div ref={countRef} className="flex justify-between items-center mb-1.5">
             <span className="text-[9px] font-mono text-[#4a3d66] uppercase tracking-wider">Proficiency</span>
-            <span className="text-[10px] font-mono" style={{ color: lc }}>{skill.level}%</span>
+            <span className="text-[10px] font-mono" style={{ color: lc }}>{pctDisplay}%</span>
           </div>
           <div className="h-[3px] w-full rounded-full bg-white/[0.06] overflow-hidden">
             <motion.div

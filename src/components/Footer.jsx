@@ -47,7 +47,7 @@ function Footer() {
                 <a
                   key={label}
                   href={href}
-                  className="text-[13px] text-white/40 hover:text-white transition-colors duration-200 uppercase tracking-wider flex items-center gap-2 group"
+                  className="text-[13px] text-white/40 hover:text-accent transition-all duration-200 uppercase tracking-wider flex items-center gap-2 group hover:-translate-y-0.5"
                   style={{ fontFamily: "'Chakra Petch', sans-serif" }}
                 >
                   <span className="w-0 group-hover:w-3 h-[1px] bg-accent transition-all duration-300" />
@@ -72,7 +72,7 @@ function Footer() {
                   href={href}
                   target={label !== "Email" ? "_blank" : undefined}
                   rel={label !== "Email" ? "noopener noreferrer" : undefined}
-                  className="text-[13px] text-white/40 hover:text-white transition-colors duration-200 uppercase tracking-wider flex items-center justify-between border-b border-white/[0.04] pb-3 group"
+                  className="text-[13px] text-white/40 hover:text-accent transition-all duration-200 uppercase tracking-wider flex items-center justify-between border-b border-white/[0.04] pb-3 group hover:-translate-y-0.5"
                   style={{ fontFamily: "'Chakra Petch', sans-serif" }}
                 >
                   {label}

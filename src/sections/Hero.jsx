@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { socialLinks } from "../constants";
+import useCountUp from "../hooks/useCountUp";
 
 const TERMINAL_CYCLES = [
   {
@@ -90,11 +91,8 @@ function CicdTerminal() {
 
   return (
     <div className="relative w-full max-w-[460px]">
-      {/* Glow */}
       <div className="absolute inset-0 blur-2xl bg-accent/10 scale-105 pointer-events-none" aria-hidden="true" />
-
       <div className="relative border border-white/[0.07] bg-[#0a0a0a] overflow-hidden">
-        {/* Title bar */}
         <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.05] bg-white/[0.02]">
           <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
           <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
@@ -102,13 +100,11 @@ function CicdTerminal() {
           <span className="ml-3 text-[10px] font-mono text-white/30">jenkins — pipeline console</span>
           {statusBadge()}
         </div>
-        {/* Branch */}
         <div className="flex items-center gap-3 px-4 py-2 border-b border-white/[0.03]">
           <span className="text-[9px] font-mono text-white/20 uppercase tracking-wider">branch</span>
           <span className="text-[10px] font-mono text-accent">{cycle.branch}</span>
           <span className="text-[9px] font-mono text-white/20 ml-auto">run {cycle.run}</span>
         </div>
-        {/* Log */}
         <div className="p-4 font-mono text-[11px] leading-[1.9] min-h-[200px] overflow-hidden">
           {cycle.lines.slice(0, visibleCount).map((line, i) => (
             <motion.div
@@ -126,7 +122,6 @@ function CicdTerminal() {
             <span className="inline-block w-[2px] h-[12px] bg-accent animate-pulse ml-1" />
           )}
         </div>
-        {/* Dots */}
         <div className="flex justify-center gap-2 pb-3 pt-1">
           {TERMINAL_CYCLES.map((c, i) => (
             <div
@@ -142,8 +137,6 @@ function CicdTerminal() {
           ))}
         </div>
       </div>
-
-      {/* Floating badges */}
       <div className="absolute -top-3 -right-3 px-3 py-1 border border-accent/40 bg-[#0a0a0a] text-[10px] font-mono text-accent">
         156+ Pipelines
       </div>
@@ -154,11 +147,91 @@ function CicdTerminal() {
   );
 }
 
+// ── Typewriter ───────────────────────────────────────────────────────────────
+const ROLES = [
+  "DevSecOps Engineer",
+  "Cloud Security Architect",
+  "CI/CD Automation Lead",
+  "Kubernetes Operator",
+];
+
+function Typewriter() {
+  const [roleIdx, setRoleIdx] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const target = ROLES[roleIdx];
+    let timeout;
+
+    if (!deleting && displayed.length < target.length) {
+      timeout = setTimeout(() => setDisplayed(target.slice(0, displayed.length + 1)), 60);
+    } else if (!deleting && displayed.length === target.length) {
+      timeout = setTimeout(() => setDeleting(true), 2000);
+    } else if (deleting && displayed.length > 0) {
+      timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 35);
+    } else if (deleting && displayed.length === 0) {
+      setDeleting(false);
+      setRoleIdx((r) => (r + 1) % ROLES.length);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayed, deleting, roleIdx]);
+
+  return (
+    <div className="flex items-center gap-1 h-5">
+      <span className="text-[11px] font-mono text-accent uppercase tracking-[0.15em]">{displayed}</span>
+      <span className="typewriter-cursor" aria-hidden="true" />
+    </div>
+  );
+}
+
+// ── Magnetic wrapper ─────────────────────────────────────────────────────────
+function Magnetic({ children, strength = 0.25 }) {
+  const ref = useRef(null);
+
+  const onMove = useCallback((e) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const dx = (e.clientX - (rect.left + rect.width / 2)) * strength;
+    const dy = (e.clientY - (rect.top + rect.height / 2)) * strength;
+    el.style.transform = `translate(${dx}px, ${dy}px)`;
+    el.style.transition = "transform 0.15s ease";
+  }, [strength]);
+
+  const onLeave = useCallback(() => {
+    if (ref.current) {
+      ref.current.style.transform = "translate(0,0)";
+      ref.current.style.transition = "transform 0.5s cubic-bezier(0.22,1,0.36,1)";
+    }
+  }, []);
+
+  return (
+    <div ref={ref} className="magnetic-wrap" onMouseMove={onMove} onMouseLeave={onLeave}>
+      {children}
+    </div>
+  );
+}
+
 const ArrowIcon = () => (
   <svg width="14" height="14" viewBox="0 0 16 14" fill="none">
     <path d="M7.088 0.164V1.746c0 .09.039.176.107.237L12.123 6.258H1.125A.125.125 0 001 6.414v1.172c0 .086.07.156.125.156H12.123L7.195 12.018a.172.172 0 00-.107.236v1.582c0 .133.158.205.258.117l7.47-6.482a1.03 1.03 0 000-1.542L7.346.047c-.1-.088-.258-.016-.258.117z" fill="currentColor"/>
   </svg>
 );
+
+function HeroStat({ val, label }) {
+  const isSpecial = val === "24/7";
+  const { ref, displayValue } = useCountUp(val, 1600, true);
+  return (
+    <div ref={ref} className="flex items-baseline gap-3 border-t border-white/[0.05] pt-4">
+      <span className="text-2xl font-bold text-white" style={{ fontFamily: "'Chakra Petch', sans-serif" }}>
+        {isSpecial ? "24/7" : displayValue}
+      </span>
+      <span className="text-[10px] font-mono text-white/30 uppercase tracking-wider">{label}</span>
+    </div>
+  );
+}
 
 function Hero() {
   return (
@@ -169,13 +242,12 @@ function Hero() {
 
         {/* LEFT column */}
         <div className="flex flex-col justify-between p-8 md:p-12 pt-28 md:pt-28 border-r border-white/[0.05]">
-          {/* Descriptor */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center gap-2 mb-4">
               <span className="text-accent text-sm">/</span>
               <p
                 className="text-[11px] text-white/40 uppercase tracking-[0.2em]"
@@ -185,10 +257,23 @@ function Hero() {
               </p>
             </div>
 
+            {/* Typewriter role */}
+            <div className="mb-5">
+              <Typewriter />
+            </div>
+
             {/* Status badge */}
-            <div className="inline-flex items-center gap-2 border border-green-500/20 px-3 py-1.5 mb-8">
+            <div className="inline-flex items-center gap-2 border border-green-500/20 px-3 py-1.5 mb-3">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
               <span className="text-[10px] font-mono text-green-400 uppercase tracking-wider">Open to opportunities</span>
+            </div>
+
+            {/* Currently building badge */}
+            <div className="inline-flex items-center gap-2 border border-accent/20 bg-accent/5 px-3 py-1.5 mb-8">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+              <span className="text-[10px] font-mono text-white/40 uppercase tracking-wider">
+                Building · <span className="text-accent">K8s Security Platform</span>
+              </span>
             </div>
           </motion.div>
 
@@ -204,15 +289,7 @@ function Hero() {
               { val: "50+", label: "Cloud Environments" },
               { val: "24/7", label: "On-Call Coverage" },
             ].map(({ val, label }) => (
-              <div key={label} className="flex items-baseline gap-3 border-t border-white/[0.05] pt-4">
-                <span
-                  className="text-2xl font-bold text-white"
-                  style={{ fontFamily: "'Chakra Petch', sans-serif" }}
-                >
-                  {val}
-                </span>
-                <span className="text-[10px] font-mono text-white/30 uppercase tracking-wider">{label}</span>
-              </div>
+              <HeroStat key={label} val={val} label={label} />
             ))}
 
             {/* Social links */}
@@ -247,29 +324,30 @@ function Hero() {
           <CicdTerminal />
         </motion.div>
 
-        {/* RIGHT column — cloud providers + descriptor */}
+        {/* RIGHT column — cloud providers */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="hidden md:flex flex-col justify-between p-8 pt-28"
         >
-          {/* Cloud tags */}
           <div className="flex flex-col gap-3">
             {["AWS", "Azure", "Google Cloud", "Kubernetes", "Docker", "Terraform"].map((tag, i) => (
-              <div
+              <motion.div
                 key={tag}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 + i * 0.07, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="flex items-center gap-3 border border-white/[0.06] px-3 py-2 hover:border-accent/30 transition-colors duration-300"
               >
                 <span className="text-[10px] font-mono text-white/20">0{i + 1}</span>
                 <span className="text-[12px] text-white/60 uppercase tracking-wider" style={{ fontFamily: "'Chakra Petch', sans-serif" }}>{tag}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
 
-          {/* Bottom descriptor */}
           <div className="text-right">
-            <p className="text-[10px] font-mono text-white/20 uppercase tracking-[0.3em] rotate-0">
+            <p className="text-[10px] font-mono text-white/20 uppercase tracking-[0.3em]">
               Innovation at every turn
             </p>
           </div>
@@ -306,23 +384,27 @@ function Hero() {
             </h1>
           </div>
 
-          {/* CTA */}
+          {/* CTA — magnetic buttons */}
           <div className="flex flex-wrap items-center gap-4 pb-2">
-            <a href="#contact" className="xizt-btn">
-              Let&apos;s Talk
-              <span className="arrow-wrap">
-                <ArrowIcon />
-                <ArrowIcon />
-              </span>
-            </a>
-            <a
-              href={socialLinks.resume}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[12px] font-mono text-white/40 uppercase tracking-wider hover:text-white transition-colors duration-300"
-            >
-              / Resume
-            </a>
+            <Magnetic>
+              <a href="#contact" className="xizt-btn">
+                Let&apos;s Talk
+                <span className="arrow-wrap">
+                  <ArrowIcon />
+                  <ArrowIcon />
+                </span>
+              </a>
+            </Magnetic>
+            <Magnetic strength={0.15}>
+              <a
+                href={socialLinks.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[12px] font-mono text-white/40 uppercase tracking-wider hover:text-white transition-colors duration-300"
+              >
+                / Resume
+              </a>
+            </Magnetic>
           </div>
         </div>
       </motion.div>

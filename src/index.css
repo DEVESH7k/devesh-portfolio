@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── CSS Variables ── */
+:root {
+  --c-bg: #080808;
+  --c-bg1: #0e0e0e;
+  --c-surface: rgba(14,14,14,0.8);
+  --c-text: #ffffff;
+  --c-muted: #888888;
+  --c-border: rgba(255,255,255,0.06);
+  --c-nav-overlay: rgba(8,8,8,0.97);
+  --c-nav-scrolled: rgba(8,8,8,0.90);
+  --c-input-border: rgba(255,255,255,0.15);
+  --c-input-placeholder: rgba(255,255,255,0.2);
+  --c-scrollbar: #080808;
+}
+html.light {
+  --c-bg: #f0ede7;
+  --c-bg1: #e7e3dc;
+  --c-surface: rgba(232,228,220,0.85);
+  --c-text: #0d0d0d;
+  --c-muted: #666666;
+  --c-border: rgba(0,0,0,0.07);
+  --c-nav-overlay: rgba(240,237,231,0.98);
+  --c-nav-scrolled: rgba(240,237,231,0.92);
+  --c-input-border: rgba(0,0,0,0.15);
+  --c-input-placeholder: rgba(0,0,0,0.25);
+  --c-scrollbar: #f0ede7;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -14,18 +42,19 @@
 }
 
 body {
-  background-color: #080808;
-  color: #ffffff;
+  background-color: var(--c-bg);
+  color: var(--c-text);
   font-family: 'Chakra Petch', 'Outfit', sans-serif;
   overflow-x: hidden;
   cursor: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Hide default cursor — custom cursor active */
 a, button { cursor: none; }
 
 ::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: #080808; }
+::-webkit-scrollbar-track { background: var(--c-scrollbar); }
 ::-webkit-scrollbar-thumb { background: #6A1BDA; border-radius: 0; }
 
 .hash-span { margin-top: -100px; padding-bottom: 100px; display: block; }
@@ -40,7 +69,11 @@ a, button { cursor: none; }
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 9998;
-  transition: width 0.2s, height 0.2s, background 0.2s;
+  transition: width 0.2s, height 0.2s, background 0.2s, transform 0.15s;
+}
+.cursor-dot.dot-hover {
+  background: #ffffff;
+  transform: translate(-50%, -50%) scale(1.6);
 }
 .cursor-ring {
   pointer-events: none;
@@ -212,20 +245,20 @@ a, button { cursor: none; }
 .form-input {
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
+  border-bottom: 1px solid var(--c-input-border);
   border-radius: 0;
   padding: 14px 0;
-  color: #ffffff;
+  color: var(--c-text);
   font-family: 'Chakra Petch', sans-serif;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, color 0.3s;
   width: 100%;
 }
 .form-input:focus {
   border-bottom-color: #6A1BDA;
 }
-.form-input::placeholder { color: rgba(255,255,255,0.2); }
+.form-input::placeholder { color: var(--c-input-placeholder); }
 
 /* ── Scroll progress bar ── */
 .scroll-progress {
@@ -305,17 +338,17 @@ a, button { cursor: none; }
 
 /* ── Glassmorphism card ── */
 .glass-card {
-  background: rgba(14,14,14,0.8);
+  background: var(--c-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid var(--c-border);
 }
 
 /* ── Xizt nav overlay ── */
 .nav-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(8,8,8,0.97);
+  background: var(--c-nav-overlay);
   backdrop-filter: blur(20px);
   z-index: 100;
   display: flex;
@@ -433,3 +466,58 @@ section { scroll-margin-top: 80px; }
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
 }
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Typewriter cursor blink ── */
+.typewriter-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: #6A1BDA;
+  margin-left: 3px;
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+
+/* ── Noise texture overlay ── */
+.noise-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+}
+html.light .noise-layer { opacity: 0.04; }
+
+/* ── Magnetic button wrapper ── */
+.magnetic-wrap { display: inline-block; }
+
+/* ── Light mode global overrides ── */
+html.light .bg-primary { background-color: var(--c-bg) !important; }
+html.light .bg-bg1 { background-color: var(--c-bg1) !important; }
+html.light .section-label { color: rgba(0,0,0,0.35); }
+html.light .xizt-h2 { color: #aaa; }
+html.light .xizt-btn {
+  border-color: rgba(0,0,0,0.2);
+  color: #0d0d0d;
+}
+html.light .xizt-btn:hover {
+  border-color: #6A1BDA;
+  background: rgba(106,27,218,0.06);
+  color: #0d0d0d;
+}
+html.light .dot-grid-bg {
+  background-image: radial-gradient(rgba(106,27,218,0.12) 1px, transparent 1px);
+  opacity: 0.3;
+}
+html.light .blog-shimmer {
+  background: linear-gradient(90deg, #e7e3dc 25%, #dedad2 50%, #e7e3dc 75%);
+}
+html.light .bg-accent\/8 { background-color: rgba(106,27,218,0.06) !important; }
+html.light .bg-accent\/5 { background-color: rgba(106,27,218,0.04) !important; }
+html.light .bg-bg3 { background-color: #dedad2 !important; }

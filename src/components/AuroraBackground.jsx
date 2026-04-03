@@ -1,8 +1,22 @@
+import { useEffect, useRef } from "react";
+
 function AuroraBackground() {
+  const dotRef = useRef(null);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (dotRef.current) {
+        dotRef.current.style.backgroundPositionY = `${window.scrollY * 0.25}px`;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
-      {/* Dot grid */}
-      <div className="dot-grid-bg" aria-hidden="true" />
+      {/* Dot grid with parallax */}
+      <div ref={dotRef} className="dot-grid-bg" aria-hidden="true" />
       {/* Subtle purple vignette top-left */}
       <div
         aria-hidden="true"

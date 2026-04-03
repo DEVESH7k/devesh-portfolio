@@ -37,7 +37,6 @@ function Navbar({ onOpenPalette }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  // Lock body scroll when menu open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -77,15 +76,27 @@ function Navbar({ onOpenPalette }) {
               Open to work
             </div>
 
-            {/* Hamburger */}
+            {/* Hamburger — z-[200] keeps it above the overlay */}
             <button
-              onClick={() => setMenuOpen(true)}
-              className="flex flex-col justify-center gap-[5px] w-10 h-10 group"
-              aria-label="Open menu"
+              onClick={() => setMenuOpen((o) => !o)}
+              className="flex flex-col justify-center gap-[5px] w-10 h-10 group relative z-[200]"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
             >
-              <span className="w-full h-[1px] bg-white/60 group-hover:bg-white transition-colors duration-200" />
-              <span className="w-2/3 h-[1px] bg-white/60 group-hover:bg-white transition-colors duration-200" />
-              <span className="w-full h-[1px] bg-white/60 group-hover:bg-white transition-colors duration-200" />
+              <motion.span
+                animate={menuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full h-[1px] bg-white/60 group-hover:bg-white block"
+              />
+              <motion.span
+                animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+                transition={{ duration: 0.2 }}
+                className="w-2/3 h-[1px] bg-white/60 group-hover:bg-white block origin-left"
+              />
+              <motion.span
+                animate={menuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full h-[1px] bg-white/60 group-hover:bg-white block"
+              />
             </button>
           </div>
         </div>
@@ -96,16 +107,15 @@ function Navbar({ onOpenPalette }) {
         {menuOpen && (
           <motion.div
             className="nav-overlay open"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+            exit={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="w-full flex flex-col md:flex-row max-w-[1440px] mx-auto px-8 sm:px-12 py-8 h-full">
 
               {/* Left column */}
               <div className="flex flex-col justify-between md:w-1/3 pb-8 md:pb-0 border-b md:border-b-0 md:border-r border-white/[0.06]">
-                {/* Logo */}
                 <div>
                   <div className="flex items-center gap-3 mb-12">
                     <div className="w-8 h-8 flex items-center justify-center border border-accent/50">
@@ -148,19 +158,10 @@ function Navbar({ onOpenPalette }) {
 
               {/* Right column — nav links */}
               <div className="flex-1 flex flex-col justify-center md:pl-16 pt-8 md:pt-0">
-                {/* Close button */}
                 <div className="flex justify-between items-center mb-10 md:mb-16">
                   <span className="text-white/20 text-[11px] tracking-[0.3em] uppercase" style={{ fontFamily: "'Chakra Petch', monospace" }}>
                     / Menu
                   </span>
-                  <button
-                    onClick={() => setMenuOpen(false)}
-                    className="text-white/40 hover:text-white transition-colors text-sm tracking-widest uppercase"
-                    style={{ fontFamily: "'Chakra Petch', monospace" }}
-                    aria-label="Close menu"
-                  >
-                    Close ✕
-                  </button>
                 </div>
 
                 <nav>

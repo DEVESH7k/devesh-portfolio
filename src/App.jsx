@@ -1,4 +1,5 @@
 import { useState, lazy, Suspense, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
 import AuroraBackground from "./components/AuroraBackground";
@@ -35,12 +36,10 @@ function CustomCursor() {
     window.addEventListener("mousemove", onMove, { passive: true });
 
     const animate = () => {
-      // Dot follows instantly
       if (dotRef.current) {
         dotRef.current.style.left = pos.current.x + "px";
         dotRef.current.style.top = pos.current.y + "px";
       }
-      // Ring lags slightly
       ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.12;
       ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.12;
       if (ringRef.current) {
@@ -51,8 +50,14 @@ function CustomCursor() {
     };
     rafRef.current = requestAnimationFrame(animate);
 
-    const onEnter = () => ringRef.current?.classList.add("hovering");
-    const onLeave = () => ringRef.current?.classList.remove("hovering");
+    const onEnter = () => {
+      ringRef.current?.classList.add("hovering");
+      dotRef.current?.classList.add("dot-hover");
+    };
+    const onLeave = () => {
+      ringRef.current?.classList.remove("hovering");
+      dotRef.current?.classList.remove("dot-hover");
+    };
     document.querySelectorAll("a, button").forEach((el) => {
       el.addEventListener("mouseenter", onEnter);
       el.addEventListener("mouseleave", onLeave);
@@ -72,7 +77,42 @@ function CustomCursor() {
   );
 }
 
+function BackToTop() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+      setVisible(pct > 0.4);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.button
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 16 }}
+          transition={{ duration: 0.25 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-8 right-8 z-50 w-10 h-10 flex items-center justify-center border border-accent/40 bg-[#080808]/80 backdrop-blur-sm text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300 text-lg"
+          aria-label="Back to top"
+        >
+          ↑
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+}
+
 function App() {
+  // Always enforce dark mode — remove any stale light theme from localStorage
+  localStorage.removeItem("theme");
+  document.documentElement.classList.remove("light");
+
   const [loading, setLoading] = useState(true);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
@@ -90,33 +130,37 @@ function App() {
 
   return (
     <>
+      {/* Grain / noise texture */}
+      <div className="noise-layer" aria-hidden="true" />
+
+      <BackToTop />
       <CustomCursor />
 
-      {loading && <Loader onComplete={() => setLoading(false)} />}
+        {loading && <Loader onComplete={() => setLoading(false)} />}
 
-      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+        <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
 
-      <div className={`relative bg-primary ${loading ? "overflow-hidden h-screen" : ""}`}>
-        <AuroraBackground />
+        <div className={`relative bg-primary ${loading ? "overflow-hidden h-screen" : ""}`}>
+          <AuroraBackground />
 
-        <div className="relative z-10">
-          <Navbar onOpenPalette={() => setPaletteOpen(true)} />
-          <main>
-            <Hero />
-            <Suspense fallback={<SectionFallback />}>
-              <About />
-              <Skills />
-              <Experience />
-              <Projects />
-              <Architecture />
-              <Writing />
-              <Testimonials />
-              <Contact />
-            </Suspense>
-          </main>
-          <Footer />
+          <div className="relative z-10">
+            <Navbar onOpenPalette={() => setPaletteOpen(true)} />
+            <main>
+              <Hero />
+              <Suspense fallback={<SectionFallback />}>
+                <About />
+                <Skills />
+                <Experience />
+                <Projects />
+                <Architecture />
+                <Writing />
+                <Testimonials />
+                <Contact />
+              </Suspense>
+            </main>
+            <Footer />
+          </div>
         </div>
-      </div>
     </>
   );
 }

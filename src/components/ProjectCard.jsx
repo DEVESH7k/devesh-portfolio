@@ -4,12 +4,26 @@ import { motion, AnimatePresence } from "framer-motion";
 function ProjectCard({ project, index }) {
   const [tab, setTab] = useState("overview");
   const [spotlight, setSpotlight] = useState({ x: 0, y: 0 });
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
 
   const handleMouseMove = useCallback((e) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     setSpotlight({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+
+    // 3D tilt
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const maxTilt = 7;
+    setTilt({
+      x: ((e.clientY - cy) / (rect.height / 2)) * maxTilt,
+      y: ((e.clientX - cx) / (rect.width / 2)) * -maxTilt,
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setTilt({ x: 0, y: 0 });
   }, []);
 
   return (
@@ -20,7 +34,14 @@ function ProjectCard({ project, index }) {
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       onMouseMove={handleMouseMove}
-      className="group relative rounded-2xl p-[1px] overflow-hidden card-hover"
+      onMouseLeave={handleMouseLeave}
+      className="group relative rounded-2xl p-[1px] overflow-hidden"
+      style={{
+        transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(${tilt.x !== 0 || tilt.y !== 0 ? "-6px" : "0"})`,
+        transition: tilt.x === 0 && tilt.y === 0 ? "transform 0.5s cubic-bezier(0.22,1,0.36,1)" : "transform 0.12s ease",
+        transformStyle: "preserve-3d",
+        willChange: "transform",
+      }}
     >
       {/* Gradient border */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/35 via-transparent to-accentPink/25 opacity-25 group-hover:opacity-100 transition-opacity duration-500" />
