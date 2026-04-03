@@ -22,7 +22,9 @@
       "Bash(fnm use:*)",
       "Bash(npx --yes eslint src/sections/SecurityDashboard.jsx src/sections/CodeSnippets.jsx src/components/AuroraBackground.jsx src/components/CommandPalette.jsx src/sections/About.jsx src/sections/Architecture.jsx --no-eslintrc --rule '{\"\"\"\"no-undef\"\"\"\": \"\"\"\"off\"\"\"\"}')",
       "Bash(npx eslint:*)",
-      "Bash(echo \"EXIT:$?\")"
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(find /mnt/g/devesh-portfolio/devesh-portfolio/src -type f \\\\\\(-name *.jsx -o -name *.js \\\\\\))",
+      "Bash(git checkout:*)"
     ]
   }
 }

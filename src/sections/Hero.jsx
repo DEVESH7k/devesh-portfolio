@@ -1,20 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { socialLinks } from "../constants";
-import useCountUp from "../hooks/useCountUp";
-
-const titles = [
-  "DevSecOps Engineer",
-  "Cloud Security Builder",
-  "CI/CD Pipeline Architect",
-  "Shift-Left Advocate",
-];
 
 const TERMINAL_CYCLES = [
   {
-    run: "#47",
-    branch: "main",
-    status: "SUCCESS",
+    run: "#47", branch: "main", status: "SUCCESS",
     lines: [
       { ts: "08:42:01", text: "Incoming webhook — main branch push detected", type: "info" },
       { ts: "08:42:02", text: "Starting pipeline: netflix-clone-devsecops #47", type: "info" },
@@ -27,28 +17,21 @@ const TERMINAL_CYCLES = [
     ],
   },
   {
-    run: "#48",
-    branch: "feature/update-deps",
-    status: "BLOCKED",
+    run: "#48", branch: "feature/update-deps", status: "BLOCKED",
     lines: [
       { ts: "14:17:01", text: "Incoming webhook — feature/update-deps push", type: "info" },
-      { ts: "14:17:02", text: "Starting pipeline: netflix-clone-devsecops #48", type: "info" },
       { ts: "14:17:03", text: "Stage 1/5 · Source Checkout ................. ✓", type: "success" },
       { ts: "14:17:08", text: "Stage 2/5 · SonarQube SAST .................. ✓  (0 bugs · 0 vulns)", type: "success" },
       { ts: "14:17:19", text: "Stage 3/5 · Docker Build ..................... ✓  devesh/netflix:2.4.2", type: "success" },
       { ts: "14:17:26", text: "Stage 4/5 · Trivy CVE Scan .................. ✗  CRITICAL: 2 found", type: "fail" },
       { ts: "14:17:26", text: "  ↳ CVE-2024-4577 [CRITICAL] php:8.2 — RCE via arg injection", type: "fail" },
-      { ts: "14:17:26", text: "  ↳ CVE-2024-39689 [CRITICAL] certifi:2023.11 — CA bundle", type: "fail" },
       { ts: "14:17:27", text: "⛔  Pipeline BLOCKED — 2 CRITICAL CVEs, deploy prevented", type: "blocked" },
     ],
   },
   {
-    run: "#49",
-    branch: "fix/cve-remediation",
-    status: "SUCCESS",
+    run: "#49", branch: "fix/cve-remediation", status: "SUCCESS",
     lines: [
       { ts: "14:31:05", text: "Hotfix: python:3.12-alpine base + certifi≥2024.2", type: "info" },
-      { ts: "14:31:06", text: "Starting pipeline: netflix-clone-devsecops #49", type: "info" },
       { ts: "14:31:14", text: "Stage 2/5 · SonarQube SAST .................. ✓  (0 bugs · 0 vulns)", type: "success" },
       { ts: "14:31:21", text: "Stage 3/5 · Docker Build ..................... ✓  devesh/netflix:2.4.3", type: "success" },
       { ts: "14:31:28", text: "Stage 4/5 · Trivy CVE Scan .................. ✓  CRITICAL: 0 · HIGH: 0", type: "success" },
@@ -58,46 +41,22 @@ const TERMINAL_CYCLES = [
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
+const lineColor = (type) => {
+  if (type === "success") return "#34d399";
+  if (type === "done") return "#9d5ff5";
+  if (type === "fail") return "#f87171";
+  if (type === "blocked") return "#fb923c";
+  return "#666";
 };
-const itemVariants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
-};
-
-function StatItem({ value, label }) {
-  const { ref, displayValue } = useCountUp(value, 1400, true);
-  return (
-    <div ref={ref}>
-      <p className="text-[30px] sm:text-[34px] font-bold font-outfit text-white leading-none tabular-nums">
-        {displayValue}
-      </p>
-      <p className="text-[11px] font-mono text-[#b4aec8] uppercase tracking-[0.15em] mt-1">{label}</p>
-    </div>
-  );
-}
 
 function CicdTerminal() {
   const [cycleIndex, setCycleIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(0);
   const [isRunning, setIsRunning] = useState(true);
   const [tick, setTick] = useState(0);
-
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   const cycle = TERMINAL_CYCLES[cycleIndex];
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      setVisibleCount(cycle.lines.length);
-      setIsRunning(false);
-      return;
-    }
-
     setVisibleCount(0);
     setIsRunning(true);
     let i = 0;
@@ -112,93 +71,63 @@ function CicdTerminal() {
           setTick((t) => t + 1);
         }, cycleIndex === 1 ? 3000 : 4000);
       }
-    }, 460);
+    }, 480);
     return () => clearInterval(interval);
   }, [tick]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const lineColor = (type) => {
-    if (type === "success") return "#34d399";
-    if (type === "done") return "#a78bfa";
-    if (type === "fail") return "#f87171";
-    if (type === "blocked") return "#fb923c";
-    return "#b4aec8";
-  };
-
   const statusBadge = () => {
     if (isRunning && visibleCount > 0 && visibleCount < cycle.lines.length) {
-      return (
-        <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-[#febc2e]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#febc2e] animate-pulse" aria-hidden="true" />
-          RUNNING
-        </span>
-      );
+      return <span className="ml-auto text-[9px] font-mono text-yellow-400 tracking-widest">RUNNING</span>;
     }
     if (!isRunning && cycle.status === "BLOCKED") {
-      return (
-        <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-[#fb923c]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#fb923c]" aria-hidden="true" />
-          BLOCKED
-        </span>
-      );
+      return <span className="ml-auto text-[9px] font-mono text-orange-400 tracking-widest">BLOCKED</span>;
     }
     if (!isRunning && cycle.status === "SUCCESS") {
-      return (
-        <span className="ml-auto flex items-center gap-1.5 text-[10px] font-mono text-[#34d399]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]" aria-hidden="true" />
-          SUCCESS
-        </span>
-      );
+      return <span className="ml-auto text-[9px] font-mono text-green-400 tracking-widest">SUCCESS</span>;
     }
     return null;
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 0.5, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-      className="animate-float relative w-full max-w-[480px]"
-    >
-      <div className="absolute inset-0 rounded-2xl blur-2xl bg-gradient-to-br from-accent/20 to-accentPink/10 scale-110 pointer-events-none" aria-hidden="true" />
+    <div className="relative w-full max-w-[460px]">
+      {/* Glow */}
+      <div className="absolute inset-0 blur-2xl bg-accent/10 scale-105 pointer-events-none" aria-hidden="true" />
 
-      <div className="relative rounded-2xl border border-white/[0.08] bg-[#07040f]/95 backdrop-blur-sm overflow-hidden shadow-card">
+      <div className="relative border border-white/[0.07] bg-[#0a0a0a] overflow-hidden">
         {/* Title bar */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
-          <div className="w-3 h-3 rounded-full bg-[#ff5f57]" aria-hidden="true" />
-          <div className="w-3 h-3 rounded-full bg-[#febc2e]" aria-hidden="true" />
-          <div className="w-3 h-3 rounded-full bg-[#28c840]" aria-hidden="true" />
-          <span className="ml-3 text-[11px] font-mono text-[#b4aec8]">jenkins — pipeline console</span>
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.05] bg-white/[0.02]">
+          <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+          <span className="ml-3 text-[10px] font-mono text-white/30">jenkins — pipeline console</span>
           {statusBadge()}
         </div>
-
-        {/* Branch + run indicator */}
-        <div className="flex items-center gap-3 px-4 py-2 border-b border-white/[0.04] bg-white/[0.01]">
-          <span className="text-[9px] font-mono text-[#4a3d66] uppercase tracking-wider">branch</span>
+        {/* Branch */}
+        <div className="flex items-center gap-3 px-4 py-2 border-b border-white/[0.03]">
+          <span className="text-[9px] font-mono text-white/20 uppercase tracking-wider">branch</span>
           <span className="text-[10px] font-mono text-accent">{cycle.branch}</span>
-          <span className="text-[9px] font-mono text-[#4a3d66] ml-auto">run {cycle.run}</span>
+          <span className="text-[9px] font-mono text-white/20 ml-auto">run {cycle.run}</span>
         </div>
-
-        {/* Log body */}
-        <div className="p-4 font-mono text-[11px] leading-[1.85] min-h-[220px] overflow-hidden" aria-label="CI/CD pipeline log output">
+        {/* Log */}
+        <div className="p-4 font-mono text-[11px] leading-[1.9] min-h-[200px] overflow-hidden">
           {cycle.lines.slice(0, visibleCount).map((line, i) => (
             <motion.div
               key={`${cycleIndex}-${i}`}
-              initial={{ opacity: 0, x: -6 }}
+              initial={{ opacity: 0, x: -4 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.22 }}
-              className="flex gap-2 items-baseline"
+              transition={{ duration: 0.18 }}
+              className="flex gap-2"
             >
-              <span className="text-[#4a3d66] flex-shrink-0 text-[9.5px]">[{line.ts}]</span>
+              <span className="text-white/20 flex-shrink-0 text-[9px]">[{line.ts}]</span>
               <span style={{ color: lineColor(line.type) }}>{line.text}</span>
             </motion.div>
           ))}
           {isRunning && visibleCount < cycle.lines.length && (
-            <span className="inline-block w-[2px] h-[13px] bg-accent animate-pulse ml-1" aria-hidden="true" />
+            <span className="inline-block w-[2px] h-[12px] bg-accent animate-pulse ml-1" />
           )}
         </div>
-
-        {/* Cycle indicator dots */}
-        <div className="flex items-center justify-center gap-2 pb-3 pt-1">
+        {/* Dots */}
+        <div className="flex justify-center gap-2 pb-3 pt-1">
           {TERMINAL_CYCLES.map((c, i) => (
             <div
               key={i}
@@ -206,191 +135,92 @@ function CicdTerminal() {
               style={{
                 background: i === cycleIndex
                   ? (c.status === "BLOCKED" ? "#fb923c" : "#34d399")
-                  : "rgba(255,255,255,0.12)",
-                transform: i === cycleIndex ? "scale(1.3)" : "scale(1)",
+                  : "rgba(255,255,255,0.1)",
+                transform: i === cycleIndex ? "scale(1.4)" : "scale(1)",
               }}
             />
           ))}
         </div>
       </div>
 
-      {/* Floating status badges */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.7 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute -top-4 -right-3 px-3 py-1.5 rounded-full bg-[#07040f] border border-accent/30 text-[10.5px] font-mono text-accent flex items-center gap-1.5 shadow-glow"
-      >
-        <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true" />
+      {/* Floating badges */}
+      <div className="absolute -top-3 -right-3 px-3 py-1 border border-accent/40 bg-[#0a0a0a] text-[10px] font-mono text-accent">
         156+ Pipelines
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.7 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1.5, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute -bottom-4 -left-3 px-3 py-1.5 rounded-full bg-[#07040f] border border-[#34d399]/30 text-[10.5px] font-mono text-[#34d399] flex items-center gap-1.5"
-      >
-        <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" aria-hidden="true" />
-        Zero CVEs in prod
-      </motion.div>
-    </motion.div>
+      </div>
+      <div className="absolute -bottom-3 -left-3 px-3 py-1 border border-green-500/30 bg-[#0a0a0a] text-[10px] font-mono text-green-400">
+        0 CRITICAL CVEs
+      </div>
+    </div>
   );
 }
 
+const ArrowIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 16 14" fill="none">
+    <path d="M7.088 0.164V1.746c0 .09.039.176.107.237L12.123 6.258H1.125A.125.125 0 001 6.414v1.172c0 .086.07.156.125.156H12.123L7.195 12.018a.172.172 0 00-.107.236v1.582c0 .133.158.205.258.117l7.47-6.482a1.03 1.03 0 000-1.542L7.346.047c-.1-.088-.258-.016-.258.117z" fill="currentColor"/>
+  </svg>
+);
+
 function Hero() {
-  const [titleIndex, setTitleIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: -500, y: -500 });
-
-  useEffect(() => {
-    const current = titles[titleIndex];
-    let timeout;
-    if (!isDeleting && charIndex < current.length) {
-      timeout = setTimeout(() => setCharIndex((c) => c + 1), 68);
-    } else if (!isDeleting && charIndex === current.length) {
-      timeout = setTimeout(() => setIsDeleting(true), 2200);
-    } else if (isDeleting && charIndex > 0) {
-      timeout = setTimeout(() => setCharIndex((c) => c - 1), 38);
-    } else if (isDeleting && charIndex === 0) {
-      setIsDeleting(false);
-      setTitleIndex((i) => (i + 1) % titles.length);
-    }
-    return () => clearTimeout(timeout);
-  }, [charIndex, isDeleting, titleIndex]);
-
-  useEffect(() => {
-    const handleMouse = (e) => setMousePos({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", handleMouse, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouse);
-  }, []);
-
   return (
-    <section className="relative w-full min-h-screen flex items-center overflow-hidden">
-      {/* Cursor glow */}
-      <div
-        className="cursor-glow hidden md:block"
-        style={{ left: mousePos.x, top: mousePos.y }}
-        aria-hidden="true"
-      />
+    <section className="relative w-full min-h-screen flex flex-col overflow-hidden">
 
-      {/* Grid overlay */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.022]"
-        style={{
-          backgroundImage:
-            "linear-gradient(#a78bfa 1px, transparent 1px), linear-gradient(90deg, #a78bfa 1px, transparent 1px)",
-          backgroundSize: "56px 56px",
-        }}
-        aria-hidden="true"
-      />
+      {/* TOP SECTION — 3-column editorial layout */}
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_1.1fr_0.6fr] border-b border-white/[0.05] min-h-[calc(100vh-180px)]">
 
-      {/* Ambient blobs */}
-      <div className="pointer-events-none absolute top-[-5%] left-[-8%] w-[580px] h-[580px] rounded-full opacity-[0.07] blur-[110px] bg-accent" aria-hidden="true" />
-      <div className="pointer-events-none absolute bottom-[5%] right-[-8%] w-[500px] h-[500px] rounded-full opacity-[0.06] blur-[100px] bg-accentPink" aria-hidden="true" />
-      <div className="pointer-events-none absolute top-[55%] left-[38%] w-[320px] h-[320px] rounded-full opacity-[0.04] blur-[80px] bg-accentPink" aria-hidden="true" />
+        {/* LEFT column */}
+        <div className="flex flex-col justify-between p-8 md:p-12 pt-28 md:pt-28 border-r border-white/[0.05]">
+          {/* Descriptor */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="flex items-center gap-2 mb-6">
+              <span className="text-accent text-sm">/</span>
+              <p
+                className="text-[11px] text-white/40 uppercase tracking-[0.2em]"
+                style={{ fontFamily: "'Chakra Petch', monospace" }}
+              >
+                Professional DevSecOps engineer providing full-stack cloud security engineering and CI/CD automation
+              </p>
+            </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 w-full py-24 md:py-0">
-        <div className="grid md:grid-cols-2 gap-14 md:gap-8 items-center">
+            {/* Status badge */}
+            <div className="inline-flex items-center gap-2 border border-green-500/20 px-3 py-1.5 mb-8">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-[10px] font-mono text-green-400 uppercase tracking-wider">Open to opportunities</span>
+            </div>
+          </motion.div>
 
-          {/* LEFT */}
-          <motion.div variants={containerVariants} initial="hidden" animate="visible">
-
-            {/* Status badges */}
-            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-3 mb-7">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#07040f] border border-white/[0.08] text-[11px] font-mono text-[#b4aec8]">
-                <span className="text-[#34d399]" aria-hidden="true">●</span>
-                ProTechmanize · DevSecOps Engineer
+          {/* Bottom of left col — stats */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col gap-5"
+          >
+            {[
+              { val: "156+", label: "CI/CD Pipelines" },
+              { val: "50+", label: "Cloud Environments" },
+              { val: "24/7", label: "On-Call Coverage" },
+            ].map(({ val, label }) => (
+              <div key={label} className="flex items-baseline gap-3 border-t border-white/[0.05] pt-4">
+                <span
+                  className="text-2xl font-bold text-white"
+                  style={{ fontFamily: "'Chakra Petch', sans-serif" }}
+                >
+                  {val}
+                </span>
+                <span className="text-[10px] font-mono text-white/30 uppercase tracking-wider">{label}</span>
               </div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-accent/20 bg-accent/[0.06] text-[11px] font-mono text-accent">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true" />
-                Open to opportunities
-              </div>
-            </motion.div>
-
-            {/* Label */}
-            <motion.p variants={itemVariants} className="section-label">
-              Hello, I'm Devesh
-            </motion.p>
-
-            {/* Headline */}
-            <motion.h1
-              variants={itemVariants}
-              className="text-[40px] sm:text-[52px] md:text-[58px] lg:text-[64px] font-bold font-outfit leading-[1.06] mt-2"
-            >
-              Engineering
-              <br />
-              <span className="hero-gradient-text">Secure&nbsp;</span>
-              <span className="hero-gradient-text-alt">Cloud&#8209;Native</span>
-              <br />
-              <span className="text-white">Pipelines.</span>
-            </motion.h1>
-
-            {/* Typewriter */}
-            <motion.div variants={itemVariants} className="mt-5 h-[30px] flex items-center">
-              <span
-                aria-live="polite"
-                aria-atomic="true"
-                className="text-[16px] sm:text-[19px] font-mono text-accent"
-              >
-                &gt;&nbsp;{titles[titleIndex].slice(0, charIndex)}
-              </span>
-              <span className="inline-block w-[2px] h-[17px] bg-accent ml-0.5 animate-pulse" aria-hidden="true" />
-            </motion.div>
-
-            {/* Stats */}
-            <motion.div variants={itemVariants} className="mt-10 flex flex-wrap gap-8 sm:gap-12">
-              <StatItem value="156+" label="CI/CD Pipelines" />
-              <StatItem value="50+" label="Cloud Environments" />
-              <div>
-                <p className="text-[30px] sm:text-[34px] font-bold font-outfit text-white leading-none">24/7</p>
-                <p className="text-[11px] font-mono text-[#b4aec8] uppercase tracking-[0.15em] mt-1">On-Call Coverage</p>
-              </div>
-            </motion.div>
-
-            {/* CTAs */}
-            <motion.div variants={itemVariants} className="mt-9 flex flex-wrap gap-3">
-              <a
-                href="#projects"
-                className="px-7 py-3 rounded-full green-pink-gradient text-white font-outfit font-semibold text-[14px] hover:opacity-90 transition-opacity shadow-lg shadow-accent/20"
-              >
-                View Projects
-              </a>
-              <a
-                href={socialLinks.resume}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-7 py-3 rounded-full border border-accent/40 text-accent font-outfit font-semibold text-[14px] hover:bg-accent/10 transition-all duration-300 flex items-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Resume
-              </a>
-              <a
-                href="#contact"
-                className="px-7 py-3 rounded-full border border-white/[0.12] text-[#b4aec8] font-outfit font-semibold text-[14px] hover:border-accent hover:text-accent transition-all duration-300"
-              >
-                Contact
-              </a>
-            </motion.div>
+            ))}
 
             {/* Social links */}
-            <motion.div variants={itemVariants} className="mt-7 flex items-center gap-3">
+            <div className="flex items-center gap-3 mt-2">
               {[
-                {
-                  href: socialLinks.github, label: "GitHub",
-                  icon: <svg className="w-[15px] h-[15px]" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>,
-                },
-                {
-                  href: socialLinks.linkedin, label: "LinkedIn",
-                  icon: <svg className="w-[15px] h-[15px]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>,
-                },
-                {
-                  href: `mailto:${socialLinks.email}`, label: "Email",
-                  icon: <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
-                },
+                { href: socialLinks.github, label: "GitHub", icon: <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg> },
+                { href: socialLinks.linkedin, label: "LinkedIn", icon: <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg> },
+                { href: `mailto:${socialLinks.email}`, label: "Email", icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> },
               ].map(({ href, label, icon }) => (
                 <a
                   key={label}
@@ -398,40 +228,124 @@ function Hero() {
                   target={label !== "Email" ? "_blank" : undefined}
                   rel={label !== "Email" ? "noopener noreferrer" : undefined}
                   aria-label={label}
-                  className="w-9 h-9 rounded-lg border border-white/[0.08] flex items-center justify-center text-[#b4aec8] hover:border-accent/50 hover:text-accent hover:bg-accent/5 transition-all duration-300"
+                  className="w-8 h-8 border border-white/[0.08] flex items-center justify-center text-white/40 hover:border-accent/60 hover:text-accent transition-all duration-300"
                 >
                   {icon}
                 </a>
               ))}
-              <div className="h-px flex-1 max-w-[80px] bg-white/[0.06]" aria-hidden="true" />
-            </motion.div>
+            </div>
           </motion.div>
-
-          {/* RIGHT: CI/CD terminal — shown on md+ and on mobile below the fold */}
-          <div className="flex justify-center md:justify-end md:pr-2">
-            <CicdTerminal />
-          </div>
         </div>
+
+        {/* CENTER column — terminal */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="flex items-center justify-center p-8 md:p-12 pt-28 md:pt-28 border-r border-white/[0.05]"
+        >
+          <CicdTerminal />
+        </motion.div>
+
+        {/* RIGHT column — cloud providers + descriptor */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="hidden md:flex flex-col justify-between p-8 pt-28"
+        >
+          {/* Cloud tags */}
+          <div className="flex flex-col gap-3">
+            {["AWS", "Azure", "Google Cloud", "Kubernetes", "Docker", "Terraform"].map((tag, i) => (
+              <div
+                key={tag}
+                className="flex items-center gap-3 border border-white/[0.06] px-3 py-2 hover:border-accent/30 transition-colors duration-300"
+              >
+                <span className="text-[10px] font-mono text-white/20">0{i + 1}</span>
+                <span className="text-[12px] text-white/60 uppercase tracking-wider" style={{ fontFamily: "'Chakra Petch', sans-serif" }}>{tag}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom descriptor */}
+          <div className="text-right">
+            <p className="text-[10px] font-mono text-white/20 uppercase tracking-[0.3em] rotate-0">
+              Innovation at every turn
+            </p>
+          </div>
+        </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* BOTTOM — large display headline */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="px-8 md:px-12 py-8 border-b border-white/[0.05] flex flex-col gap-0 overflow-hidden"
+      >
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <h1
+              className="text-[clamp(42px,8vw,110px)] font-bold leading-[0.92] uppercase text-white"
+              style={{ fontFamily: "'Chakra Petch', sans-serif", letterSpacing: "-0.02em" }}
+            >
+              Turn Vulns
+            </h1>
+            <h1
+              className="text-[clamp(42px,8vw,110px)] font-bold leading-[0.92] uppercase"
+              style={{
+                fontFamily: "'Chakra Petch', sans-serif",
+                letterSpacing: "-0.02em",
+                color: "#888",
+              }}
+            >
+              into{" "}
+              <span className="text-white">
+                / Strength /
+              </span>
+            </h1>
+          </div>
+
+          {/* CTA */}
+          <div className="flex flex-wrap items-center gap-4 pb-2">
+            <a href="#contact" className="xizt-btn">
+              Let&apos;s Talk
+              <span className="arrow-wrap">
+                <ArrowIcon />
+                <ArrowIcon />
+              </span>
+            </a>
+            <a
+              href={socialLinks.resume}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[12px] font-mono text-white/40 uppercase tracking-wider hover:text-white transition-colors duration-300"
+            >
+              / Resume
+            </a>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ProTechmanize tag */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.5, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        transition={{ delay: 1.2, duration: 0.8 }}
+        className="px-8 md:px-12 py-4 flex items-center justify-between"
       >
-        <a href="#about" className="flex flex-col items-center gap-2">
-          <div className="w-[26px] h-[44px] rounded-full border-2 border-[#b4aec8]/30 flex justify-center pt-2">
-            <motion.div
-              animate={{ y: [0, 14, 0] }}
-              transition={{ duration: 1.8, repeat: Infinity, repeatType: "loop" }}
-              className="w-[5px] h-[5px] rounded-full bg-accent"
-              aria-hidden="true"
-            />
-          </div>
-          <span className="text-[10px] font-mono text-[#b4aec8]/50 uppercase tracking-widest">Scroll</span>
-        </a>
+        <div className="flex items-center gap-4">
+          <span className="text-[10px] font-mono text-white/20 uppercase tracking-wider">Currently at</span>
+          <span
+            className="text-[12px] text-white/50 uppercase tracking-[0.15em]"
+            style={{ fontFamily: "'Chakra Petch', sans-serif" }}
+          >
+            ProTechmanize
+          </span>
+        </div>
+        <span className="text-[10px] font-mono text-white/10 uppercase tracking-wider hidden md:block">
+          Mumbai · India
+        </span>
       </motion.div>
     </section>
   );

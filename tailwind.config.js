@@ -4,24 +4,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#050816",
-        secondary: "#aaa6c3",
-        tertiary: "#151030",
-        accent: "#a78bfa",
-        accentPink: "#e879f9",
-        bg1: "#0f0a1a",
-        bg2: "#150f24",
-        bg3: "#1c1430",
-        muted: "#4a3d66",
+        primary: "#080808",
+        secondary: "#888888",
+        tertiary: "#101010",
+        accent: "#6A1BDA",
+        accentPink: "#9d5ff5",
+        bg1: "#0e0e0e",
+        bg2: "#111111",
+        bg3: "#161616",
+        muted: "#2a2a2a",
       },
       fontFamily: {
+        sans: ["Chakra Petch", "Outfit", "sans-serif"],
         outfit: ["Outfit", "sans-serif"],
         mono: ["IBM Plex Mono", "monospace"],
+        chakra: ["Chakra Petch", "sans-serif"],
       },
       boxShadow: {
-        card: "0px 35px 120px -15px #211e35",
-        glow: "0 0 40px rgba(167,139,250,0.15)",
-        glowPink: "0 0 40px rgba(232,121,249,0.15)",
+        card: "0px 35px 120px -15px #000",
+        glow: "0 0 40px rgba(106,27,218,0.2)",
+        glowPink: "0 0 40px rgba(157,95,245,0.15)",
       },
       screens: {
         xs: "450px",

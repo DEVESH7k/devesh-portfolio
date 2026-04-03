@@ -1,28 +1,79 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function Loader({ onComplete }) {
+  const canvasRef = useRef(null);
+  const [count, setCount] = useState(0);
   const [hidden, setHidden] = useState(false);
 
+  // Matrix binary rain
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setHidden(true);
-      setTimeout(() => onComplete && onComplete(), 600);
-    }, 1800);
-    return () => clearTimeout(timer);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let animId;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const fontSize = 14;
+    let cols = Math.floor(canvas.width / fontSize);
+    let drops = Array(cols).fill(1);
+
+    const draw = () => {
+      ctx.fillStyle = "rgba(0,0,0,0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#6A1BDA";
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = Math.random() > 0.5 ? "1" : "0";
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+      animId = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  // Count up 0 → 100
+  useEffect(() => {
+    let current = 0;
+    const interval = setInterval(() => {
+      current += 1;
+      setCount(current);
+      if (current >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          setHidden(true);
+          setTimeout(() => onComplete?.(), 600);
+        }, 400);
+      }
+    }, 16);
+    return () => clearInterval(interval);
   }, [onComplete]);
 
   return (
     <div className={`loader-container ${hidden ? "hidden" : ""}`}>
-      <div className="flex flex-col items-center gap-6">
-        <div className="loader-logo">DK</div>
-        <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-accent animate-bounce" style={{ animationDelay: "0ms" }} />
-          <div className="w-1.5 h-1.5 rounded-full bg-accent animate-bounce" style={{ animationDelay: "150ms" }} />
-          <div className="w-1.5 h-1.5 rounded-full bg-accent animate-bounce" style={{ animationDelay: "300ms" }} />
+      <canvas ref={canvasRef} className="loader-canvas" />
+      <div className="loader-content">
+        <div className="loader-logo">Devesh Khatik</div>
+        <div className="loader-count-row">
+          <span className="loader-count">{count}</span>
+          <span className="loader-percent">%</span>
         </div>
-        <p className="text-[11px] font-mono text-[#4a3d66] uppercase tracking-[0.2em]">
-          Loading portfolio
-        </p>
+        <div className="loader-text">Loading...</div>
       </div>
     </div>
   );

@@ -470,6 +470,6 @@ export const socialLinks = {
   linkedin: "https://linkedin.com/in/deveshkhatik",
   email: "deveshkhatik007@gmail.com",
   linkedinActivity: "https://linkedin.com/in/deveshkhatik/recent-activity/shares/",
-  medium: "https://medium.com/@deveshkhatik",
+  medium: "https://medium.com/@deveshkhatik007",
   resume: "/Devesh_Khatik_Resume.pdf",
 };
