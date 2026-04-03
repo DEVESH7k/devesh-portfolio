@@ -46,12 +46,8 @@ body {
   color: var(--c-text);
   font-family: 'Chakra Petch', 'Outfit', sans-serif;
   overflow-x: hidden;
-  cursor: none;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
-
-/* Hide default cursor — custom cursor active */
-a, button { cursor: none; }
 
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(--c-scrollbar); }
@@ -59,38 +55,6 @@ a, button { cursor: none; }
 
 .hash-span { margin-top: -100px; padding-bottom: 100px; display: block; }
 
-/* ── Custom Cursor ── */
-.cursor-dot {
-  pointer-events: none;
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background: #6A1BDA;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9998;
-  transition: width 0.2s, height 0.2s, background 0.2s, transform 0.15s;
-}
-.cursor-dot.dot-hover {
-  background: #ffffff;
-  transform: translate(-50%, -50%) scale(1.6);
-}
-.cursor-ring {
-  pointer-events: none;
-  position: fixed;
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(106,27,218,0.6);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9997;
-  transition: width 0.15s ease, height 0.15s ease, border-color 0.15s ease;
-}
-.cursor-ring.hovering {
-  width: 60px;
-  height: 60px;
-  border-color: rgba(106,27,218,0.9);
-}
 
 /* ── Gradients ── */
 .orange-text-gradient {

@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, useEffect, useCallback, useRef } from "react";
+import { useState, lazy, Suspense, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
@@ -24,58 +24,6 @@ function SectionFallback() {
   );
 }
 
-function CustomCursor() {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const pos = useRef({ x: -100, y: -100 });
-  const ringPos = useRef({ x: -100, y: -100 });
-  const rafRef = useRef(null);
-
-  useEffect(() => {
-    const onMove = (e) => { pos.current = { x: e.clientX, y: e.clientY }; };
-    window.addEventListener("mousemove", onMove, { passive: true });
-
-    const animate = () => {
-      if (dotRef.current) {
-        dotRef.current.style.left = pos.current.x + "px";
-        dotRef.current.style.top = pos.current.y + "px";
-      }
-      ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.12;
-      ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.12;
-      if (ringRef.current) {
-        ringRef.current.style.left = ringPos.current.x + "px";
-        ringRef.current.style.top = ringPos.current.y + "px";
-      }
-      rafRef.current = requestAnimationFrame(animate);
-    };
-    rafRef.current = requestAnimationFrame(animate);
-
-    const onEnter = () => {
-      ringRef.current?.classList.add("hovering");
-      dotRef.current?.classList.add("dot-hover");
-    };
-    const onLeave = () => {
-      ringRef.current?.classList.remove("hovering");
-      dotRef.current?.classList.remove("dot-hover");
-    };
-    document.querySelectorAll("a, button").forEach((el) => {
-      el.addEventListener("mouseenter", onEnter);
-      el.addEventListener("mouseleave", onLeave);
-    });
-
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
-  return (
-    <>
-      <div ref={dotRef} className="cursor-dot" aria-hidden="true" />
-      <div ref={ringRef} className="cursor-ring" aria-hidden="true" />
-    </>
-  );
-}
 
 function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -134,7 +82,6 @@ function App() {
       <div className="noise-layer" aria-hidden="true" />
 
       <BackToTop />
-      <CustomCursor />
 
         {loading && <Loader onComplete={() => setLoading(false)} />}
 
