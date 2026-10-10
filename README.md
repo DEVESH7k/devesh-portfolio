@@ -1,6 +1,6 @@
 # 🚀 Devesh Khatik — DevSecOps Portfolio
 
-A production-grade 3D portfolio built with **React + Three.js + Tailwind CSS**, deployed on **AWS** with a fully automated CI/CD pipeline.
+A minimalist, developer-focused portfolio inspired by the classic Brittany Chiang v4 aesthetic, built with **React 19 + Vite 8 + Tailwind CSS 3** and deployed on **AWS** with a fully automated CI/CD pipeline (CodePipeline + CodeBuild to S3 + CloudFront).
 
 🔗 **Live:** [d35cca44okwtnr.cloudfront.net](https://d35cca44okwtnr.cloudfront.net)
 
@@ -10,27 +10,27 @@ A production-grade 3D portfolio built with **React + Three.js + Tailwind CSS**, 
 
 | Layer | Tools |
 |---|---|
-| **Frontend** | React 19, Vite 8, Tailwind CSS, Framer Motion |
-| **3D / Animations** | Three.js, React Three Fiber, Drei |
+| **Frontend** | React 19, Vite 8, Tailwind CSS 3, Framer Motion |
+| **Typography** | Inter (body), JetBrains Mono (nav, numbers, tags, labels) |
+| **Styling** | Custom Dark Navy Design System (`#0a192f`, `#112240`, `#233554`, `#64ffda`) |
 | **Hosting** | AWS S3 + CloudFront CDN |
 | **CI/CD** | AWS CodePipeline + CodeBuild |
-| **SEO** | Structured Data (JSON-LD), Open Graph, Sitemap, robots.txt |
+| **SEO & Access** | Semantic HTML, JSON-LD, Open Graph, Sitemap, robots.txt, WCAG AA Contrast |
 
 ---
 
 ## 🎯 Features
 
-- **Animated Starfield** — Three.js particle system across the entire site
-- **Typing Animation** — Rotating role titles in the hero section
-- **Official Tech Logos** — 12 skill icons loaded from devicons CDN
-- **Animated Counters** — Numbers count up from 0 when scrolled into view
-- **Scroll Progress Bar** — Gradient progress indicator in the navbar
-- **Loading Screen** — DK logo pulse animation on initial load
-- **Cursor Glow** — Follows mouse movement in the hero
-- **Lazy Loading** — All sections below the fold are code-split
-- **Resume Download** — One-click PDF download
-- **Responsive** — Fully mobile-optimized with hamburger menu
-- **SEO Optimized** — Schema.org, OG tags, sitemap, semantic HTML
+- **Minimalist Dark Navy Aesthetic** — Curated color palette (`#0a192f` navy background, `#64ffda` teal accents, `#ccd6f6` headings, `#8892b0` body text)
+- **Sticky Blur Navbar** — Numbered mono links (`01. About`, `02. Experience`, `03. Work`, `04. Contact`) that hide on scroll down, reappear on scroll up, with a mobile slide-in panel
+- **Fixed Vertical Rails** — Left social rail (GitHub, LinkedIn, Medium) and right vertical email rail with hover micro-interactions
+- **Tabbed Experience** — Vertical tabbed navigation with an animated active indicator and keyboard navigation support
+- **Featured Projects (Alternating)** — Left/right alternating cards with navy/teal overlay tints, DevSecOps pipeline/architecture diagram placeholders, and GitHub/external links
+- **Noteworthy Projects Grid** — 3-column responsive card grid with hover lift and "Show More" toggle
+- **Writing & Certifications** — 4-phase summary of the 30 Days of DevSecOps challenge, linked article cards, and clearly status-tagged certifications
+- **Code-Split Lazy Loading** — All sections below the fold are dynamically lazy loaded with React Suspense
+- **Resume Download** — Direct link to `/resume.pdf`
+- **Accessible & Motion-Respecting** — Keyboard focus-visible rings, skip-to-content link, and strict `prefers-reduced-motion` compliance
 
 ---
 
@@ -40,30 +40,26 @@ A production-grade 3D portfolio built with **React + Three.js + Tailwind CSS**, 
 devesh-portfolio/
 ├── public/
 │   ├── favicon.svg
+│   ├── resume.pdf
 │   ├── robots.txt
 │   └── sitemap.xml
 ├── src/
 │   ├── components/
-│   │   ├── ExperienceCard.jsx
 │   │   ├── Footer.jsx
-│   │   ├── Loader.jsx
 │   │   ├── Navbar.jsx
-│   │   ├── ProjectCard.jsx
-│   │   └── StarsCanvas.jsx
-│   ├── sections/
-│   │   ├── About.jsx
-│   │   ├── Blog.jsx
-│   │   ├── Certifications.jsx
-│   │   ├── Challenge.jsx
-│   │   ├── Contact.jsx
-│   │   ├── Experience.jsx
-│   │   ├── Hero.jsx
-│   │   ├── Projects.jsx
-│   │   └── Skills.jsx
+│   │   ├── ProjectDiagram.jsx
+│   │   └── SocialRails.jsx
 │   ├── constants/
 │   │   └── index.js
 │   ├── hooks/
 │   │   └── useCountUp.js
+│   ├── sections/
+│   │   ├── About.jsx
+│   │   ├── Contact.jsx
+│   │   ├── Experience.jsx
+│   │   ├── Hero.jsx
+│   │   ├── Projects.jsx
+│   │   └── Writing.jsx
 │   ├── App.jsx
 │   ├── index.css
 │   └── main.jsx
@@ -119,43 +115,41 @@ GitHub Push → AWS CodePipeline → CodeBuild → S3 → CloudFront
 - **CodeBuild:** `deveshkhatik-portfolio-build`
 - **Region:** `ap-south-1`
 
-**Cache Strategy:**
-- Static assets (JS/CSS/images): `max-age=31536000` (1 year, immutable)
-- `index.html`: `no-cache` (always fresh)
-- `sitemap.xml` / `robots.txt`: `no-cache`
-
 ---
 
-## 📸 Screenshots
+## 📸 Section Overview
 
 ### Hero Section
-Animated starfield background with typing effect and cursor glow.
+Clean developer introduction with mono accent greeting, bold headings, DevSecOps engineer summary, and an outlined teal "Check out my work" button.
 
-### Tech Stack
-Official brand logos for AWS, Kubernetes, Docker, Terraform, Jenkins, SonarQube, Trivy, Azure, Linux, Git, Prometheus, and Grafana.
+### About Me
+Two-column layout highlighting career progression from HERE Technologies to ProTechmanize, a two-column mono tech stack with teal arrow markers, an offset border photo container with tint clear on hover, and a quiet row of metric counters.
 
-### Experience Timeline
-Animated vertical timeline with scroll-triggered reveals.
+### Where I've Worked
+Tabbed experience layout featuring roles at ProTechmanize and HERE Technologies with vertical tabs, an animated teal active indicator, and bullet points detailing shift-left security and automation achievements.
 
-### 30 Days of DevSecOps
-Showcase of the LinkedIn challenge — stats, phases, and top posts.
+### Some Things I've Built (Work)
+Alternating featured project cards with custom architecture and pipeline diagram visual placeholders (OWASP Juice Shop DevSecOps pipeline, Netflix Clone CI/CD on EKS, Swiggy CI/CD on AWS CodePipeline, and EKS with Terraform IaC), followed by a 3-column noteworthy projects card grid.
+
+### Writing & Certifications
+Structured overview of the 30 Days of DevSecOps challenge broken into 4 strategic phases, selected articles linked out to LinkedIn, and a verified certifications status tracker.
+
+### Get In Touch (Contact)
+Centered minimalist contact section with a mono "04. What's Next?" prompt, friendly invitation, and an outlined teal "Say Hello" button.
 
 ---
 
-## 📝 Sections
+## 📝 Sections Table
 
-| Section | Description |
-|---|---|
-| **Hero** | Typing animation, stats, CTAs, starfield background |
-| **About** | Career story + animated count-up stat cards |
-| **Skills** | 12 official tech logos in a responsive grid |
-| **Experience** | Animated timeline — ProTechmanize + HERE Technologies |
-| **Projects** | 4 DevSecOps project cards with hover effects |
-| **Certifications** | AWS SAA, CKA, Terraform, DevSecOps roadmap |
-| **30 Days Challenge** | Stats, 4 phases, top posts with impressions |
-| **Blog** | Latest 6 LinkedIn posts with excerpts |
-| **Contact** | Contact form + social links + availability status |
-| **Footer** | GitHub, LinkedIn, Email + back to top |
+| Section | Identifier | Description |
+|---|---|---|
+| **Hero** | `#hero` | Intro, role summary, outlined CTA button |
+| **About** | `#about` | 01. About Me — story, mono tech list, offset photo card, quiet stat counters |
+| **Experience** | `#experience` | 02. Where I've Worked — vertical tabs, animated active indicator, bullet points |
+| **Projects** | `#projects` | 03. Some Things I've Built — alternating featured projects, diagrams, noteworthy grid |
+| **Writing & Certs** | `#writing` | ~/ Writing & Certifications — 4 challenge phases, LinkedIn post cards, cert status |
+| **Contact** | `#contact` | 04. What's Next? — Centered "Say Hello" mailto CTA |
+| **Footer** | `footer` | Minimal credit "Designed & Built by Devesh Khatik" |
 
 ---
 
@@ -167,7 +161,7 @@ Showcase of the LinkedIn challenge — stats, phases, and top posts.
 - 🔐 Integrated **SonarQube SAST** + **Trivy CVE scanning** across all pipelines
 - ☁️ Managing **50+ customer environments** on EC2
 - 📝 Completed **30 Days of DevSecOps** LinkedIn challenge
-- 🤝 **3,500+ LinkedIn followers**
+- 🤝 **4,500+ LinkedIn followers**
 
 ---
 
@@ -182,7 +176,3 @@ Showcase of the LinkedIn challenge — stats, phases, and top posts.
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
-
----
-
-> *Built with ☕ and `git push` — because a DevOps engineer's portfolio should deploy itself.*

@@ -1,82 +1,65 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
 
-function Loader({ onComplete }) {
-  const canvasRef = useRef(null);
-  const [count, setCount] = useState(0);
-  const [hidden, setHidden] = useState(false);
-
-  // Matrix binary rain
+export default function Loader({ isLoading, onComplete }) {
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    let animId;
+    // Finish loading exactly when the CSS sequence completes (2.7s)
+    const timer = setTimeout(() => {
+      onComplete?.();
+    }, 2700);
 
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    const fontSize = 14;
-    let cols = Math.floor(canvas.width / fontSize);
-    let drops = Array(cols).fill(1);
-
-    const draw = () => {
-      ctx.fillStyle = "rgba(0,0,0,0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#6A1BDA";
-      ctx.font = `${fontSize}px monospace`;
-
-      for (let i = 0; i < drops.length; i++) {
-        const char = Math.random() > 0.5 ? "1" : "0";
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-      animId = requestAnimationFrame(draw);
-    };
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
-  // Count up 0 → 100
-  useEffect(() => {
-    let current = 0;
-    const interval = setInterval(() => {
-      current += 1;
-      setCount(current);
-      if (current >= 100) {
-        clearInterval(interval);
-        setTimeout(() => {
-          setHidden(true);
-          setTimeout(() => onComplete?.(), 600);
-        }, 400);
-      }
-    }, 16);
-    return () => clearInterval(interval);
+    return () => clearTimeout(timer);
   }, [onComplete]);
 
+  if (!isLoading) return null;
+
   return (
-    <div className={`loader-container ${hidden ? "hidden" : ""}`}>
-      <canvas ref={canvasRef} className="loader-canvas" />
-      <div className="loader-content">
-        <div className="loader-logo">Devesh Khatik</div>
-        <div className="loader-count-row">
-          <span className="loader-count">{count}</span>
-          <span className="loader-percent">%</span>
-        </div>
-        <div className="loader-text">Loading...</div>
+    <div
+      id="loader-overlay"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#020c1b]"
+      aria-label="Loading portfolio"
+    >
+      <div
+        id="loader-logo-wrapper"
+        className="relative flex items-center justify-center w-24 h-24 select-none"
+      >
+        <svg
+          id="logo"
+          viewBox="0 0 100 100"
+          className="w-full h-full text-teal overflow-visible select-none"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <title>Loader Logo</title>
+          {/* Brittany Chiang v4 Exact Hexagon Coordinates */}
+          <path
+            id="loader-hexagon"
+            d="M 50, 5
+               L 11, 27
+               L 11, 72
+               L 50, 95
+               L 89, 73
+               L 89, 28 z"
+            stroke="#64ffda"
+            strokeWidth="5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          {/* Centered Monogram D */}
+          <text
+            id="loader-letter"
+            x="50"
+            y="53"
+            fill="#64ffda"
+            textAnchor="middle"
+            dominantBaseline="central"
+            fontFamily="var(--font-mono), monospace"
+            fontSize="34"
+            fontWeight="bold"
+          >
+            D
+          </text>
+        </svg>
       </div>
     </div>
   );
 }
-
-export default Loader;

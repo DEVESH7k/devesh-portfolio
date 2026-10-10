@@ -5,49 +5,40 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#080808",
-        secondary: "#888888",
-        tertiary: "#101010",
-        accent: "#6A1BDA",
-        accentPink: "#9d5ff5",
-        bg1: "#0e0e0e",
-        bg2: "#111111",
-        bg3: "#161616",
-        muted: "#2a2a2a",
+        navy: {
+          DEFAULT: "#0a192f",
+          light: "#112240",
+          lightest: "#233554",
+        },
+        "navy-light": "#112240",
+        "navy-lightest": "#233554",
+        slate: {
+          DEFAULT: "#8892b0",
+          light: "#a8b2d1",
+          lightest: "#ccd6f6",
+        },
+        "slate-light": "#a8b2d1",
+        "slate-lightest": "#ccd6f6",
+        teal: {
+          DEFAULT: "#64ffda",
+          tint: "rgba(100, 255, 218, 0.1)",
+        },
+        "teal-tint": "rgba(100, 255, 218, 0.1)",
+        white: "#e6f1ff",
       },
       fontFamily: {
-        sans: ["Chakra Petch", "Outfit", "sans-serif"],
-        outfit: ["Outfit", "sans-serif"],
-        mono: ["IBM Plex Mono", "monospace"],
-        chakra: ["Chakra Petch", "sans-serif"],
+        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        mono: ["'JetBrains Mono'", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
+      },
+      transitionTimingFunction: {
+        portfolio: "cubic-bezier(0.645, 0.045, 0.355, 1)",
       },
       boxShadow: {
-        card: "0px 35px 120px -15px #000",
-        glow: "0 0 40px rgba(106,27,218,0.2)",
-        glowPink: "0 0 40px rgba(157,95,245,0.15)",
+        card: "0 10px 30px -15px rgba(2, 12, 27, 0.7)",
+        "card-hover": "0 20px 30px -15px rgba(2, 12, 27, 0.7)",
       },
-      screens: {
-        xs: "450px",
-      },
-      animation: {
-        "spin-slow": "spin 20s linear infinite",
-        "pulse-glow": "pulseGlow 3s ease-in-out infinite",
-        "float": "float 6s ease-in-out infinite",
-        "shimmer": "shimmer 2s linear infinite",
-      },
-      keyframes: {
-        pulseGlow: {
-          "0%, 100%": { opacity: "0.4" },
-          "50%": { opacity: "1" },
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
-        shimmer: {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
-        },
+      maxWidth: {
+        content: "1000px",
       },
     },
   },
