@@ -158,7 +158,7 @@ Centered minimalist contact section with a mono "04. What's Next?" prompt, frien
 **Devesh Khatik** — DevSecOps Engineer at ProTechmanize, Mumbai
 
 - 🔧 Managing **156+ CI/CD pipelines** across AWS, Azure & Jenkins
-- 🔐 Integrated **SonarQube SAST** + **Trivy CVE scanning** across all pipelines
+- 🔐 Integrated **Checkmarx (SAST, SCA, API & Docker Image scanning)** with daily CVE vulnerability tracking
 - ☁️ Managing **50+ customer environments** on EC2
 - 📝 Completed **30 Days of DevSecOps** LinkedIn challenge
 - 🤝 **4,500+ LinkedIn followers**

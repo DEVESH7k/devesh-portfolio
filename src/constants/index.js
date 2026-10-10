@@ -26,9 +26,9 @@ export const heroData = {
 
 export const aboutData = {
   paragraphs: [
-    "My journey into cloud security and infrastructure began at HERE Technologies as a Data Specialist, where I built Python automation scripts to govern large-scale geospatial records and worked alongside cloud teams on AWS S3 and EC2 at global scale.",
-    "Today, I'm a DevSecOps Engineer at ProTechmanize in Mumbai, where I architect and maintain 156+ automated CI/CD pipelines across AWS, Azure DevOps, and Jenkins. I also manage Ubuntu and Windows EC2 hosts across 50+ customer environments, enforcing security hardening and continuous vulnerability scanning.",
-    "Driven by continuous learning, I recently completed the 30 Days of DevSecOps challenge on LinkedIn, documenting deep dives on shift-left security, container hardening, Kubernetes internals, and zero-downtime deployment pipelines.",
+    "Today, I'm a DevSecOps Engineer at ProTechmanize in Mumbai, where I build and maintain automated CI/CD pipelines across AWS, Azure DevOps, and Jenkins. Security is built into every stage rather than bolted on at the end: I leverage Checkmarx for SAST, SCA, and API security, alongside container and Docker image scanning with automated daily updates for newly disclosed CVE vulnerabilities to ensure zero risky builds ever reach production.",
+    "Beyond pipelines, I manage Ubuntu and Windows EC2 hosts across multiple customer environments, enforcing OS hardening baselines and running continuous CVE remediation so that every environment stays patched, consistent, and auditable. I use Terraform to keep infrastructure reproducible, and Prometheus and Grafana to keep a close eye on how it behaves in production.",
+    "Driven by continuous learning, I recently completed the 30 Days of DevSecOps challenge on LinkedIn, documenting deep dives on shift-left security, container hardening, Kubernetes internals, and zero-downtime deployment. I enjoy turning what I learn into practical, hands-on projects and sharing it with the community.",
   ],
   skills: [
     "AWS",
@@ -36,7 +36,7 @@ export const aboutData = {
     "Docker",
     "Terraform",
     "Jenkins",
-    "SonarQube",
+    "Checkmarx",
     "Trivy",
     "Azure",
     "Linux",
@@ -61,8 +61,8 @@ export const experiences = [
     url: "https://protechmanize.com",
     bullets: [
       "Manage 156+ CI/CD pipelines across AWS CodePipeline, Azure DevOps, and Jenkins with zero CRITICAL CVEs reaching production since SAST integration.",
-      "Integrated SonarQube SAST across all pipelines, enforcing strict quality gates that halt builds before container images are generated.",
-      "Implemented Trivy container image scanning as a mandatory pipeline gate across Docker and EKS environments, preventing vulnerable images from deploying.",
+      "Integrated Checkmarx for SAST, SCA, and API security across all pipelines, enforcing strict quality gates that halt builds before container images are generated.",
+      "Implemented Docker container image scanning with daily CVE vulnerability feeds, preventing vulnerable dependencies or images from deploying to production.",
       "Administer Ubuntu Linux and Windows EC2 hosts across 50+ customer environments — managing OS patching, security hardening, and 24/7 on-call rotations.",
     ],
   },
@@ -93,8 +93,8 @@ export const featuredProjects = [
   {
     title: "End-to-End DevSecOps Kubernetes Pipeline",
     description:
-      "Shift-left DevSecOps pipeline featuring Jenkins declarative workflows, SonarQube SAST quality gates, Trivy container CVE scanning, Helm charts, and GitOps continuous delivery with ArgoCD to Kubernetes on AWS EC2.",
-    tech: ["Jenkins", "SonarQube", "Trivy", "Docker", "Kubernetes", "ArgoCD", "Helm", "Prometheus"],
+      "Shift-left DevSecOps pipeline featuring Jenkins declarative workflows, Checkmarx SAST quality gates, Trivy container CVE scanning, Helm charts, and GitOps continuous delivery with ArgoCD to Kubernetes on AWS EC2.",
+    tech: ["Jenkins", "Checkmarx", "Trivy", "Docker", "Kubernetes", "ArgoCD", "Helm", "Prometheus"],
     github: "https://github.com/DEVESH7k/DevSecOps-Project",
     external: null,
     image: "/projects/devsecops-flow.png",
@@ -105,8 +105,8 @@ export const otherProjects = [
   {
     title: "OWASP Juice Shop DevSecOps Pipeline",
     description:
-      "Automated shift-left DevSecOps pipeline on AWS integrating SonarQube SAST static analysis, OWASP dependency vulnerability auditing, multi-stage Docker builds, and Trivy CVE scanning.",
-    tech: ["AWS", "Jenkins", "SonarQube", "Trivy", "Docker"],
+      "Automated shift-left DevSecOps pipeline on AWS integrating Checkmarx SAST static analysis, OWASP dependency vulnerability auditing, multi-stage Docker builds, and Trivy CVE scanning.",
+    tech: ["AWS", "Jenkins", "Checkmarx", "Trivy", "Docker"],
     github: "https://github.com/DEVESH7k/juice-shop-aws-devsecops",
     external: null,
   },
@@ -114,7 +114,7 @@ export const otherProjects = [
     title: "Swiggy App CI/CD Pipeline",
     description:
       "Cloud-native CI/CD architecture for food delivery platform automating build, test, containerization, security scans, and zero-downtime deployment with manual approval gates.",
-    tech: ["Jenkins", "Docker", "SonarQube", "Trivy", "AWS EC2"],
+    tech: ["Jenkins", "Docker", "Checkmarx", "Trivy", "AWS EC2"],
     github: "https://github.com/DEVESH7k/DevOps-Project-Swiggy",
     external: null,
   },
@@ -165,7 +165,7 @@ export const challengePhases = [
     title: "Shift-Left Security & CVE Scanning",
     days: "Days 8 — 14",
     summary:
-      "Embedding security at code commit: SonarQube SAST quality gates, IAM least-privilege enforcement, container vulnerability scanning with Trivy, and attack surface reduction.",
+      "Embedding security at code commit: Checkmarx SAST & SCA quality gates, IAM least-privilege enforcement, container vulnerability scanning with Trivy, and attack surface reduction.",
   },
   {
     phase: "03",

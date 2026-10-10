@@ -13,7 +13,7 @@ export default function ProjectDiagram({ type }) {
         <div className="grid grid-cols-3 gap-3 my-4">
           <div className="bg-navy p-3 rounded border border-navy-lightest flex flex-col gap-1">
             <span className="font-mono text-[10px] text-teal">01 · SAST GATE</span>
-            <span className="text-xs font-semibold text-slate-lightest">SonarQube</span>
+            <span className="text-xs font-semibold text-slate-lightest">Checkmarx</span>
             <span className="font-mono text-[10px] text-green-400">0 Vulns · A-Rating</span>
           </div>
           <div className="bg-navy p-3 rounded border border-navy-lightest flex flex-col gap-1">

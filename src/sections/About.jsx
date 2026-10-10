@@ -34,30 +34,34 @@ export default function About() {
           {/* Text Content: 3 cols (60%) */}
           <div className="md:col-span-3 text-slate text-base leading-relaxed space-y-4">
             <p>
-              My journey into cloud security and infrastructure began at{" "}
-              <span className="text-teal font-medium">HERE Technologies</span> as a
-              Data Specialist, where I built Python automation scripts to govern
-              large-scale geospatial datasets and worked alongside cloud infrastructure
-              teams on <span className="text-teal font-medium">AWS S3 and EC2</span>{" "}
-              at global scale.
+              Today, I&apos;m a DevSecOps Engineer at{" "}
+              <span className="text-teal font-medium">ProTechmanize</span> in Mumbai,
+              where I build and maintain automated CI/CD pipelines across{" "}
+              <span className="text-teal font-medium">AWS, Azure DevOps, and Jenkins</span>.
+              Security is built into every stage rather than bolted on at the end: I leverage{" "}
+              <span className="text-teal font-medium">Checkmarx</span> for{" "}
+              <span className="text-teal font-medium">SAST, SCA, and API security</span>,
+              alongside container and Docker image scanning with automated daily updates for newly
+              disclosed CVE vulnerabilities to ensure zero risky builds ever reach production.
             </p>
 
             <p>
-              Today, I&apos;m a DevSecOps Engineer at{" "}
-              <span className="text-teal font-medium">ProTechmanize</span> in Mumbai,
-              where I architect and manage{" "}
-              <span className="text-teal font-medium">156+ automated CI/CD pipelines</span>{" "}
-              across AWS, Azure DevOps, and Jenkins. I also manage Ubuntu and Windows
-              EC2 hosts across{" "}
-              <span className="text-teal font-medium">50+ customer environments</span>,
-              enforcing OS hardening and continuous CVE remediation.
+              Beyond pipelines, I manage Ubuntu and Windows EC2 hosts across multiple
+              customer environments, enforcing OS hardening baselines and running continuous
+              CVE remediation so that every environment stays patched, consistent, and
+              auditable. I use <span className="text-teal font-medium">Terraform</span> to keep
+              infrastructure reproducible, and{" "}
+              <span className="text-teal font-medium">Prometheus and Grafana</span> to keep a
+              close eye on how it behaves in production.
             </p>
+
 
             <p>
               Driven by continuous learning, I recently completed the{" "}
-              <span className="text-teal font-medium">30 Days of DevSecOps</span>{" "}
-              challenge on LinkedIn, documenting deep dives on shift-left security,
-              container hardening, Kubernetes internals, and zero-downtime deployment.
+              <span className="text-teal font-medium">30 Days of DevSecOps</span> challenge on
+              LinkedIn, documenting deep dives on shift-left security, container hardening,
+              Kubernetes internals, and zero-downtime deployment. I enjoy turning what I learn
+              into practical, hands-on projects and sharing it with the community.
             </p>
 
             <p className="pt-2 text-slate-lightest font-medium">
