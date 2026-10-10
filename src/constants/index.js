@@ -20,7 +20,7 @@ export const heroData = {
   name: "Devesh Khatik.",
   subtitle: "I secure and automate software delivery.",
   description:
-    "DevSecOps Engineer at ProTechmanize, Mumbai. I manage 156+ CI/CD pipelines across AWS, Azure and Jenkins, with SonarQube SAST and Trivy CVE scanning built into every one.",
+    "I'm a DevOps & Cloud Security Engineer passionate about automating resilient cloud infrastructure and shift-left security. I specialize in architecting automated CI/CD pipelines, container orchestration with Kubernetes, and Infrastructure as Code on AWS.",
   ctaText: "Check out my work",
 };
 
