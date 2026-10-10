@@ -109,9 +109,9 @@ export default function About() {
 
         {/* Small quiet row of count-up stats */}
         <div className="mt-16 pt-8 border-t border-navy-lightest grid grid-cols-2 sm:grid-cols-4 gap-6">
-          <StatItem value="156+" label="CI/CD Pipelines" />
-          <StatItem value="0" label="CRITICAL CVEs in Prod" />
-          <StatItem value="50+" label="Customer Envs (EC2)" />
+          <StatItem value="3+" label="Years in Cloud & Security" />
+          <StatItem value="400" label="End-to-End DevSecOps Projects" />
+          <StatItem value="30" label="Days of DevSecOps challenge (Completed)" />
           <StatItem value="4.5K+" label="LinkedIn Followers" />
         </div>
       </motion.div>

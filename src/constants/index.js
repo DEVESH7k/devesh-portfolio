@@ -46,9 +46,9 @@ export const aboutData = {
     "Bash",
   ],
   stats: [
-    { value: 156, suffix: "+", label: "CI/CD Pipelines" },
-    { value: 0, suffix: "", label: "CRITICAL CVEs in Prod" },
-    { value: 50, suffix: "+", label: "Customer Environments" },
+    { value: 3, suffix: "+", label: "Years in Cloud & Security" },
+    { value: 400, suffix: "", label: "End-to-End DevSecOps Projects" },
+    { value: 30, suffix: "", label: "Days of DevSecOps challenge (Completed)" },
     { value: 4500, suffix: "+", label: "LinkedIn Followers" },
   ],
 };
