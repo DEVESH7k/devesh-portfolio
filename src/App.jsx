@@ -1,21 +1,28 @@
-import { useState, useCallback } from "react";
+import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
 import SocialRails from "./components/SocialRails";
 import Hero from "./sections/Hero";
+import TechnologyShowcase from "./components/TechnologyShowcase";
 import Footer from "./components/Footer";
 
-import About from "./sections/About";
-import Experience from "./sections/Experience";
-import Projects from "./sections/Projects";
-import Writing from "./sections/Writing";
-import Contact from "./sections/Contact";
+const BelowFold = lazy(() => import("./sections/BelowFold"));
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleComplete = useCallback(() => {
-    setIsLoading(false);
+  const handleComplete = useCallback(() => setIsLoading(false), []);
+
+  /* Warm the below-the-fold chunk as soon as the hero is on screen,
+     so the split costs parse time rather than a visible wait. */
+  useEffect(() => {
+    const warm = () => import("./sections/BelowFold");
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(warm, { timeout: 1200 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const timer = setTimeout(warm, 200);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -23,23 +30,19 @@ export default function App() {
       <Loader isLoading={isLoading} onComplete={handleComplete} />
 
       <div
-        className={`bg-navy text-slate min-h-screen flex flex-col justify-between selection:bg-navy-lightest selection:text-teal font-sans transition-opacity duration-700 ${
-          isLoading ? "opacity-0 h-screen overflow-hidden" : "opacity-100"
+        className={`flex min-h-screen flex-col bg-ink text-mist transition-opacity duration-700 ease-expo ${
+          isLoading ? "h-screen overflow-hidden opacity-0" : "opacity-100"
         }`}
       >
         <Navbar />
         <SocialRails />
 
-        <main
-          id="content"
-          className="flex-grow w-full max-w-[1000px] mx-auto px-6 sm:px-12 md:px-24 xl:px-0"
-        >
+        <main id="content" className="flex-1">
           <Hero isLoaded={!isLoading} />
-          <About />
-          <Experience />
-          <Projects />
-          <Writing />
-          <Contact />
+          <TechnologyShowcase />
+          <Suspense fallback={<div className="min-h-screen" aria-hidden="true" />}>
+            <BelowFold />
+          </Suspense>
         </main>
 
         <Footer />

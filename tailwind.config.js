@@ -5,40 +5,69 @@ export default {
   theme: {
     extend: {
       colors: {
-        navy: {
-          DEFAULT: "#0a192f",
-          light: "#112240",
-          lightest: "#233554",
+        ink: {
+          DEFAULT: "#050608",
+          soft: "#0B0D12",
+          raised: "#12151C",
         },
-        "navy-light": "#112240",
-        "navy-lightest": "#233554",
-        slate: {
-          DEFAULT: "#8892b0",
-          light: "#a8b2d1",
-          lightest: "#ccd6f6",
+        line: {
+          DEFAULT: "rgba(245,245,247,0.08)",
+          strong: "rgba(245,245,247,0.16)",
         },
-        "slate-light": "#a8b2d1",
-        "slate-lightest": "#ccd6f6",
-        teal: {
-          DEFAULT: "#64ffda",
-          tint: "rgba(100, 255, 218, 0.1)",
+        chalk: "#F5F5F7",
+        mist: "#A1A1AA",
+        emerald: {
+          DEFAULT: "#00DFA2",
+          dim: "rgba(0,223,162,0.12)",
         },
-        "teal-tint": "rgba(100, 255, 218, 0.1)",
-        white: "#e6f1ff",
+        cyan: {
+          DEFAULT: "#55C8FF",
+          dim: "rgba(85,200,255,0.12)",
+        },
+        azure: {
+          DEFAULT: "#477BFF",
+          dim: "rgba(71,123,255,0.12)",
+        },
       },
       fontFamily: {
         sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
         mono: ["'JetBrains Mono'", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
       },
-      transitionTimingFunction: {
-        portfolio: "cubic-bezier(0.645, 0.045, 0.355, 1)",
+      fontSize: {
+        display: ["clamp(2.6rem, 7.2vw, 6.25rem)", { lineHeight: "0.98", letterSpacing: "-0.035em" }],
+        hero: ["clamp(2.1rem, 4.3vw, 3.75rem)", { lineHeight: "1.04", letterSpacing: "-0.032em" }],
+        section: ["clamp(2rem, 4.4vw, 3.5rem)", { lineHeight: "1.08", letterSpacing: "-0.028em" }],
+        stat: ["clamp(2.75rem, 6vw, 4.5rem)", { lineHeight: "1", letterSpacing: "-0.04em" }],
+        eyebrow: ["0.6875rem", { lineHeight: "1", letterSpacing: "0.22em" }],
       },
-      boxShadow: {
-        card: "0 10px 30px -15px rgba(2, 12, 27, 0.7)",
-        "card-hover": "0 20px 30px -15px rgba(2, 12, 27, 0.7)",
+      transitionTimingFunction: {
+        expo: "cubic-bezier(0.16, 1, 0.3, 1)",
+        smooth: "cubic-bezier(0.65, 0, 0.35, 1)",
       },
       maxWidth: {
-        content: "1000px",
+        shell: "1240px",
+        prose: "68ch",
+      },
+      backdropBlur: {
+        glass: "20px",
+      },
+      boxShadow: {
+        lift: "0 24px 60px -24px rgba(0,0,0,0.85)",
+        glow: "0 0 0 1px rgba(0,223,162,0.25), 0 20px 60px -20px rgba(0,223,162,0.25)",
+      },
+      keyframes: {
+        caret: {
+          "0%, 49%": { opacity: "1" },
+          "50%, 100%": { opacity: "0" },
+        },
+        driftSlow: {
+          "0%, 100%": { transform: "translate3d(0,0,0)" },
+          "50%": { transform: "translate3d(0,-10px,0)" },
+        },
+      },
+      animation: {
+        caret: "caret 1.05s steps(1) infinite",
+        drift: "driftSlow 7s cubic-bezier(0.45,0,0.55,1) infinite",
       },
     },
   },

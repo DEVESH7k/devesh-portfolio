@@ -1,65 +1,84 @@
 import { useEffect } from "react";
+import { useReducedMotion } from "framer-motion";
+
+/* ──────────────────────────────────────────────────────────────
+   The intro. Driven entirely by CSS keyframes (see
+   styles/animations.css) so it starts painting before React
+   hydrates and never waits on JS timing. The timer below only
+   releases the page underneath once the curtain has lifted.
+   ────────────────────────────────────────────────────────────── */
+
+const SEQUENCE_MS = 2350;
+const REDUCED_MS = 550;
 
 export default function Loader({ isLoading, onComplete }) {
-  useEffect(() => {
-    // Finish loading exactly when the CSS sequence completes (2.7s)
-    const timer = setTimeout(() => {
-      onComplete?.();
-    }, 2700);
+  const prefersReduced = useReducedMotion();
 
+  useEffect(() => {
+    const timer = setTimeout(
+      () => onComplete?.(),
+      prefersReduced ? REDUCED_MS : SEQUENCE_MS
+    );
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, [onComplete, prefersReduced]);
 
   if (!isLoading) return null;
 
   return (
     <div
-      id="loader-overlay"
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#020c1b]"
-      aria-label="Loading portfolio"
+      id="intro-curtain"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-ink"
+      role="status"
+      aria-label="Loading"
     >
       <div
-        id="loader-logo-wrapper"
-        className="relative flex items-center justify-center w-24 h-24 select-none"
-      >
-        <svg
-          id="logo"
-          viewBox="0 0 100 100"
-          className="w-full h-full text-teal overflow-visible select-none"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <title>Loader Logo</title>
-          {/* Brittany Chiang v4 Exact Hexagon Coordinates */}
-          <path
-            id="loader-hexagon"
-            d="M 50, 5
-               L 11, 27
-               L 11, 72
-               L 50, 95
-               L 89, 73
-               L 89, 28 z"
-            stroke="#64ffda"
-            strokeWidth="5"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-70"
+        style={{
+          background:
+            "radial-gradient(45% 40% at 50% 50%, rgba(0,223,162,0.14), transparent 70%)",
+        }}
+      />
+
+      <div id="intro-stack" className="relative h-28 w-28 select-none">
+        <svg viewBox="0 0 120 120" className="h-full w-full overflow-visible">
+          <defs>
+            <linearGradient id="intro-stroke" x1="0" y1="0" x2="120" y2="120">
+              <stop offset="0" stopColor="#00DFA2" />
+              <stop offset="1" stopColor="#55C8FF" />
+            </linearGradient>
+          </defs>
+
+          <circle
+            id="intro-ring"
+            cx="60"
+            cy="60"
+            r="51"
+            fill="none"
+            stroke="url(#intro-stroke)"
+            strokeWidth="2"
             strokeLinecap="round"
-            strokeLinejoin="round"
+            transform="rotate(-90 60 60)"
           />
-          {/* Centered Monogram D */}
+
           <text
-            id="loader-letter"
-            x="50"
-            y="53"
-            fill="#64ffda"
+            id="intro-mark"
+            x="60"
+            y="62"
             textAnchor="middle"
-            dominantBaseline="central"
-            fontFamily="var(--font-mono), monospace"
-            fontSize="34"
-            fontWeight="bold"
+            dominantBaseline="middle"
+            fontFamily="Inter, sans-serif"
+            fontSize="30"
+            fontWeight="500"
+            letterSpacing="-1.5"
+            fill="#F5F5F7"
           >
-            D
+            DK
           </text>
         </svg>
       </div>
+
+      <span className="sr-only">Loading portfolio</span>
     </div>
   );
 }

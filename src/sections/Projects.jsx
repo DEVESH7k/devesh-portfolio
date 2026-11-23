@@ -1,292 +1,301 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { featuredProjects, otherProjects } from "../constants";
-import ProjectDiagram from "../components/ProjectDiagram";
+import { useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { caseStudies, otherProjects } from "../constants";
+import AnimatedSection, { Reveal, RevealGroup, RevealItem, SectionHeading, Words } from "../components/AnimatedSection";
+import ProjectVisual from "../components/ProjectVisual";
+import TechMark from "../components/TechMark";
+import { ArrowIcon, GithubIcon, ExternalIcon } from "../components/Icons";
 
-export default function Projects() {
-  const [showMore, setShowMore] = useState(false);
-  const displayedOtherProjects = showMore ? otherProjects : otherProjects.slice(0, 6);
+function Visual({ project, className = "" }) {
+  const ref = useRef(null);
+  const prefersReduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  /* The plate settles from slightly over-scaled as it enters view. */
+  const scale = useTransform(scrollYProgress, [0, 0.45, 1], [1.08, 1, 1.04]);
+  const y = useTransform(scrollYProgress, [0, 1], ["3%", "-3%"]);
 
   return (
-    <section id="projects" className="px-6 sm:px-12 md:px-0">
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 1.05, ease: [0.16, 1, 0.3, 1] }}
+      className={`group relative overflow-hidden rounded-[26px] border border-line bg-ink-soft ${className}`}
+    >
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.15 }}
-        transition={{ duration: 0.6, ease: [0.645, 0.045, 0.355, 1] }}
+        style={prefersReduced ? undefined : { scale, y }}
+        className="origin-center"
       >
-        <h2 className="numbered-heading">
-          <span className="text-teal font-mono text-xl sm:text-2xl mr-3 font-normal">
-            03.
-          </span>
-          Some Things I&apos;ve Built
-        </h2>
-
-        {/* Featured Projects List (Alternating Left/Right) */}
-        <div className="space-y-24 md:space-y-28 mt-12">
-          {featuredProjects.map((project, index) => {
-            const isEven = index % 2 === 0;
-
-            return (
-              <div
-                key={project.title}
-                className="relative grid grid-cols-1 md:grid-cols-12 items-center gap-4"
-              >
-                {/* Project Visual (Image or Diagram) */}
-                <div
-                  className={`relative col-span-1 md:col-span-8 h-[280px] sm:h-[340px] md:h-[360px] rounded overflow-hidden shadow-card group md:row-start-1 md:row-end-2 bg-teal ${
-                    isEven ? "md:col-start-1" : "md:col-start-5"
-                  }`}
-                >
-                  <a
-                    href={project.external || project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${project.title} preview and source code`}
-                    className="block w-full h-full relative overflow-hidden bg-teal group-hover:bg-transparent transition-colors duration-300"
-                  >
-                    {project.image ? (
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full h-full object-cover object-center filter grayscale contrast-100 brightness-90 mix-blend-multiply group-hover:filter-none group-hover:mix-blend-normal transition-all duration-300"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <ProjectDiagram type={project.diagramType} />
-                    )}
-
-                    {/* Dark navy overlay with mix-blend-screen that clears on hover */}
-                    <div
-                      className="absolute inset-0 bg-navy/40 group-hover:bg-transparent transition-all duration-300 mix-blend-screen pointer-events-none"
-                      aria-hidden="true"
-                    />
-                    {/* Subtle teal overlay that fades on hover */}
-                    <div
-                      className="absolute inset-0 bg-teal/20 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </div>
-
-                {/* Project Details Content */}
-                <div
-                  className={`relative z-20 col-span-1 md:col-span-7 flex flex-col md:row-start-1 md:row-end-2 mt-4 md:mt-0 ${
-                    isEven
-                      ? "md:col-start-6 md:items-end md:text-right"
-                      : "md:col-start-1 md:items-start md:text-left"
-                  }`}
-                >
-                  <p className="font-mono text-teal text-xs tracking-wider mb-1">
-                    Featured Project
-                  </p>
-
-                  <h3 className="text-slate-lightest font-bold text-2xl font-sans hover:text-teal transition-colors mb-4">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {project.title}
-                    </a>
-                  </h3>
-
-                  {/* Description Card */}
-                  <div
-                    className={`bg-navy-light p-5 sm:p-6 rounded shadow-card text-slate text-sm sm:text-[14.5px] leading-relaxed mb-4 max-w-lg ${
-                      isEven ? "md:ml-auto" : "md:mr-auto"
-                    }`}
-                  >
-                    <p>{project.description}</p>
-                  </div>
-
-                  {/* Tech Stack List */}
-                  <ul
-                    className={`flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-slate-light list-none p-0 mb-4 max-w-md ${
-                      isEven ? "md:justify-end md:ml-auto" : "md:justify-start md:mr-auto"
-                    }`}
-                  >
-                    {project.tech.map((t) => (
-                      <li key={t}>{t}</li>
-                    ))}
-                  </ul>
-
-                  {/* Icon Links */}
-                  <div
-                    className={`flex items-center gap-4 text-slate-lightest ${
-                      isEven ? "md:justify-end" : "md:justify-start"
-                    }`}
-                  >
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`GitHub Repository for ${project.title}`}
-                        className="text-slate-light hover:text-teal transition-colors p-1"
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                        </svg>
-                      </a>
-                    )}
-                    <a
-                      href={project.external || project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`External link for ${project.title}`}
-                      className="text-slate-light hover:text-teal transition-colors p-1"
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                        <polyline points="15 3 21 3 21 9" />
-                        <line x1="10" y1="14" x2="21" y2="3" />
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Other Noteworthy Projects Section */}
-        <div className="mt-32">
-          <div className="text-center">
-            <h3 className="text-2xl sm:text-3xl font-bold text-slate-lightest font-sans">
-              Other Noteworthy Projects
-            </h3>
-            <a
-              href="https://github.com/DEVESH7k?tab=repositories"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block font-mono text-sm text-teal hover:underline mt-2 tracking-wide"
-            >
-              view the archive
-            </a>
+        {/* Below large screens the diagram would shrink its labels past
+            legibility, so it scrolls sideways at a readable size instead.
+            tabIndex keeps the scroll region reachable from the keyboard. */}
+        <div
+          role="group"
+          tabIndex={0}
+          aria-label={`${project.title} architecture diagram, scrollable`}
+          className="mask-x overflow-x-auto overscroll-x-contain lg:mask-none lg:overflow-visible"
+        >
+          <div className="min-w-[620px] lg:min-w-0">
+            <ProjectVisual variant={project.visual} title={project.title} />
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
-            {displayedOtherProjects.map((item) => (
-              <div
-                key={item.title}
-                className="bg-navy-light p-8 rounded flex flex-col justify-between shadow-card hover:shadow-card-hover hover:-translate-y-2 transition-all duration-300 group"
-              >
-                <div>
-                  {/* Card Header: Folder icon on left, GitHub & external link icons on right */}
-                  <div className="flex items-center justify-between mb-8">
-                    <svg
-                      className="w-10 h-10 text-teal"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-                    </svg>
-
-                    <div className="flex items-center gap-3 text-slate-light">
-                      {item.github && (
-                        <a
-                          href={item.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={`GitHub repository for ${item.title}`}
-                          className="text-slate-light hover:text-teal transition-colors p-1"
-                        >
-                          <svg
-                            className="w-5 h-5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                          </svg>
-                        </a>
-                      )}
-                      <a
-                        href={item.external || item.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`External link for ${item.title}`}
-                        className="text-slate-light hover:text-teal transition-colors p-1"
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                          <polyline points="15 3 21 3 21 9" />
-                          <line x1="10" y1="14" x2="21" y2="3" />
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-
-                  <h4 className="text-xl font-bold text-slate-lightest group-hover:text-teal transition-colors mb-3 font-sans leading-snug">
-                    <a
-                      href={item.external || item.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {item.title}
-                    </a>
-                  </h4>
-
-                  <p className="text-slate text-sm leading-relaxed mb-6">
-                    {item.description}
-                  </p>
-                </div>
-
-                {/* Tech Stack List */}
-                <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-slate-light/70 list-none p-0 mt-auto">
-                  {item.tech.map((t) => (
-                    <li key={t}>{t}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          {/* Show More / Show Less Toggle Button */}
-          {otherProjects.length > 6 && (
-            <div className="text-center mt-12">
-              <button
-                onClick={() => setShowMore(!showMore)}
-                className="btn-teal text-xs px-7 py-3.5 rounded font-mono"
-              >
-                {showMore ? "Show Less" : "Show More"}
-              </button>
-            </div>
-          )}
         </div>
       </motion.div>
-    </section>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 ease-expo group-hover:opacity-100"
+        style={{
+          background:
+            "radial-gradient(70% 60% at 50% 0%, rgba(0,223,162,0.12), transparent 70%)",
+        }}
+      />
+    </motion.div>
+  );
+}
+
+function Details({ project, align = "left" }) {
+  return (
+    <div className={align === "right" ? "lg:text-right" : ""}>
+      <Reveal as="p" y={12} amount={0.4} className="font-mono text-[11px] uppercase tracking-[0.24em] text-emerald/80">
+        {project.index} — {project.kicker}
+      </Reveal>
+
+      <Words
+        text={project.title}
+        as="h3"
+        delay={0.06}
+        amount={0.3}
+        className={`mt-5 text-[clamp(1.6rem,3.2vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-chalk ${
+          align === "right" ? "lg:ml-auto" : ""
+        }`}
+      />
+
+      <Reveal as="p" delay={0.12} amount={0.25} className="mt-5 max-w-prose text-[15px] leading-relaxed text-mist lg:inline-block">
+        {project.description}
+      </Reveal>
+
+      <RevealGroup
+        as="ul"
+        stagger={0.06}
+        delay={0.1}
+        amount={0.2}
+        className={`mt-7 space-y-3 ${align === "right" ? "lg:ml-auto" : ""} max-w-prose`}
+      >
+        {project.highlights.map((highlight) => (
+          <RevealItem
+            as="li"
+            key={highlight}
+            className={`flex gap-3 text-[14px] leading-relaxed text-mist/85 ${
+              align === "right" ? "lg:flex-row-reverse lg:text-right" : ""
+            }`}
+          >
+            <span aria-hidden="true" className="mt-[0.62em] h-px w-3.5 shrink-0 bg-emerald/60" />
+            <span>{highlight}</span>
+          </RevealItem>
+        ))}
+      </RevealGroup>
+
+      <Reveal
+        delay={0.16}
+        amount={0.2}
+        className={`mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 ${
+          align === "right" ? "lg:justify-end" : ""
+        }`}
+      >
+        {project.tech.map((tech) => (
+          <span key={tech} className="inline-flex items-center gap-1.5 text-[12px] text-mist/80">
+            <TechMark name={tech} className="h-[15px] w-[15px] text-mist/60" />
+            {tech}
+          </span>
+        ))}
+      </Reveal>
+
+      <Reveal
+        delay={0.2}
+        amount={0.2}
+        className={`mt-8 flex flex-wrap items-center gap-3 ${
+          align === "right" ? "lg:justify-end" : ""
+        }`}
+      >
+        <a
+          href={project.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-ghost sheen h-10 px-5 text-[13px]"
+        >
+          <GithubIcon className="h-4 w-4" />
+          View source
+        </a>
+        {project.external && (
+          <a
+            href={project.external}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-ghost sheen h-10 px-5 text-[13px]"
+          >
+            <ExternalIcon className="h-4 w-4" />
+            Live demo
+          </a>
+        )}
+      </Reveal>
+    </div>
+  );
+}
+
+export default function Projects() {
+  const [first, second, third, fourth] = caseStudies;
+
+  return (
+    <AnimatedSection id="projects" label="Selected projects">
+      <div className="shell">
+        <SectionHeading eyebrow="Projects" title="Pipelines, clusters and the code that provisions them." accent={["provisions"]}>
+          Four builds that show how I wire security, delivery and infrastructure
+          together. Every one is public — the source is a click away.
+        </SectionHeading>
+      </div>
+
+      {/* 01 — text left, visual right */}
+      <div className="shell mt-20 grid items-center gap-10 lg:mt-28 lg:grid-cols-12 lg:gap-14">
+        <div className="lg:col-span-5">
+          <Details project={first} />
+        </div>
+        <Visual project={first} className="lg:col-span-7" />
+      </div>
+
+      {/* 02 — visual left, text right */}
+      <div className="shell mt-24 grid items-center gap-10 lg:mt-36 lg:grid-cols-12 lg:gap-14">
+        <Visual project={second} className="lg:order-1 lg:col-span-7" />
+        <div className="lg:order-2 lg:col-span-5">
+          <Details project={second} align="right" />
+        </div>
+      </div>
+
+      {/* 03 — full-width cinematic showcase */}
+      <div className="mt-24 lg:mt-36">
+        <div className="shell">
+          <Visual project={third} className="w-full" />
+        </div>
+        <div className="shell mt-12 grid gap-10 lg:grid-cols-12 lg:gap-14">
+          <div className="lg:col-span-5">
+            <Reveal as="p" y={12} amount={0.4} className="font-mono text-[11px] uppercase tracking-[0.24em] text-emerald/80">
+              {third.index} — {third.kicker}
+            </Reveal>
+            <Words
+              text={third.title}
+              as="h3"
+              delay={0.06}
+              amount={0.3}
+              className="mt-5 text-[clamp(1.6rem,3.2vw,2.5rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-chalk"
+            />
+          </div>
+          <div className="lg:col-span-7">
+            <Reveal as="p" amount={0.25} className="max-w-prose text-[15px] leading-relaxed text-mist">
+              {third.description}
+            </Reveal>
+            <RevealGroup as="ul" stagger={0.06} amount={0.2} className="mt-7 grid gap-3 sm:grid-cols-2">
+              {third.highlights.map((highlight) => (
+                <RevealItem
+                  as="li"
+                  key={highlight}
+                  className="flex gap-3 text-[14px] leading-relaxed text-mist/85"
+                >
+                  <span aria-hidden="true" className="mt-[0.62em] h-px w-3.5 shrink-0 bg-emerald/60" />
+                  <span>{highlight}</span>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+            <Reveal delay={0.16} amount={0.2} className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
+              {third.tech.map((tech) => (
+                <span key={tech} className="inline-flex items-center gap-1.5 text-[12px] text-mist/80">
+                  <TechMark name={tech} className="h-[15px] w-[15px] text-mist/60" />
+                  {tech}
+                </span>
+              ))}
+            </Reveal>
+            <Reveal delay={0.2} amount={0.2} className="mt-8">
+              <a
+                href={third.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost sheen h-10 px-5 text-[13px]"
+              >
+                <GithubIcon className="h-4 w-4" />
+                View source
+              </a>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+
+      {/* 04 — text left, visual right */}
+      <div className="shell mt-24 grid items-center gap-10 lg:mt-36 lg:grid-cols-12 lg:gap-14">
+        <div className="lg:col-span-5">
+          <Details project={fourth} />
+        </div>
+        <Visual project={fourth} className="lg:col-span-7" />
+      </div>
+
+      {/* Supporting work */}
+      <div className="shell mt-28 lg:mt-40">
+        <Reveal as="h3" amount={0.4} className="text-xl font-semibold tracking-[-0.02em] text-chalk sm:text-2xl">
+          More things I&apos;ve built
+        </Reveal>
+
+        <RevealGroup
+          as="ul"
+          stagger={0.07}
+          amount={0.1}
+          className="mt-10 grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2"
+        >
+          {otherProjects.map((project) => (
+            <RevealItem as="li" key={project.title} className="bg-ink">
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex h-full flex-col justify-between gap-7 p-7 transition-colors duration-500 ease-expo hover:bg-ink-soft sm:p-8"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-4">
+                    <h4 className="text-lg font-medium tracking-[-0.02em] text-chalk">
+                      {project.title}
+                    </h4>
+                    <ArrowIcon className="mt-1 h-4 w-4 shrink-0 text-mist transition-[transform,color] duration-500 ease-expo group-hover:translate-x-1 group-hover:text-emerald" />
+                  </div>
+                  <p className="mt-3 text-[14px] leading-relaxed text-mist">
+                    {project.description}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                  {project.tech.map((tech) => (
+                    <span key={tech} className="inline-flex items-center gap-1.5 text-[11.5px] text-mist/80">
+                      <TechMark name={tech} className="h-[14px] w-[14px] text-mist/60" />
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </a>
+            </RevealItem>
+          ))}
+        </RevealGroup>
+
+        <Reveal amount={0.4} className="mt-10 flex justify-center">
+          <a
+            href="https://github.com/DEVESH7k?tab=repositories"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-ghost sheen"
+          >
+            <GithubIcon className="h-4 w-4" />
+            All repositories
+          </a>
+        </Reveal>
+      </div>
+    </AnimatedSection>
   );
 }

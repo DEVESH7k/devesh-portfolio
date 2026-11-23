@@ -1,82 +1,75 @@
-import { socialLinks } from "../constants";
+import { navLinks, socialLinks } from "../constants";
+import { DownloadIcon, GithubIcon, LinkedinIcon, MediumIcon } from "./Icons";
+
+const socials = [
+  { name: "GitHub", url: socialLinks.github, Icon: GithubIcon },
+  { name: "LinkedIn", url: socialLinks.linkedin, Icon: LinkedinIcon },
+  { name: "Medium", url: socialLinks.medium, Icon: MediumIcon },
+];
 
 export default function Footer() {
-  const socials = [
-    {
-      name: "GitHub",
-      url: socialLinks.github,
-      icon: (
-        <svg
-          className="w-5 h-5"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-        </svg>
-      ),
-    },
-    {
-      name: "LinkedIn",
-      url: socialLinks.linkedin,
-      icon: (
-        <svg
-          className="w-5 h-5"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-          <rect x="2" y="9" width="4" height="12" />
-          <circle cx="4" cy="4" r="2" />
-        </svg>
-      ),
-    },
-    {
-      name: "Medium",
-      url: socialLinks.medium,
-      icon: (
-        <img
-          src="/medium-logo.png"
-          alt="Medium"
-          className="w-5 h-5 object-contain"
-        />
-      ),
-    },
-  ];
-
   return (
-    <footer className="w-full py-8 px-6 text-center flex flex-col items-center justify-center">
-      {/* Mobile Social Links (Visible only on small screens where vertical rails are hidden) */}
-      <div className="flex md:hidden items-center gap-6 mb-6 text-slate">
-        {socials.map((s) => (
-          <a
-            key={s.name}
-            href={s.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${s.name} Profile`}
-            className="hover:text-teal transition-colors p-2"
-          >
-            {s.icon}
-          </a>
-        ))}
-      </div>
+    <footer className="border-t border-line">
+      <div className="shell py-12 sm:py-14">
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p className="text-base font-medium tracking-[-0.02em] text-chalk">
+              Devesh Khatik
+            </p>
+            <p className="mt-1.5 text-sm text-mist">
+              DevSecOps Engineer · Mumbai, India
+            </p>
+            <a
+              href={socialLinks.resume}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 text-[13px] text-mist transition-colors duration-300 hover:text-chalk"
+            >
+              <DownloadIcon className="h-4 w-4" />
+              Download resume
+            </a>
+          </div>
 
-      <a
-        href={socialLinks.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="font-mono text-xs text-slate hover:text-teal transition-colors p-2 inline-block focus-visible:text-teal"
-      >
-        <div>Designed &amp; Built by Devesh Khatik</div>
-      </a>
+          <nav aria-label="Footer">
+            <ul className="grid grid-cols-2 gap-x-10 gap-y-2.5 sm:grid-cols-3 lg:grid-cols-2">
+              {navLinks.map((link) => (
+                <li key={link.id}>
+                  <a
+                    href={`#${link.id}`}
+                    className="text-[13px] text-mist transition-colors duration-300 hover:text-chalk"
+                  >
+                    {link.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="flex items-center gap-1">
+            {socials.map(({ name, url, Icon }) => (
+              <a
+                key={name}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${name} profile`}
+                className="flex h-10 w-10 items-center justify-center rounded-full text-mist transition-colors duration-300 hover:bg-chalk/5 hover:text-chalk"
+              >
+                <Icon className="h-[18px] w-[18px]" />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-12 flex flex-col gap-3 border-t border-line pt-7 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-mono text-[11px] text-mist/75">
+            Designed &amp; built by Devesh Khatik
+          </p>
+          <p className="font-mono text-[11px] text-mist/75">
+            React · Vite · Tailwind · Framer Motion
+          </p>
+        </div>
+      </div>
     </footer>
   );
 }

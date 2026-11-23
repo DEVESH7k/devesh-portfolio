@@ -1,197 +1,211 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { navLinks, socialLinks } from "../constants";
+import { EASE_EXPO, useActiveSection } from "../hooks/useScrollAnimation";
+
+const SECTION_IDS = navLinks.map((link) => link.id);
+
+function Monogram({ className = "" }) {
+  return (
+    <svg viewBox="0 0 40 40" className={className} aria-hidden="true" focusable="false">
+      <rect
+        x="1.6"
+        y="1.6"
+        width="36.8"
+        height="36.8"
+        rx="11"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.28"
+        strokeWidth="1.4"
+      />
+      <text
+        x="20"
+        y="21.4"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontFamily="Inter, sans-serif"
+        fontSize="14.5"
+        fontWeight="600"
+        letterSpacing="-0.6"
+        fill="currentColor"
+      >
+        DK
+      </text>
+    </svg>
+  );
+}
 
 export default function Navbar() {
-  const [scrolledToTop, setScrolledToTop] = useState(true);
-  const [visible, setVisible] = useState(true);
+  const { scrollY } = useScroll();
+  const [solid, setSolid] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const lastScrollY = useRef(0);
+  const active = useActiveSection(SECTION_IDS);
 
-  const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
+  useMotionValueEvent(scrollY, "change", (value) => {
+    setSolid(value > 24);
+  });
 
-    setScrolledToTop(currentScrollY < 50);
-
-    if (currentScrollY > lastScrollY.current && currentScrollY > 70) {
-      // Scrolling down
-      setVisible(false);
-    } else {
-      // Scrolling up
-      setVisible(true);
-    }
-
-    lastScrollY.current = currentScrollY;
-  }, []);
-
+  /* Lock the page while the mobile sheet is open. */
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
+    if (!menuOpen) return undefined;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-  // Lock body scroll when mobile menu is open
-  useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKeyDown);
     };
   }, [menuOpen]);
 
-  // Close menu on Escape key
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") setMenuOpen(false);
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ease-in-out ${
-        visible ? "translate-y-0" : "-translate-y-full"
-      } ${
-        scrolledToTop
-          ? "bg-navy/80 backdrop-blur-sm h-24"
-          : "bg-navy/90 backdrop-blur-md h-20 shadow-[0_10px_30px_-10px_rgba(2,12,27,0.7)]"
-      }`}
-    >
-      <div className="w-full h-full px-6 sm:px-12 md:px-14 flex items-center justify-between">
-        {/* Hexagon Logo */}
-        <a
-          href="#"
-          className="group relative flex items-center justify-center w-11 h-11 text-teal focus:outline-none"
-          aria-label="Devesh Khatik Home"
-        >
-          <svg
-            viewBox="0 0 84 96"
-            className="w-full h-full transition-transform duration-300 group-hover:-translate-y-0.5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polygon
-              points="42 3, 81 25.5, 81 70.5, 42 93, 3 70.5, 3 25.5"
-              className="group-hover:fill-teal/10 transition-colors duration-300"
-            />
-          </svg>
-          <span className="absolute font-mono font-bold text-teal text-base select-none">
-            D
-          </span>
-        </a>
-
-        {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-7" aria-label="Main Navigation">
-          <ol className="flex items-center gap-7 list-none m-0 p-0 font-mono text-[13px]">
-            {navLinks.map((link) => (
-              <li key={link.id}>
-                <a
-                  href={`#${link.id}`}
-                  className="text-slate-lightest hover:text-teal transition-colors duration-200 py-2 inline-flex items-center group"
-                >
-                  <span className="text-teal mr-1.5 font-normal text-xs">
-                    {link.number}.
-                  </span>
-                  <span className="text-slate-lightest group-hover:text-teal transition-colors duration-200">
-                    {link.title}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ol>
-
-          <a
-            href={socialLinks.resume}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-teal ml-3 text-xs px-4 py-2.5 rounded"
-          >
-            Resume
-          </a>
-        </nav>
-
-        {/* Mobile Hamburger Button */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden relative z-50 p-2 text-teal focus:outline-none"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-        >
-          <div className="w-7 h-5 flex flex-col justify-between items-end">
-            <span
-              className={`h-[2px] bg-teal rounded transition-all duration-300 ${
-                menuOpen ? "w-7 -rotate-45 translate-y-[9px]" : "w-7"
-              }`}
-            />
-            <span
-              className={`h-[2px] bg-teal rounded transition-all duration-300 ${
-                menuOpen ? "opacity-0 w-7" : "w-5"
-              }`}
-            />
-            <span
-              className={`h-[2px] bg-teal rounded transition-all duration-300 ${
-                menuOpen ? "w-7 rotate-45 -translate-y-[9px]" : "w-6"
-              }`}
-            />
-          </div>
-        </button>
-      </div>
-
-      {/* Mobile Sidebar Overlay & Drawer */}
-      <div
-        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
-          menuOpen ? "pointer-events-auto" : "pointer-events-none"
-        }`}
+    <>
+      <motion.header
+        initial={{ y: -24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.9, delay: 0.1, ease: EASE_EXPO }}
+        className="fixed inset-x-0 top-0 z-50"
       >
-        {/* Backdrop blur */}
         <div
-          onClick={() => setMenuOpen(false)}
-          className={`absolute inset-0 bg-navy/70 backdrop-blur-sm transition-opacity duration-300 ${
-            menuOpen ? "opacity-100" : "opacity-0"
-          }`}
-        />
-
-        {/* Slide-in Menu Panel */}
-        <aside
-          className={`absolute top-0 right-0 h-screen w-[min(75vw,360px)] bg-navy-light shadow-[-10px_0_30px_-15px_rgba(2,12,27,0.7)] flex flex-col justify-center items-center px-8 transition-transform duration-300 ease-in-out ${
-            menuOpen ? "translate-x-0" : "translate-x-full"
+          className={`transition-[background-color,border-color,backdrop-filter] duration-500 ease-expo ${
+            solid
+              ? "border-b border-line bg-ink/65 backdrop-blur-xl backdrop-saturate-150"
+              : "border-b border-transparent bg-transparent"
           }`}
         >
-          <nav className="w-full text-center" aria-label="Mobile Navigation">
-            <ol className="flex flex-col gap-6 list-none m-0 p-0 font-mono text-base">
-              {navLinks.map((link) => (
-                <li key={link.id}>
-                  <a
-                    href={`#${link.id}`}
-                    onClick={() => setMenuOpen(false)}
-                    className="flex flex-col items-center py-1 text-slate-lightest hover:text-teal transition-colors"
-                  >
-                    <span className="text-teal text-sm mb-1">{link.number}.</span>
-                    <span>{link.title}</span>
-                  </a>
-                </li>
-              ))}
-            </ol>
+          <nav
+            aria-label="Primary"
+            className="shell flex h-[68px] items-center justify-between gap-6"
+          >
+            <a
+              href="#hero"
+              className="flex items-center gap-2.5 text-chalk transition-opacity duration-300 hover:opacity-80"
+              aria-label="Devesh Khatik — back to top"
+            >
+              <Monogram className="h-9 w-9" />
+              <span className="sr-only">Devesh Khatik</span>
+            </a>
 
-            <div className="mt-10">
+            {/* Desktop links */}
+            <ul className="hidden items-center gap-1 lg:flex">
+              {navLinks.map((link) => {
+                const isActive = active === link.id;
+                return (
+                  <li key={link.id}>
+                    <a
+                      href={`#${link.id}`}
+                      aria-current={isActive ? "true" : undefined}
+                      className={`relative rounded-full px-3.5 py-2 text-[13px] tracking-[-0.01em] transition-colors duration-300 ${
+                        isActive ? "text-chalk" : "text-mist hover:text-chalk"
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.span
+                          layoutId="nav-active"
+                          className="absolute inset-0 -z-10 rounded-full bg-chalk/[0.07]"
+                          transition={{ duration: 0.5, ease: EASE_EXPO }}
+                        />
+                      )}
+                      {link.title}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className="flex items-center gap-2">
               <a
                 href={socialLinks.resume}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => setMenuOpen(false)}
-                className="btn-teal text-sm px-8 py-3.5 inline-block"
+                className="btn btn-ghost sheen hidden h-10 px-5 text-[13px] sm:inline-flex"
               >
-                Resume
+                Download Resume
               </a>
+
+              <button
+                type="button"
+                onClick={() => setMenuOpen((open) => !open)}
+                aria-expanded={menuOpen}
+                aria-controls="mobile-menu"
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
+                className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-line text-chalk transition-colors duration-300 hover:bg-chalk/5 lg:hidden"
+              >
+                <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                  {menuOpen ? (
+                    <path d="m6 6 12 12M18 6 6 18" />
+                  ) : (
+                    <path d="M4 9h16M4 15h16" />
+                  )}
+                </svg>
+              </button>
             </div>
           </nav>
-        </aside>
-      </div>
-    </header>
+        </div>
+      </motion.header>
+
+      {/* Mobile sheet */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            id="mobile-menu"
+            key="mobile-menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: EASE_EXPO }}
+            className="fixed inset-0 z-40 bg-ink/92 backdrop-blur-2xl lg:hidden"
+          >
+            <motion.ul
+              initial="hidden"
+              animate="show"
+              variants={{ show: { transition: { staggerChildren: 0.05, delayChildren: 0.08 } } }}
+              className="shell flex h-full flex-col justify-center gap-1 pb-16"
+            >
+              {navLinks.map((link) => (
+                <motion.li
+                  key={link.id}
+                  variants={{
+                    hidden: { opacity: 0, y: 18 },
+                    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_EXPO } },
+                  }}
+                >
+                  <a
+                    href={`#${link.id}`}
+                    onClick={() => setMenuOpen(false)}
+                    className="block py-3 text-3xl font-medium tracking-[-0.03em] text-chalk"
+                  >
+                    {link.title}
+                  </a>
+                </motion.li>
+              ))}
+              <motion.li
+                variants={{
+                  hidden: { opacity: 0, y: 18 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_EXPO } },
+                }}
+                className="mt-8"
+              >
+                <a
+                  href={socialLinks.resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMenuOpen(false)}
+                  className="btn btn-solid w-full"
+                >
+                  Download Resume
+                </a>
+              </motion.li>
+            </motion.ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
